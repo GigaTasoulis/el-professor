@@ -15,37 +15,45 @@ const Login = () => {
     try {
       const user = await login(username, password);
       setUser(user);
-      navigate('/');
+      if (user.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <div className="row justify-content-center">
+    <div className="row justify-content-center mt-5">
       <div className="col-md-6">
-        <h2 className="text-center">Login</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Username</label>
-            <input 
-              type="text" 
-              className="form-control" 
-              value={username} 
-              onChange={(e) => setUsername(e.target.value)} 
-            />
+        <div className="card">
+          <div className="card-body">
+            <h2 className="card-title text-center">Login</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Username</label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  value={username} 
+                  onChange={(e) => setUsername(e.target.value)} 
+                />
+              </div>
+              <div className="form-group">
+                <label>Password</label>
+                <input 
+                  type="password" 
+                  className="form-control" 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                />
+              </div>
+              <button type="submit" className="btn btn-primary btn-block">Login</button>
+            </form>
           </div>
-          <div className="form-group">
-            <label>Password</label>
-            <input 
-              type="password" 
-              className="form-control" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-            />
-          </div>
-          <button type="submit" className="btn btn-primary btn-block">Login</button>
-        </form>
+        </div>
       </div>
     </div>
   );

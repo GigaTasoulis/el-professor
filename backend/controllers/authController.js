@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
 const generateToken = (id) => {
@@ -8,7 +9,8 @@ const generateToken = (id) => {
 exports.registerUser = async (req, res) => {
   const { username, password, role } = req.body;
   try {
-    const user = new User({ username, password, role });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ username, password: hashedPassword, role });
     await user.save();
     res.status(201).json({
       _id: user._id,
@@ -24,8 +26,15 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   const { username, password } = req.body;
   try {
+    console.log(`Attempting to log in user: ${username}`);
     const user = await User.findOne({ username });
-    if (user && (await user.matchPassword(password))) {
+    if (!user) {
+      console.log('User not found');
+      return res.status(401).json({ message: 'Invalid username or password' });
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (isMatch) {
+      console.log('Password match');
       res.json({
         _id: user._id,
         username: user.username,
@@ -33,9 +42,11 @@ exports.loginUser = async (req, res) => {
         token: generateToken(user._id)
       });
     } else {
+      console.log('Password does not match');
       res.status(401).json({ message: 'Invalid username or password' });
     }
   } catch (error) {
+    console.error('Error logging in user:', error);
     res.status(400).json({ message: error.message });
   }
 };

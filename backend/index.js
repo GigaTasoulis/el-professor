@@ -1,16 +1,19 @@
-require('dotenv').config(); // Ensure this is at the top
+require('dotenv').config(); // Ensure this is at the very top
 
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
+const adminRoutes = require('./routes/adminRoutes'); // Add this line
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
 const PORT = process.env.PORT || 5000;
+
+console.log('MONGO_URI:', process.env.MONGO_URI); // Add this line to debug
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -22,6 +25,7 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes); // Add this line
 
 app.get('/', (req, res) => {
   res.send('El Professor Backend');
