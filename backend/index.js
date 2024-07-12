@@ -1,7 +1,10 @@
+require('dotenv').config(); // Ensure this is at the top
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 app.use(bodyParser.json());
@@ -9,7 +12,7 @@ app.use(cors());
 
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect('mongodb://localhost:27017/el-professor', {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => {
@@ -17,6 +20,8 @@ mongoose.connect('mongodb://localhost:27017/el-professor', {
 }).catch(err => {
   console.error('Error connecting to MongoDB', err);
 });
+
+app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('El Professor Backend');
