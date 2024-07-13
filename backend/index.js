@@ -6,6 +6,8 @@ const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const classRoutes = require('./routes/classRoutes'); // Import class routes
+const studentRoutes = require('./routes/studentRoutes'); // Import student routes
+const professorRoutes = require('./routes/professorRoutes'); // Import professor routes
 
 const app = express();
 app.use(bodyParser.json());
@@ -29,6 +31,8 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/classes', classRoutes); // Use class routes
+app.use('/api/students', studentRoutes); // Use student routes
+app.use('/api/professors', professorRoutes); // Use professor routes
 
 // Default route for testing
 app.get('/', (req, res) => {

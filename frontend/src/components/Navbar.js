@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { logout } from '../services/authService';
+import '../styles/Navbar.css'; // Import custom CSS for the sidebar
 
 const Navbar = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -14,36 +15,41 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <Link className="navbar-brand" to="/">El Professor</Link>
-      <div className="collapse navbar-collapse">
-        <ul className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link className="nav-link" to="/">Home</Link>
-          </li>
-          {user && user.role === 'admin' && (
-            <>
-              <li className="nav-item">
-                <Link className="nav-link" to="/calendar">Calendar</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/financials">Financials</Link>
-              </li>
-            </>
-          )}
-        </ul>
-        <ul className="navbar-nav ml-auto">
+    <nav className="sidebar">
+      <h2 className="sidebar-heading">Elprof.</h2>
+      <ul className="nav flex-column">
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/dashboard">
+            Dashboard
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/students">
+            Students
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/professors">
+            Professors
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/calendar">
+            Calendar
+          </NavLink>
+        </li>
+        <li className="nav-item mt-auto"> {/* Ensure this is at the bottom */}
           {user ? (
-            <li className="nav-item">
-              <button className="btn btn-link nav-link" onClick={handleLogout}>Logout</button>
-            </li>
+            <button className="btn btn-link nav-link" onClick={handleLogout}>
+              Logout
+            </button>
           ) : (
-            <li className="nav-item">
-              <Link className="nav-link" to="/login">Login</Link>
-            </li>
+            <NavLink className="nav-link" to="/login">
+              Login
+            </NavLink>
           )}
-        </ul>
-      </div>
+        </li>
+      </ul>
     </nav>
   );
 };

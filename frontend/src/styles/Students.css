@@ -1,0 +1,64 @@
+.container-fluid {
+    padding: 0;
+  }
+.btn-link{
+    width:auto;
+}
+  
+.students-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.student-item {
+  flex: 1 1 30%;
+  margin: 10px;
+  padding: 10px;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.student-item i {
+  margin-right: 10px;
+}
+
+.add-student {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.add-student button {
+  margin-bottom: 10px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.modal-header button {
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 2px 6px;
+  display: flex;
+  align-items: center;
+}
+
+.modal-header button svg {
+  width: 16px;
+  height: 16px;
+}
