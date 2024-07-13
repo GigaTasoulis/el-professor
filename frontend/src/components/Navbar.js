@@ -1,4 +1,3 @@
-// src/components/Navbar.js
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
@@ -29,9 +28,6 @@ const Navbar = () => {
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/financials">Financials</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/admin">Admin Dashboard</Link>
               </li>
             </>
           )}
