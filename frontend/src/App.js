@@ -38,7 +38,7 @@ const MainContent = () => {
           <Route path="/students" element={<Students />} />
           <Route path="/professors" element={<Professors />} />
           <Route path="/calendar" element={<CalendarPage />} />
-          <Route path="/" element={<Navigate to="/dashboard" />} />
+          <Route path="/" element={<Navigate to="/login" />} />
         </Routes>
       </div>
     </>
