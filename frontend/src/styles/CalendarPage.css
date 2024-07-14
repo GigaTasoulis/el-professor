@@ -1,0 +1,87 @@
+.calendar-page {
+  padding: 20px;
+}
+
+.rbc-toolbar {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.rbc-calendar {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+.rbc-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+.rbc-event {
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.rbc-event:hover {
+  background-color: #0056b3;
+}
+
+.Modal {
+    top: '50%';
+    left: '50%';
+    right: 'auto';
+    bottom: 'auto';
+    margin-right: '-50%';
+    transform: 'translate(-50%; -50%)';
+    width: '400px';
+    padding: '20px';
+    background-color: '#fff';
+    border-radius: '8px';
+    box-shadow: '0 5px 15px rgba(0, 0, 0, 0.3)';
+ 
+}
+
+.Modal h2 {
+  margin-bottom: 20px;
+}
+
+.Modal form {
+  display: flex;
+  flex-direction: column;
+}
+
+.Modal form div {
+  margin-bottom: 10px;
+}
+
+.Modal form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.Modal form input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.Modal form button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.Modal form button:hover {
+  background-color: #0056b3;
+}
+  

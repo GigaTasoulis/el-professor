@@ -1,16 +1,14 @@
-// src/pages/CalendarPage.js
 import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Modal from 'react-modal';
 import { getClasses, createClass } from '../services/classService';
-// import { AuthContext } from '../context/AuthContext';
+import '../styles/CalendarPage.css'; // Make sure to create this CSS file
 
 const localizer = momentLocalizer(moment);
 
 const CalendarPage = () => {
-  // const { user } = useContext(AuthContext);
   const [events, setEvents] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -28,7 +26,7 @@ const CalendarPage = () => {
       id: cls._id,
       title: cls.subject,
       start: new Date(cls.date),
-      end: new Date(cls.date),
+      end: new Date(new Date(cls.date).getTime() + 60 * 60 * 1000), // Assuming each class is 1 hour
       students: cls.students,
       professor: cls.professor,
     }));
@@ -63,11 +61,13 @@ const CalendarPage = () => {
         events={events}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 500 }}
+        style={{ height: 600 }}
         selectable
         onSelectSlot={handleSelect}
+        views={['month', 'week', 'day']}
+        defaultView="week"
       />
-      <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
+      <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)} ariaHideApp={false}>
         <h2>Create Class</h2>
         <form>
           <div>
