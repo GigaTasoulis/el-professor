@@ -1,14 +1,26 @@
 const express = require('express');
-const { getClasses, createClass, updateClass, deleteClass } = require('../controllers/classController');
-const { protect, admin } = require('../middleware/authMiddleware');
 const router = express.Router();
+const Class = require('../models/Class');
 
-router.route('/')
-  .get(protect, getClasses)
-  .post(protect, admin, createClass);
+// Create a new class
+router.post('/', async (req, res) => {
+  const { title, start, end, className, lesson, teacher, students } = req.body;
 
-router.route('/:id')
-  .put(protect, admin, updateClass)
-  .delete(protect, admin, deleteClass);
+  console.log('Received data:', req.body);
+
+  if (!title || !start || !end || !className || !lesson || !teacher) {
+    console.log('Missing fields');
+    return res.status(400).json({ message: 'All fields are required' });
+  }
+
+  try {
+    const newClass = new Class({ title, start, end, class: className, lesson, teacher, students });
+    await newClass.save();
+    res.status(201).json(newClass);
+  } catch (error) {
+    console.error('Error creating class:', error);
+    res.status(500).json({ message: 'Error creating class', error });
+  }
+});
 
 module.exports = router;

@@ -7,8 +7,7 @@ import Students from './pages/Students';
 import Professors from './pages/Professors';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import Navbar from './components/Navbar';
-
-import './styles/App.css'; // Ensure custom CSS for the layout is imported
+import './styles/App.css';
 
 function App() {
   return (
