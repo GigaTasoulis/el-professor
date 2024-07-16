@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import CustomEvent from '../components/CustomEvent'; // Import the custom event component
 import '../styles/CalendarPage.css';
 
 const localizer = momentLocalizer(moment);
@@ -13,8 +14,8 @@ const localizer = momentLocalizer(moment);
 const CalendarPage = () => {
   const { user } = useContext(AuthContext);
   const [events, setEvents] = useState([]);
+  const [students, setStudents] = useState([]);
   const [newEvent, setNewEvent] = useState({
-    title: '',
     start: new Date(),
     end: new Date(),
     className: '',
@@ -26,6 +27,7 @@ const CalendarPage = () => {
 
   useEffect(() => {
     fetchEvents();
+    fetchStudents();
   }, []);
 
   useEffect(() => {
@@ -39,14 +41,26 @@ const CalendarPage = () => {
   const fetchEvents = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/classes');
-      setEvents(response.data);
+      setEvents(response.data.map(event => ({
+        ...event,
+        start: new Date(event.start),
+        end: new Date(event.end)
+      })));
     } catch (error) {
       console.error("Error fetching events: ", error);
     }
   };
 
+  const fetchStudents = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/students');
+      setStudents(response.data);
+    } catch (error) {
+      console.error("Error fetching students: ", error);
+    }
+  };
+
   const handleSelectSlot = ({ start, end }) => {
-    console.log('Slot selected:', start, end);
     setNewEvent({ ...newEvent, start, end });
     setModalOpen(true);
   };
@@ -54,12 +68,10 @@ const CalendarPage = () => {
   const handleEventChange = (e) => {
     const { name, value } = e.target;
     setNewEvent({ ...newEvent, [name]: value });
-    console.log('Event change:', name, value);
   };
 
   const handleDateChange = (date, field) => {
     setNewEvent({ ...newEvent, [field]: date });
-    console.log('Date change:', field, date);
   };
 
   const handleStudentChange = (index, e) => {
@@ -67,28 +79,30 @@ const CalendarPage = () => {
       i === index ? { ...student, name: e.target.value } : student
     );
     setNewEvent({ ...newEvent, students: updatedStudents });
-    console.log('Student change:', index, e.target.value);
+  };
+  
+  const filterStudents = (input) => {
+    if (!input) return students;
+    return students.filter(student => student.name.toLowerCase().includes(input.toLowerCase()));
   };
 
   const addStudent = () => {
     setNewEvent({ ...newEvent, students: [...newEvent.students, { name: '' }] });
-    console.log('Added student');
   };
 
   const removeStudent = (index) => {
     const updatedStudents = newEvent.students.filter((_, i) => i !== index);
     setNewEvent({ ...newEvent, students: updatedStudents });
-    console.log('Removed student:', index);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submitting event:', newEvent);
     try {
-      await axios.post('http://localhost:5000/api/classes', newEvent);
+      const { start, end, className, lesson, teacher, students } = newEvent;
+      const eventToCreate = { start, end, className, lesson, teacher, students };
+      await axios.post('http://localhost:5000/api/classes', eventToCreate);
       setModalOpen(false);
       fetchEvents();
-      console.log('Event created:', newEvent);
     } catch (error) {
       console.error("Error creating event: ", error);
     }
@@ -105,6 +119,10 @@ const CalendarPage = () => {
           style={{ height: 500 }}
           selectable
           onSelectSlot={handleSelectSlot}
+          components={{
+            event: CustomEvent // Use the custom event component
+          }}
+          views={['month', 'week', 'day']} // Ensure all views are available
         />
       </div>
 
@@ -113,16 +131,6 @@ const CalendarPage = () => {
           <div className="modal-content" style={{ background: 'white', padding: '20px', borderRadius: '8px', width: '400px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
             <h2>Add Lesson</h2>
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>Title</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={newEvent.title}
-                  onChange={handleEventChange}
-                  className="form-control"
-                />
-              </div>
               <div className="form-group">
                 <label>Date</label>
                 <DatePicker
@@ -196,7 +204,13 @@ const CalendarPage = () => {
                     value={student.name}
                     onChange={(e) => handleStudentChange(index, e)}
                     className="form-control"
+                    list={`students-list-${index}`}
                   />
+                  <datalist id={`students-list-${index}`}>
+                    {filterStudents(student.name).map((filteredStudent, i) => (
+                      <option key={i} value={filteredStudent.name} />
+                    ))}
+                  </datalist>
                   <button type="button" onClick={() => removeStudent(index)}>Remove</button>
                 </div>
               ))}

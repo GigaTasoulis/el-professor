@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const classSchema = new mongoose.Schema({
-  title: { type: String, required: true },
   start: { type: Date, required: true },
   end: { type: Date, required: true },
   class: { type: String, required: true },
@@ -9,5 +8,7 @@ const classSchema = new mongoose.Schema({
   teacher: { type: String, required: true },
   students: [{ name: String }]
 });
+
+
 
 module.exports = mongoose.model('Class', classSchema);
