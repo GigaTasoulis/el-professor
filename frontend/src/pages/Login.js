@@ -23,30 +23,40 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Username</label>
-          <input
-            type="text"
-            className="form-control"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+    <div className="login-page">
+      <div className="image-container">
+        <div className="login-background"></div>
+        <div className="image-text top">El Prof.</div>
+        <div className="image-text bottom">
+          <div className="bottom-bold">We help you to organize your business</div>
+          <div className="bottom-normal">Start for free now</div>
         </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            className="form-control"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        {error && <div className="error">{error}</div>}
-        <button type="submit" className="btn btn-primary">Login</button>
-      </form>
+      </div>
+      <div className="login-container">
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="login-form-group">
+            <label>Username</label>
+            <input
+              type="text"
+              className="login-form-control"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className="login-form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              className="login-form-control"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          {error && <div className="login-error">{error}</div>}
+          <button type="submit" className="login-btn btn-primary">Login</button>
+        </form>
+      </div>
     </div>
   );
 };
