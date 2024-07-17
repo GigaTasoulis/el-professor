@@ -99,6 +99,13 @@ const CalendarPage = () => {
     }
   };
 
+  const EventComponent = ({ event }) => (
+    <span>
+      <strong>{event.lesson}</strong>
+      <div>{event.class}</div>
+    </span>
+  );
+
   return (
     <div className="calendar-page">
       <div className="calendar-container">
@@ -111,6 +118,9 @@ const CalendarPage = () => {
           selectable
           onSelectSlot={handleSelectSlot}
           views={['month', 'week', 'day']}
+          components={{
+            event: EventComponent
+          }}
         />
       </div>
 
