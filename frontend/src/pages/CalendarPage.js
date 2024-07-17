@@ -7,6 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import Modal from '../components/Modal';
+import FormGroup from '../components/FormGroup';
 import '../styles/CalendarPage.css';
 
 const localizer = momentLocalizer(moment);
@@ -116,17 +117,15 @@ const CalendarPage = () => {
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <h2>Add Lesson</h2>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Date</label>
+          <FormGroup label="Date">
             <DatePicker
               selected={newEvent.start}
               onChange={(date) => handleDateChange(date, 'start')}
               dateFormat="dd-MMM-yyyy"
               className="form-control"
             />
-          </div>
-          <div className="form-group">
-            <label>Start Time</label>
+          </FormGroup>
+          <FormGroup label="Start Time">
             <DatePicker
               selected={newEvent.start}
               onChange={(date) => handleDateChange(date, 'start')}
@@ -137,9 +136,8 @@ const CalendarPage = () => {
               dateFormat="h:mm aa"
               className="form-control"
             />
-          </div>
-          <div className="form-group">
-            <label>End Time</label>
+          </FormGroup>
+          <FormGroup label="End Time">
             <DatePicker
               selected={newEvent.end}
               onChange={(date) => handleDateChange(date, 'end')}
@@ -150,9 +148,8 @@ const CalendarPage = () => {
               dateFormat="h:mm aa"
               className="form-control"
             />
-          </div>
-          <div className="form-group">
-            <label>Class</label>
+          </FormGroup>
+          <FormGroup label="Class">
             <input
               type="text"
               name="className"
@@ -160,9 +157,8 @@ const CalendarPage = () => {
               onChange={handleEventChange}
               className="form-control"
             />
-          </div>
-          <div className="form-group">
-            <label>Lesson</label>
+          </FormGroup>
+          <FormGroup label="Lesson">
             <input
               type="text"
               name="lesson"
@@ -170,9 +166,8 @@ const CalendarPage = () => {
               onChange={handleEventChange}
               className="form-control"
             />
-          </div>
-          <div className="form-group">
-            <label>Teacher</label>
+          </FormGroup>
+          <FormGroup label="Teacher">
             <input
               type="text"
               name="teacher"
@@ -180,10 +175,9 @@ const CalendarPage = () => {
               onChange={handleEventChange}
               className="form-control"
             />
-          </div>
+          </FormGroup>
           {newEvent.students.map((student, index) => (
-            <div className="form-group" key={index}>
-              <label>Student {index + 1}</label>
+            <FormGroup label={`Student ${index + 1}`} key={index}>
               <input
                 type="text"
                 value={student.name}
@@ -197,7 +191,7 @@ const CalendarPage = () => {
                 ))}
               </datalist>
               <button type="button" onClick={() => removeStudent(index)}>Remove</button>
-            </div>
+            </FormGroup>
           ))}
           <div className="button-group">
             <button type="button" onClick={addStudent}>Add student</button>
