@@ -9,6 +9,4 @@ const classSchema = new mongoose.Schema({
   students: [{ name: String }]
 });
 
-
-
 module.exports = mongoose.model('Class', classSchema);

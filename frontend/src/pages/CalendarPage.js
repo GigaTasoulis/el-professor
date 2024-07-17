@@ -6,7 +6,6 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
-import CustomEvent from '../components/CustomEvent'; // Import the custom event component
 import '../styles/CalendarPage.css';
 
 const localizer = momentLocalizer(moment);
@@ -29,14 +28,6 @@ const CalendarPage = () => {
     fetchEvents();
     fetchStudents();
   }, []);
-
-  useEffect(() => {
-    console.log('Modal open:', modalOpen);
-  }, [modalOpen]);
-
-  useEffect(() => {
-    console.log('New event state:', newEvent);
-  }, [newEvent]);
 
   const fetchEvents = async () => {
     try {
@@ -61,7 +52,7 @@ const CalendarPage = () => {
   };
 
   const handleSelectSlot = ({ start, end }) => {
-    setNewEvent({ ...newEvent, start, end });
+    setNewEvent({ ...newEvent, start, end: moment(start).add(1, 'hour').toDate() });
     setModalOpen(true);
   };
 
@@ -80,7 +71,7 @@ const CalendarPage = () => {
     );
     setNewEvent({ ...newEvent, students: updatedStudents });
   };
-  
+
   const filterStudents = (input) => {
     if (!input) return students;
     return students.filter(student => student.name.toLowerCase().includes(input.toLowerCase()));
@@ -98,9 +89,7 @@ const CalendarPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { start, end, className, lesson, teacher, students } = newEvent;
-      const eventToCreate = { start, end, className, lesson, teacher, students };
-      await axios.post('http://localhost:5000/api/classes', eventToCreate);
+      await axios.post('http://localhost:5000/api/classes', newEvent);
       setModalOpen(false);
       fetchEvents();
     } catch (error) {
@@ -119,16 +108,13 @@ const CalendarPage = () => {
           style={{ height: 500 }}
           selectable
           onSelectSlot={handleSelectSlot}
-          components={{
-            event: CustomEvent // Use the custom event component
-          }}
-          views={['month', 'week', 'day']} // Ensure all views are available
+          views={['month', 'week', 'day']}
         />
       </div>
 
       {modalOpen && (
-        <div className="modal" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0, 0, 0, 0.5)', zIndex: 1000 }}>
-          <div className="modal-content" style={{ background: 'white', padding: '20px', borderRadius: '8px', width: '400px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+        <div className="modal">
+          <div className="modal-content">
             <h2>Add Lesson</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
