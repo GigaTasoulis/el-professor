@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import Modal from '../components/Modal';
 import '../styles/CalendarPage.css';
 
 const localizer = momentLocalizer(moment);
@@ -16,7 +17,7 @@ const CalendarPage = () => {
   const [students, setStudents] = useState([]);
   const [newEvent, setNewEvent] = useState({
     start: new Date(),
-    end: new Date(),
+    end: moment().add(1, 'hour').toDate(),
     className: '',
     lesson: '',
     teacher: user ? user.name : '',
@@ -51,7 +52,7 @@ const CalendarPage = () => {
     }
   };
 
-  const handleSelectSlot = ({ start, end }) => {
+  const handleSelectSlot = ({ start }) => {
     setNewEvent({ ...newEvent, start, end: moment(start).add(1, 'hour').toDate() });
     setModalOpen(true);
   };
@@ -112,101 +113,99 @@ const CalendarPage = () => {
         />
       </div>
 
-      {modalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Add Lesson</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>Date</label>
-                <DatePicker
-                  selected={newEvent.start}
-                  onChange={(date) => handleDateChange(date, 'start')}
-                  dateFormat="dd-MMM-yyyy"
-                  className="form-control"
-                />
-              </div>
-              <div className="form-group">
-                <label>Start Time</label>
-                <DatePicker
-                  selected={newEvent.start}
-                  onChange={(date) => handleDateChange(date, 'start')}
-                  showTimeSelect
-                  showTimeSelectOnly
-                  timeIntervals={15}
-                  timeCaption="Time"
-                  dateFormat="h:mm aa"
-                  className="form-control"
-                />
-              </div>
-              <div className="form-group">
-                <label>End Time</label>
-                <DatePicker
-                  selected={newEvent.end}
-                  onChange={(date) => handleDateChange(date, 'end')}
-                  showTimeSelect
-                  showTimeSelectOnly
-                  timeIntervals={15}
-                  timeCaption="Time"
-                  dateFormat="h:mm aa"
-                  className="form-control"
-                />
-              </div>
-              <div className="form-group">
-                <label>Class</label>
-                <input
-                  type="text"
-                  name="className"
-                  value={newEvent.className}
-                  onChange={handleEventChange}
-                  className="form-control"
-                />
-              </div>
-              <div className="form-group">
-                <label>Lesson</label>
-                <input
-                  type="text"
-                  name="lesson"
-                  value={newEvent.lesson}
-                  onChange={handleEventChange}
-                  className="form-control"
-                />
-              </div>
-              <div className="form-group">
-                <label>Teacher</label>
-                <input
-                  type="text"
-                  name="teacher"
-                  value={newEvent.teacher}
-                  onChange={handleEventChange}
-                  className="form-control"
-                />
-              </div>
-              {newEvent.students.map((student, index) => (
-                <div className="form-group" key={index}>
-                  <label>Student {index + 1}</label>
-                  <input
-                    type="text"
-                    value={student.name}
-                    onChange={(e) => handleStudentChange(index, e)}
-                    className="form-control"
-                    list={`students-list-${index}`}
-                  />
-                  <datalist id={`students-list-${index}`}>
-                    {filterStudents(student.name).map((filteredStudent, i) => (
-                      <option key={i} value={filteredStudent.name} />
-                    ))}
-                  </datalist>
-                  <button type="button" onClick={() => removeStudent(index)}>Remove</button>
-                </div>
-              ))}
-              <button type="button" onClick={addStudent}>Add student</button>
-              <button type="submit" className="btn btn-primary">Submit</button>
-              <button type="button" className="btn btn-secondary" onClick={() => setModalOpen(false)}>Cancel</button>
-            </form>
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
+        <h2>Add Lesson</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Date</label>
+            <DatePicker
+              selected={newEvent.start}
+              onChange={(date) => handleDateChange(date, 'start')}
+              dateFormat="dd-MMM-yyyy"
+              className="form-control"
+            />
           </div>
-        </div>
-      )}
+          <div className="form-group">
+            <label>Start Time</label>
+            <DatePicker
+              selected={newEvent.start}
+              onChange={(date) => handleDateChange(date, 'start')}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={15}
+              timeCaption="Time"
+              dateFormat="h:mm aa"
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label>End Time</label>
+            <DatePicker
+              selected={newEvent.end}
+              onChange={(date) => handleDateChange(date, 'end')}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={15}
+              timeCaption="Time"
+              dateFormat="h:mm aa"
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label>Class</label>
+            <input
+              type="text"
+              name="className"
+              value={newEvent.className}
+              onChange={handleEventChange}
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label>Lesson</label>
+            <input
+              type="text"
+              name="lesson"
+              value={newEvent.lesson}
+              onChange={handleEventChange}
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label>Teacher</label>
+            <input
+              type="text"
+              name="teacher"
+              value={newEvent.teacher}
+              onChange={handleEventChange}
+              className="form-control"
+            />
+          </div>
+          {newEvent.students.map((student, index) => (
+            <div className="form-group" key={index}>
+              <label>Student {index + 1}</label>
+              <input
+                type="text"
+                value={student.name}
+                onChange={(e) => handleStudentChange(index, e)}
+                className="form-control"
+                list={`students-list-${index}`}
+              />
+              <datalist id={`students-list-${index}`}>
+                {filterStudents(student.name).map((filteredStudent, i) => (
+                  <option key={i} value={filteredStudent.name} />
+                ))}
+              </datalist>
+              <button type="button" onClick={() => removeStudent(index)}>Remove</button>
+            </div>
+          ))}
+          <div className="button-group">
+            <button type="button" onClick={addStudent}>Add student</button>
+            <button type="submit" className="btn btn-primary">Submit</button>
+            <button type="button" className="btn btn-secondary" onClick={() => setModalOpen(false)}>Cancel</button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };
