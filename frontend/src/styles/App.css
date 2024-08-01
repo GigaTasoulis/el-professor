@@ -4,10 +4,10 @@
 .app-container {
   display: flex;
   min-height: 100vh;
+  
 }
 
 .main-content {
-  margin-left: 200px; /* Same width as the sidebar */
   padding: 20px;
   width: calc(100% - 200px);
 }

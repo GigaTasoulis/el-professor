@@ -89,7 +89,7 @@ const Students = () => {
           </div>
           
           <div className="add-student">
-            <button type="button" className="btn btn-primary" onClick={openModal}>
+            <button type="button" id="open-student-modal-btn" className="btn btn-primary" onClick={openModal}>
               +Add Student
             </button>
             <p>Please, organize your students through the button below!</p>
