@@ -16,6 +16,9 @@ const CalendarPage = () => {
   const { user } = useContext(AuthContext);
   const [events, setEvents] = useState([]);
   const [students, setStudents] = useState([]);
+  const [classes, setClasses] = useState([]);
+  const [teachers, setTeachers] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [newEvent, setNewEvent] = useState({
     start: new Date(),
     end: moment().add(1, 'hour').toDate(),
@@ -25,10 +28,13 @@ const CalendarPage = () => {
     students: [{ name: '' }]
   });
   const [modalOpen, setModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     fetchEvents();
     fetchStudents();
+    fetchClasses();
+    fetchTeachers();
   }, []);
 
   const fetchEvents = async () => {
@@ -53,25 +59,68 @@ const CalendarPage = () => {
     }
   };
 
+  const fetchClasses = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/classes');
+      setClasses(response.data);
+    } catch (error) {
+      console.error("Error fetching classes: ", error);
+    }
+  };
+
+  const fetchTeachers = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/professors');
+      setTeachers(response.data);
+    } catch (error) {
+      console.error("Error fetching teachers: ", error);
+    }
+  };
+
   const handleSelectSlot = ({ start }) => {
+    setSelectedEvent(null);
     setNewEvent({ ...newEvent, start, end: moment(start).add(1, 'hour').toDate() });
+    setIsEditing(true);
+    setModalOpen(true);
+  };
+
+  const handleSelectEvent = (event) => {
+    setSelectedEvent(event);
+    setNewEvent({
+      start: new Date(event.start),
+      end: new Date(event.end),
+      className: event.class,
+      lesson: event.lesson,
+      teacher: event.teacher,
+      students: event.students
+    });
+    setIsEditing(false);
     setModalOpen(true);
   };
 
   const handleEventChange = (e) => {
     const { name, value } = e.target;
-    setNewEvent({ ...newEvent, [name]: value });
+    setNewEvent((prevState) => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
   const handleDateChange = (date, field) => {
-    setNewEvent({ ...newEvent, [field]: date });
+    setNewEvent((prevState) => ({
+      ...prevState,
+      [field]: date
+    }));
   };
 
   const handleStudentChange = (index, e) => {
     const updatedStudents = newEvent.students.map((student, i) =>
       i === index ? { ...student, name: e.target.value } : student
     );
-    setNewEvent({ ...newEvent, students: updatedStudents });
+    setNewEvent((prevState) => ({
+      ...prevState,
+      students: updatedStudents
+    }));
   };
 
   const filterStudents = (input) => {
@@ -80,22 +129,51 @@ const CalendarPage = () => {
   };
 
   const addStudent = () => {
-    setNewEvent({ ...newEvent, students: [...newEvent.students, { name: '' }] });
+    setNewEvent((prevState) => ({
+      ...prevState,
+      students: [...prevState.students, { name: '' }]
+    }));
   };
 
   const removeStudent = (index) => {
     const updatedStudents = newEvent.students.filter((_, i) => i !== index);
-    setNewEvent({ ...newEvent, students: updatedStudents });
+    setNewEvent((prevState) => ({
+      ...prevState,
+      students: updatedStudents
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const eventData = {
+      start: newEvent.start,
+      end: newEvent.end,
+      class: newEvent.className,
+      lesson: newEvent.lesson,
+      teacher: newEvent.teacher,
+      students: newEvent.students
+    };
+
+    console.log('Event data:', eventData);
+
     try {
-      await axios.post('http://localhost:5000/api/classes', newEvent);
+      if (selectedEvent) {
+        console.log('Updating event:', selectedEvent._id);
+        const response = await axios.put(`http://localhost:5000/api/classes/${selectedEvent._id}`, eventData);
+        console.log('Event updated:', response.data);
+      } else {
+        console.log('Creating event with data:', eventData);
+        const response = await axios.post('http://localhost:5000/api/classes', eventData);
+        console.log('Event created:', response.data);
+      }
       setModalOpen(false);
       fetchEvents();
     } catch (error) {
-      console.error("Error creating event: ", error);
+      console.error("Error creating/updating event: ", error);
+      if (error.response) {
+        console.log('Error response data:', error.response.data);
+      }
     }
   };
 
@@ -117,6 +195,7 @@ const CalendarPage = () => {
           style={{ height: 500 }}
           selectable
           onSelectSlot={handleSelectSlot}
+          onSelectEvent={handleSelectEvent}
           views={['month', 'week', 'day']}
           components={{
             event: EventComponent
@@ -125,7 +204,7 @@ const CalendarPage = () => {
       </div>
 
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <h2>Add Lesson</h2>
+        <h2>{selectedEvent ? 'View/Edit Lesson' : 'Add Lesson'}</h2>
         <form onSubmit={handleSubmit}>
           <FormGroup label="Date">
             <DatePicker
@@ -133,6 +212,7 @@ const CalendarPage = () => {
               onChange={(date) => handleDateChange(date, 'start')}
               dateFormat="dd-MMM-yyyy"
               className="form-control"
+              disabled={!isEditing}
             />
           </FormGroup>
           <FormGroup label="Start Time">
@@ -145,6 +225,7 @@ const CalendarPage = () => {
               timeCaption="Time"
               dateFormat="h:mm aa"
               className="form-control"
+              disabled={!isEditing}
             />
           </FormGroup>
           <FormGroup label="End Time">
@@ -157,6 +238,7 @@ const CalendarPage = () => {
               timeCaption="Time"
               dateFormat="h:mm aa"
               className="form-control"
+              disabled={!isEditing}
             />
           </FormGroup>
           <FormGroup label="Class">
@@ -166,7 +248,14 @@ const CalendarPage = () => {
               value={newEvent.className}
               onChange={handleEventChange}
               className="form-control"
+              disabled={!isEditing}
+              list="classes-list"
             />
+            <datalist id="classes-list">
+              {classes.map((classItem, index) => (
+                <option key={index} value={classItem.name} />
+              ))}
+            </datalist>
           </FormGroup>
           <FormGroup label="Lesson">
             <input
@@ -175,6 +264,7 @@ const CalendarPage = () => {
               value={newEvent.lesson}
               onChange={handleEventChange}
               className="form-control"
+              disabled={!isEditing}
             />
           </FormGroup>
           <FormGroup label="Teacher">
@@ -184,32 +274,42 @@ const CalendarPage = () => {
               value={newEvent.teacher}
               onChange={handleEventChange}
               className="form-control"
+              disabled={!isEditing}
+              list="teachers-list"
             />
+            <datalist id="teachers-list">
+              {teachers.map((teacher, index) => (
+                <option key={index} value={teacher.name} />
+              ))}
+            </datalist>
           </FormGroup>
           {newEvent.students.map((student, index) => (
             <FormGroup label={`Student ${index + 1}`} key={index}>
-              <div className="student-input-container">
-                <input
-                  type="text"
-                  value={student.name}
-                  onChange={(e) => handleStudentChange(index, e)}
-                  className="form-control"
-                  list={`students-list-${index}`}
-                />
-                <datalist id={`students-list-${index}`}>
-                  {filterStudents(student.name).map((filteredStudent, i) => (
-                    <option key={i} value={filteredStudent.name} />
-                  ))}
-                </datalist>
-              </div>
-              <button type="button" onClick={() => removeStudent(index)}>Remove</button>
+              <input
+                type="text"
+                value={student.name}
+                onChange={(e) => handleStudentChange(index, e)}
+                className="form-control"
+                list={`students-list-${index}`}
+                disabled={!isEditing}
+              />
+              <datalist id={`students-list-${index}`}>
+                {filterStudents(student.name).map((filteredStudent, i) => (
+                  <option key={i} value={filteredStudent.name} />
+                ))}
+              </datalist>
+              {isEditing && <button type="button" onClick={() => removeStudent(index)}>Remove</button>}
             </FormGroup>
           ))}
-          <div className="button-group">
-            <button type="button" onClick={addStudent}>Add student</button>
-            <button type="submit" className="btn btn-primary">Submit</button>
-            <button type="button" className="btn btn-secondary" onClick={() => setModalOpen(false)}>Cancel</button>
-          </div>
+          {isEditing && <button type="button" onClick={addStudent}>Add student</button>}
+          {isEditing ? (
+            <div className="button-group">
+              <button type="submit" className="btn btn-primary">Submit</button>
+              <button type="button" className="btn btn-secondary" onClick={() => setModalOpen(false)}>Cancel</button>
+            </div>
+          ) : (
+            <button type="button" className="btn btn-secondary" onClick={() => setIsEditing(true)}>Edit</button>
+          )}
         </form>
       </Modal>
     </div>
@@ -217,4 +317,3 @@ const CalendarPage = () => {
 };
 
 export default CalendarPage;
-
