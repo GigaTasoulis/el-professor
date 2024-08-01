@@ -188,18 +188,20 @@ const CalendarPage = () => {
           </FormGroup>
           {newEvent.students.map((student, index) => (
             <FormGroup label={`Student ${index + 1}`} key={index}>
-              <input
-                type="text"
-                value={student.name}
-                onChange={(e) => handleStudentChange(index, e)}
-                className="form-control"
-                list={`students-list-${index}`}
-              />
-              <datalist id={`students-list-${index}`}>
-                {filterStudents(student.name).map((filteredStudent, i) => (
-                  <option key={i} value={filteredStudent.name} />
-                ))}
-              </datalist>
+              <div className="student-input-container">
+                <input
+                  type="text"
+                  value={student.name}
+                  onChange={(e) => handleStudentChange(index, e)}
+                  className="form-control"
+                  list={`students-list-${index}`}
+                />
+                <datalist id={`students-list-${index}`}>
+                  {filterStudents(student.name).map((filteredStudent, i) => (
+                    <option key={i} value={filteredStudent.name} />
+                  ))}
+                </datalist>
+              </div>
               <button type="button" onClick={() => removeStudent(index)}>Remove</button>
             </FormGroup>
           ))}
@@ -215,3 +217,4 @@ const CalendarPage = () => {
 };
 
 export default CalendarPage;
+
