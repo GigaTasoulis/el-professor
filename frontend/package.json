@@ -5,6 +5,7 @@
   "dependencies": {
     "@fullcalendar/core": "^6.1.14",
     "@fullcalendar/react": "^6.1.14",
+    "@syncfusion/ej2-react-schedule": "^26.1.41",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -14,6 +15,7 @@
     "moment-timezone": "^0.5.45",
     "react": "^18.3.1",
     "react-big-calendar": "^1.13.1",
+    "react-datepicker": "^7.3.0",
     "react-dom": "^18.3.1",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.24.1",
