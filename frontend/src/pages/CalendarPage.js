@@ -203,6 +203,10 @@ const CalendarPage = () => {
         />
       </div>
 
+      <button type="button" id="open-calendar-modal-btn" className="btn btn-primary" style={{ display: 'none' }} onClick={() => handleSelectSlot({ start: new Date() })}>
+        +Add Event
+      </button>
+
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <h2>{selectedEvent ? 'View/Edit Lesson' : 'Add Lesson'}</h2>
         <form onSubmit={handleSubmit}>
