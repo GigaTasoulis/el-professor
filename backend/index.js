@@ -8,14 +8,13 @@ const adminRoutes = require('./routes/adminRoutes');
 const classRoutes = require('./routes/classRoutes');
 const studentRoutes = require('./routes/studentRoutes');
 const professorRoutes = require('./routes/professorRoutes');
+const paymentRoutes = require('./routes/paymentRoutes'); 
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
 const PORT = process.env.PORT || 5000;
-
-console.log('MONGO_URI:', process.env.MONGO_URI);
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -28,9 +27,10 @@ mongoose.connect(process.env.MONGO_URI, {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/classes', classRoutes);
-app.use('/api/students', studentRoutes);
-app.use('/api/professors', professorRoutes);
+app.use('/api/classes', classRoutes); 
+app.use('/api/students', studentRoutes); 
+app.use('/api/professors', professorRoutes); 
+app.use('/api/payments', paymentRoutes); 
 
 app.get('/', (req, res) => {
   res.send('El Professor Backend');
