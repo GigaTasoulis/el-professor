@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ReactModal from 'react-modal';
 import '../styles/Professors.css';
 import { getProfessors, createProfessor, updateProfessor } from '../services/professorService';
+import editIcon from '../images/edit.png';
 
 const Professors = () => {
   const [professors, setProfessors] = useState([]);
@@ -158,15 +159,7 @@ const Professors = () => {
                           className="btn btn-sm btn-link"
                           onClick={() => setEditingIndex(index)}
                         >
-                          <svg
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            className="bi bi-pencil"
-                            viewBox="0 0 16 16"
-                          >
-                            <path d="M12.146.854a.5.5 0 011.708.708l-10 10a.5.5 0 01-.168.11l-4 1a.5.5 0 01-.637-.637l1-4a.5.5 0 01.11-.168l10-10zm.854 1.708L12.354 1.5 3.5 10.354V11h.646L14 1.5l.854-.854-1-1zM11.5 3.5L10 2l-.5.5 1.5 1.5.5-.5zM1 13.5V15h1.5l4-4H5l-4 4z" />
-                          </svg>
+                          <img src={editIcon} alt="Edit" className="icon" />
                         </button>
                       )}
                     </td>
