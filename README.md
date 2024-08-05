@@ -1,4 +1,4 @@
-El Professor
+# El Professor
 
 El Professor is a web-based application designed to manage university lessons, students, and professors efficiently. The application provides functionalities for scheduling classes, managing student debts, and tracking payments.
 Table of Contents
@@ -11,7 +11,7 @@ Table of Contents
     Contributing
     License
 
-Features
+# Features
 
     User Authentication: Secure login and logout functionalities for the admin.
     Dashboard: Overview of total lessons, hours taught, student count, revenue goals, and unpaid debts.
@@ -21,7 +21,7 @@ Features
     Payment Tracking: Track student payments and manage their debts.
     Responsive Design: Accessible on both desktop and mobile devices.
 
-Tech Stack
+# Tech Stack
 
     Frontend:
         React.js
@@ -36,51 +36,51 @@ Tech Stack
         Chart.js for data visualization
         CSS for styling
 
-Installation
+# Installation
 Prerequisites
 
     Node.js and npm installed on your local machine
     MongoDB installed and running
 
-Steps
+# Steps
 
     Clone the repository:
 
     bash
 
-git clone https://github.com/your-username/el-professor.git
-cd el-professor
+```git clone https://github.com/your-username/el-professor.git```
+```cd el-professor```
 
-Install backend dependencies:
-
-bash
-
-cd backend
-npm install
-
-Install frontend dependencies:
+# Install backend dependencies:
 
 bash
 
-cd ../frontend
-npm install
+```cd backend```
+```npm install```
 
-Set up environment variables:
+# Install frontend dependencies:
+
+bash
+
+```cd ../frontend ```
+``` npm install ```
+
+# Set up environment variables:
 Create a .env file in the backend directory and add the following:
 
 env
 
-MONGO_URI=mongodb://localhost:27017/el-professor
-PORT=5000
+```MONGO_URI=mongodb://localhost:27017/el-professor```
+```PORT=5000```
 
-Run the backend server:
+# Run the backend server:
 
 bash
 
-cd backend
-npm start
+```cd backend```
+```node index.js```
 
-Run the frontend development server:
+# Run the frontend development server:
 
 bash
 
