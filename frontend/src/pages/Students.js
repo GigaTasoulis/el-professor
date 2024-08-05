@@ -3,6 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ReactModal from 'react-modal';
 import '../styles/Students.css';
 import { getStudents, createStudent, updateStudent } from '../services/studentService';
+import editIcon from '../images/edit.png';
+import paymentIcon from '../images/credit-card.png';
+import historyIcon from '../images/scroll.png';
 
 const Students = () => {
   const [students, setStudents] = useState([]);
@@ -147,19 +150,13 @@ const Students = () => {
                     <td>{student.debt}</td>
                     <td>
                       <button className="btn btn-link" onClick={() => openEditModal(student)}>
-                        <svg width="16" height="16" fill="currentColor" className="bi bi-pencil" viewBox="0 0 16 16">
-                          <path d="M12.146.854a.5.5 0 011.708.708l-10 10a.5.5 0 01-.168.11l-4 1a.5.5 0 01-.637-.637l1-4a.5.5 0 01.11-.168l10-10zm.854 1.708L12.354 1.5 3.5 10.354V11h.646L14 1.5l.854-.854-1-1zM11.5 3.5L10 2l-.5.5 1.5 1.5.5-.5zM1 13.5V15h1.5l4-4H5l-4 4z" />
-                        </svg>
+                      <img src={editIcon} alt="Edit" className="icon" />
                       </button>
                       <button className="btn btn-link" onClick={() => openPaymentModal(student)}>
-                        <svg width="16" height="16" fill="currentColor" className="bi bi-plus-circle" viewBox="0 0 16 16">
-                          <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zm0 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm3 7a.5.5 0 0 1-.5.5H8.5v2.5a.5.5 0 0 1-1 0V8.5H5a.5.5 0 0 1 0-1h2.5V5a.5.5 0 0 1 1 0v2.5h2.5A.5.5 0 0 1 11 8z" />
-                        </svg>
+                      <img src={paymentIcon} alt="Edit" className="icon" />
                       </button>
                       <button className="btn btn-link" onClick={() => openPaymentHistoryModal(student)}>
-                        <svg width="16" height="16" fill="currentColor" className="bi bi-clock-history" viewBox="0 0 16 16">
-                          <path d="M8.515 3h-.03a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 1 0v2a.5.5 0 0 1-.47.5zm2.02.035a.5.5 0 0 1-.485-.637 5.5 5.5 0 0 0-9.87 0 .5.5 0 1 1-.97-.247 6.5 6.5 0 1 1 11.745 0 .5.5 0 0 1-.485.637h-.03zm-1.07 7.217c.262-.262.495-.581.678-.937h.003a.5.5 0 1 1 .886.464 5.474 5.474 0 0 1-.852 1.182 5.5 5.5 0 1 1-7.694 0 .5.5 0 1 1 .886-.464 5.474 5.474 0 0 1 .852-1.182zm.35-5.096a.5.5 0 0 1 .352.145l1.5 1.5a.5.5 0 0 1-.707.707L9.5 6.207V10.5a.5.5 0 0 1-1 0V6.5a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 .5.5v2.5a.5.5 0 0 1-1 0V6.707L7.854 8.854a.5.5 0 0 1-.708-.707l1.5-1.5a.5.5 0 0 1 .352-.145z" />
-                        </svg>
+                      <img src={historyIcon} alt="Edit" className="icon" />
                       </button>
                     </td>
                   </tr>
@@ -204,9 +201,7 @@ const Students = () => {
             <div className="modal-header">
               <h2>Edit Student</h2>
               <button className="btn btn-link" onClick={toggleEdit}>
-                <svg width="16" height="16" fill="currentColor" className="bi bi-pencil" viewBox="0 0 16 16">
-                  <path d="M12.146.854a.5.5 0 011.708.708l-10 10a.5.5 0 01-.168.11l-4 1a.5.5 0 01-.637-.637l1-4a.5.5 0 01.11-.168l10-10zm.854 1.708L12.354 1.5 3.5 10.354V11h.646L14 1.5l.854-.854-1-1zM11.5 3.5L10 2l-.5.5 1.5 1.5.5-.5zM1 13.5V15h1.5l4-4H5l-4 4z" />
-                </svg>
+              <img src={editIcon} alt="Edit" className="icon" />
               </button>
             </div>
             {currentStudent && (

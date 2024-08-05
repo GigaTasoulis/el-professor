@@ -39,3 +39,19 @@
 .btn-link svg {
   cursor: pointer;
 }
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.table-responsive {
+  margin-top: 20px;
+}
+
+
+.modal-header .btn-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
