@@ -6,7 +6,8 @@ const classSchema = new mongoose.Schema({
   class: { type: String, required: true },
   lesson: { type: String, required: true },
   teacher: { type: String, required: true },
-  students: [{ name: String }]
+  students: [{ name: String }],
+  costPerClass: { type: Number, required: true }
 });
 
 module.exports = mongoose.model('Class', classSchema);

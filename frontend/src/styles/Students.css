@@ -1,64 +1,41 @@
-.container-fluid {
-    padding: 0;
-  }
-.btn-link{
-    width:auto;
-}
-  
-.students-list {
-  display: flex;
-  flex-wrap: wrap;
+.table-responsive {
+  margin-bottom: 20px;
 }
 
-.student-item {
-  flex: 1 1 30%;
-  margin: 10px;
-  padding: 10px;
-  background: #f8f9fa;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
+.table thead th {
+  border-bottom: 2px solid #dee2e6;
 }
 
-.student-item i {
-  margin-right: 10px;
+.table tbody td {
+  vertical-align: middle;
 }
 
 .add-student {
-  margin-top: 20px;
   text-align: center;
+  margin-top: 20px;
 }
 
 .add-student button {
-  margin-bottom: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.add-student p {
+  margin-top: 10px;
+  color: #666;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #dee2e6;
 }
 
-.modal-header h2 {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.modal-header button {
-  background: none;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.btn-link svg {
   cursor: pointer;
-  padding: 2px 6px;
-  display: flex;
-  align-items: center;
-}
-
-.modal-header button svg {
-  width: 16px;
-  height: 16px;
 }
