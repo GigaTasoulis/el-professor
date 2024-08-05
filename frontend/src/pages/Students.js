@@ -7,10 +7,13 @@ import { getStudents, createStudent, updateStudent } from '../services/studentSe
 const Students = () => {
   const [students, setStudents] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [paymentModalIsOpen, setPaymentModalIsOpen] = useState(false);
+  const [paymentHistoryModalIsOpen, setPaymentHistoryModalIsOpen] = useState(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
-  const [newStudent, setNewStudent] = useState({ name: '', surname: '', tel: '', department: '', email: '', debt: 0 });
+  const [newStudent, setNewStudent] = useState({ name: '', surname: '', tel: '', department: '', email: '', debt: 0, paid: 0 });
   const [currentStudent, setCurrentStudent] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
+  const [paymentAmount, setPaymentAmount] = useState('');
 
   useEffect(() => {
     loadStudents();
@@ -27,7 +30,26 @@ const Students = () => {
 
   const closeModal = () => {
     setModalIsOpen(false);
-    setNewStudent({ name: '', surname: '', tel: '', department: '', email: '', debt: 0 });
+    setNewStudent({ name: '', surname: '', tel: '', department: '', email: '', debt: 0, paid: 0 });
+  };
+
+  const openPaymentModal = (student) => {
+    setCurrentStudent(student);
+    setPaymentModalIsOpen(true);
+  };
+
+  const closePaymentModal = () => {
+    setPaymentModalIsOpen(false);
+    setPaymentAmount('');
+  };
+
+  const openPaymentHistoryModal = (student) => {
+    setCurrentStudent(student);
+    setPaymentHistoryModalIsOpen(true);
+  };
+
+  const closePaymentHistoryModal = () => {
+    setPaymentHistoryModalIsOpen(false);
   };
 
   const openEditModal = (student) => {
@@ -63,6 +85,27 @@ const Students = () => {
     closeEditModal();
   };
 
+  const handleAddPayment = async () => {
+    const updatedStudent = { ...currentStudent };
+    const payment = parseFloat(paymentAmount);
+
+    if (isNaN(payment) || payment <= 0) {
+      alert("Please enter a valid payment amount");
+      return;
+    }
+
+    updatedStudent.debt -= payment;
+    updatedStudent.paid += payment;
+    updatedStudent.paymentHistory = [
+      ...currentStudent.paymentHistory,
+      { amount: payment, date: new Date().toISOString() }
+    ];
+
+    await updateStudent(currentStudent._id, updatedStudent);
+    loadStudents();
+    closePaymentModal();
+  };
+
   const toggleEdit = () => {
     setIsEditable(!isEditable);
   };
@@ -80,19 +123,49 @@ const Students = () => {
             </div>
           </div>
 
-          <div className="students-list">
-            {students.map((student, index) => (
-              <div key={index} className="student-item" onClick={() => openEditModal(student)}>
-                <i className="fa fa-user-graduate"></i> {student.name} {student.surname} - Debt: ${student.debt}
-              </div>
-            ))}
-          </div>
-          
-          <div className="add-student">
-            <button type="button" id="open-student-modal-btn" className="btn btn-primary" onClick={openModal}>
-              +Add Student
-            </button>
-            <p>Please, organize your students through the button below!</p>
+          <div className="table-responsive">
+            <table className="table table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Surname</th>
+                  <th>Tel</th>
+                  <th>Department</th>
+                  <th>Email</th>
+                  <th>Debt</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {students.map((student, index) => (
+                  <tr key={index}>
+                    <td>{student.name}</td>
+                    <td>{student.surname}</td>
+                    <td>{student.tel}</td>
+                    <td>{student.department}</td>
+                    <td>{student.email}</td>
+                    <td>{student.debt}</td>
+                    <td>
+                      <button className="btn btn-link" onClick={() => openEditModal(student)}>
+                        <svg width="16" height="16" fill="currentColor" className="bi bi-pencil" viewBox="0 0 16 16">
+                          <path d="M12.146.854a.5.5 0 011.708.708l-10 10a.5.5 0 01-.168.11l-4 1a.5.5 0 01-.637-.637l1-4a.5.5 0 01.11-.168l10-10zm.854 1.708L12.354 1.5 3.5 10.354V11h.646L14 1.5l.854-.854-1-1zM11.5 3.5L10 2l-.5.5 1.5 1.5.5-.5zM1 13.5V15h1.5l4-4H5l-4 4z" />
+                        </svg>
+                      </button>
+                      <button className="btn btn-link" onClick={() => openPaymentModal(student)}>
+                        <svg width="16" height="16" fill="currentColor" className="bi bi-plus-circle" viewBox="0 0 16 16">
+                          <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zm0 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm3 7a.5.5 0 0 1-.5.5H8.5v2.5a.5.5 0 0 1-1 0V8.5H5a.5.5 0 0 1 0-1h2.5V5a.5.5 0 0 1 1 0v2.5h2.5A.5.5 0 0 1 11 8z" />
+                        </svg>
+                      </button>
+                      <button className="btn btn-link" onClick={() => openPaymentHistoryModal(student)}>
+                        <svg width="16" height="16" fill="currentColor" className="bi bi-clock-history" viewBox="0 0 16 16">
+                          <path d="M8.515 3h-.03a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 1 0v2a.5.5 0 0 1-.47.5zm2.02.035a.5.5 0 0 1-.485-.637 5.5 5.5 0 0 0-9.87 0 .5.5 0 1 1-.97-.247 6.5 6.5 0 1 1 11.745 0 .5.5 0 0 1-.485.637h-.03zm-1.07 7.217c.262-.262.495-.581.678-.937h.003a.5.5 0 1 1 .886.464 5.474 5.474 0 0 1-.852 1.182 5.5 5.5 0 1 1-7.694 0 .5.5 0 1 1 .886-.464 5.474 5.474 0 0 1 .852-1.182zm.35-5.096a.5.5 0 0 1 .352.145l1.5 1.5a.5.5 0 0 1-.707.707L9.5 6.207V10.5a.5.5 0 0 1-1 0V6.5a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 .5.5v2.5a.5.5 0 0 1-1 0V6.707L7.854 8.854a.5.5 0 0 1-.708-.707l1.5-1.5a.5.5 0 0 1 .352-.145z" />
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
           <ReactModal isOpen={modalIsOpen} onRequestClose={closeModal} ariaHideApp={false}>
@@ -132,7 +205,7 @@ const Students = () => {
               <h2>Edit Student</h2>
               <button className="btn btn-link" onClick={toggleEdit}>
                 <svg width="16" height="16" fill="currentColor" className="bi bi-pencil" viewBox="0 0 16 16">
-                  <path d="M12.146.854a.5.5 0 011.708.708l-10 10a.5.5 0 01-.168.11l-4 1a.5.5 0 01-.637-.637l1-4a.5.5 0 01.11-.168l10-10zm.854 1.708L12.354 1.5 3.5 10.354V11h.646L14 1.5l.854-.854-1-1zM11.5 3.5L10 2l-.5.5 1.5 1.5.5-.5zM1 13.5V15h1.5l4-4H5l-4 4z"/>
+                  <path d="M12.146.854a.5.5 0 011.708.708l-10 10a.5.5 0 01-.168.11l-4 1a.5.5 0 01-.637-.637l1-4a.5.5 0 01.11-.168l10-10zm.854 1.708L12.354 1.5 3.5 10.354V11h.646L14 1.5l.854-.854-1-1zM11.5 3.5L10 2l-.5.5 1.5 1.5.5-.5zM1 13.5V15h1.5l4-4H5l-4 4z" />
                 </svg>
               </button>
             </div>
@@ -162,12 +235,40 @@ const Students = () => {
                   <label>Debt</label>
                   <input type="number" className="form-control" name="debt" value={currentStudent.debt} onChange={handleEditChange} readOnly={!isEditable} />
                 </div>
+                <div className="form-group">
+                  <label>Paid</label>
+                  <input type="number" className="form-control" name="paid" value={currentStudent.paid} onChange={handleEditChange} readOnly={!isEditable} />
+                </div>
                 {isEditable && (
                   <button type="button" className="btn btn-primary" onClick={handleEditStudent}>Save Changes</button>
                 )}
                 <button type="button" className="btn btn-secondary" onClick={closeEditModal}>Cancel</button>
               </form>
             )}
+          </ReactModal>
+
+          <ReactModal isOpen={paymentModalIsOpen} onRequestClose={closePaymentModal} ariaHideApp={false}>
+            <h2>Add Payment</h2>
+            <div className="form-group">
+              <label>Payment Amount</label>
+              <input type="number" className="form-control" value={paymentAmount} onChange={(e) => setPaymentAmount(e.target.value)} />
+            </div>
+            <button type="button" className="btn btn-primary" onClick={handleAddPayment}>Submit Payment</button>
+            <button type="button" className="btn btn-secondary" onClick={closePaymentModal}>Cancel</button>
+          </ReactModal>
+
+          <ReactModal isOpen={paymentHistoryModalIsOpen} onRequestClose={closePaymentHistoryModal} ariaHideApp={false}>
+            <h2>Payment History</h2>
+            {currentStudent && (
+              <ul>
+                {currentStudent.paymentHistory.map((payment, index) => (
+                  <li key={index}>
+                    Amount: {payment.amount}, Date: {new Date(payment.date).toLocaleString()}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <button type="button" className="btn btn-secondary" onClick={closePaymentHistoryModal}>Close</button>
           </ReactModal>
         </main>
       </div>

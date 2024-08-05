@@ -9,6 +9,9 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const Dashboard = () => {
   const [lessons, setLessons] = useState([]);
   const [students, setStudents] = useState([]);
+  const [studentGoal, setStudentGoal] = useState(100);
+  const [revenueGoal, setRevenueGoal] = useState(10000);
+  const [hoursGoal, setHoursGoal] = useState(1000);
 
   useEffect(() => {
     fetchLessons();
@@ -20,7 +23,7 @@ const Dashboard = () => {
       const response = await axios.get('http://localhost:5000/api/classes');
       setLessons(response.data);
     } catch (error) {
-      console.error("Error fetching lessons: ", error);
+      console.error('Error fetching lessons: ', error);
     }
   };
 
@@ -29,7 +32,7 @@ const Dashboard = () => {
       const response = await axios.get('http://localhost:5000/api/students');
       setStudents(response.data);
     } catch (error) {
-      console.error("Error fetching students: ", error);
+      console.error('Error fetching students: ', error);
     }
   };
 
@@ -42,15 +45,25 @@ const Dashboard = () => {
     }, 0);
   };
 
-  const studentsGoal = 100;
-  const revenueGoal = 10000;
-  const hoursGoal = 1000;
+  const calculateTotalDebt = () => {
+    return students.reduce((acc, student) => acc + student.debt, 0);
+  };
+
+  const calculateTotalRevenue = () => {
+    return students.reduce((acc, student) => acc + student.paid, 0);
+  };
+
+  const handleGoalChange = (goalType, value) => {
+    if (goalType === 'students') setStudentGoal(value);
+    if (goalType === 'revenue') setRevenueGoal(value);
+    if (goalType === 'hours') setHoursGoal(value);
+  };
 
   const pieDataStudents = {
     labels: ['Total Students', 'Goal'],
     datasets: [
       {
-        data: [students.length, studentsGoal - students.length],
+        data: [students.length, studentGoal - students.length],
         backgroundColor: ['#FF6384', '#E0E0E0'],
         hoverBackgroundColor: ['#FF6384', '#E0E0E0']
       }
@@ -61,7 +74,7 @@ const Dashboard = () => {
     labels: ['Total Revenue', 'Goal'],
     datasets: [
       {
-        data: [0, revenueGoal], // No revenue calculation for now
+        data: [calculateTotalRevenue(), revenueGoal - calculateTotalRevenue()],
         backgroundColor: ['#36A2EB', '#E0E0E0'],
         hoverBackgroundColor: ['#36A2EB', '#E0E0E0']
       }
@@ -96,18 +109,26 @@ const Dashboard = () => {
           <h3>Total Students</h3>
           <p>{students.length}</p>
         </div>
+        <div className="card">
+          <h3>Unpaid</h3>
+          <p>{calculateTotalDebt().toFixed(2)}</p>
+        </div>
+        <div className="card">
+          <h3>Revenue</h3>
+          <p>{calculateTotalRevenue().toFixed(2)}</p>
+        </div>
       </div>
       <div className="charts">
         <div className="pie-charts-container">
-          <div className="pie-chart">
+          <div className="pie-chart" onClick={() => handleGoalChange('students', prompt('Enter new students goal', studentGoal))}>
             <h3>Students Goal</h3>
             <Doughnut data={pieDataStudents} />
           </div>
-          <div className="pie-chart">
+          <div className="pie-chart" onClick={() => handleGoalChange('revenue', prompt('Enter new revenue goal', revenueGoal))}>
             <h3>Revenue Goal</h3>
             <Doughnut data={pieDataRevenue} />
           </div>
-          <div className="pie-chart">
+          <div className="pie-chart" onClick={() => handleGoalChange('hours', prompt('Enter new hours goal', hoursGoal))}>
             <h3>Hours Goal</h3>
             <Doughnut data={pieDataHours} />
           </div>

@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@fullcalendar/core": "^6.1.14",
     "@fullcalendar/react": "^6.1.14",
     "@syncfusion/ej2-react-schedule": "^26.1.41",
