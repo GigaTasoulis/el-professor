@@ -102,3 +102,7 @@
 .add-professor button {
   margin-bottom: 10px;
 }
+
+.hidden-button {
+  display: none !important;
+}
