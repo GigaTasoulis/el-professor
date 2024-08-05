@@ -120,8 +120,13 @@ const Students = () => {
           <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 className="h2">Students</h1>
             <div className="btn-toolbar mb-2 mb-md-0">
-              <button type="button" className="btn btn-sm btn-outline-secondary">
-                <i className="fa fa-filter"></i> Filters
+              <button
+                type="button"
+                id="open-student-modal-btn"
+                className="btn btn-sm btn-outline-secondary hidden-button"
+                onClick={openModal}
+              >
+                +Add Student
               </button>
             </div>
           </div>
@@ -150,13 +155,13 @@ const Students = () => {
                     <td>{student.debt}</td>
                     <td>
                       <button className="btn btn-link" onClick={() => openEditModal(student)}>
-                      <img src={editIcon} alt="Edit" className="icon" />
+                        <img src={editIcon} alt="Edit" className="icon" />
                       </button>
                       <button className="btn btn-link" onClick={() => openPaymentModal(student)}>
-                      <img src={paymentIcon} alt="Edit" className="icon" />
+                        <img src={paymentIcon} alt="Payment" className="icon" />
                       </button>
                       <button className="btn btn-link" onClick={() => openPaymentHistoryModal(student)}>
-                      <img src={historyIcon} alt="Edit" className="icon" />
+                        <img src={historyIcon} alt="History" className="icon" />
                       </button>
                     </td>
                   </tr>
@@ -201,7 +206,7 @@ const Students = () => {
             <div className="modal-header">
               <h2>Edit Student</h2>
               <button className="btn btn-link" onClick={toggleEdit}>
-              <img src={editIcon} alt="Edit" className="icon" />
+                <img src={editIcon} alt="Edit" className="icon" />
               </button>
             </div>
             {currentStudent && (

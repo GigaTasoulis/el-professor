@@ -177,10 +177,9 @@ const Professors = () => {
           </div>
           
           <div className="add-professor">
-            <button type="button" id="open-professor-modal-btn" className="btn btn-primary" onClick={openModal}>
+            <button type="button" id="open-professor-modal-btn" className="btn btn-primary hidden-button" onClick={openModal}>
               +Add Professor
             </button>
-            <p>Please, organize your professors through the button below!</p>
           </div>
 
           <ReactModal isOpen={modalIsOpen} onRequestClose={closeModal} ariaHideApp={false}>
