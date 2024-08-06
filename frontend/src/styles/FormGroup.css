@@ -1,0 +1,18 @@
+.form-group {
+  flex: 1 1 45%;
+  margin: 10px;
+  min-width: 200px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.student-input-container {
+  position: relative;
+}
+
+.student-input-container input {
+  width: 100%;
+}

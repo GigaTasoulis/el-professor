@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import CalendarPage from './pages/CalendarPage';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -7,8 +7,7 @@ import Students from './pages/Students';
 import Professors from './pages/Professors';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import Navbar from './components/Navbar';
-
-import './styles/App.css'; // Ensure custom CSS for the layout is imported
+import './styles/App.css';
 
 function App() {
   return (
@@ -24,14 +23,31 @@ function App() {
 
 const MainContent = () => {
   const { user } = useContext(AuthContext);
+  const location = useLocation();
 
-  if (!user) {
+  const handleAddButtonClick = (selectedCategory) => {
+    switch (selectedCategory) {
+      case '/students':
+        document.querySelector('#open-student-modal-btn').click();
+        break;
+      case '/professors':
+        document.querySelector('#open-professor-modal-btn').click();
+        break;
+      case '/calendar':
+        document.querySelector('#open-calendar-modal-btn').click();
+        break;
+      default:
+        break;
+    }
+  };
+
+  if (location.pathname === '/login') {
     return <Login />;
   }
 
   return (
     <>
-      <Navbar />
+      {user && <Navbar onAddButtonClick={handleAddButtonClick} />}
       <div className="main-content">
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
