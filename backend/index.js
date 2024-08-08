@@ -8,6 +8,7 @@ const adminRoutes = require('./routes/adminRoutes');
 const classRoutes = require('./routes/classRoutes');
 const studentRoutes = require('./routes/studentRoutes');
 const professorRoutes = require('./routes/professorRoutes');
+const goalRoutes = require('./routes/goalRoutes');
 
 
 const app = express();
@@ -30,7 +31,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/classes', classRoutes); 
 app.use('/api/students', studentRoutes); 
 app.use('/api/professors', professorRoutes); 
-
+app.use('/api/goals', goalRoutes);
 
 app.get('/', (req, res) => {
   res.send('El Professor Backend');

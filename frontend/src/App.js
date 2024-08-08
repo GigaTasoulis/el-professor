@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import CalendarPage from './pages/CalendarPage';
 import Login from './pages/Login';
@@ -24,20 +24,25 @@ function App() {
 const MainContent = () => {
   const { user } = useContext(AuthContext);
   const location = useLocation();
+  const dashboardRef = useRef(null);
 
   const handleAddButtonClick = (selectedCategory) => {
-    switch (selectedCategory) {
-      case '/students':
-        document.querySelector('#open-student-modal-btn').click();
-        break;
-      case '/professors':
-        document.querySelector('#open-professor-modal-btn').click();
-        break;
-      case '/calendar':
-        document.querySelector('#open-calendar-modal-btn').click();
-        break;
-      default:
-        break;
+    if (selectedCategory === '/dashboard' && dashboardRef.current) {
+      dashboardRef.current.openGoalsModal();
+    } else {
+      switch (selectedCategory) {
+        case '/students':
+          document.querySelector('#open-student-modal-btn').click();
+          break;
+        case '/professors':
+          document.querySelector('#open-professor-modal-btn').click();
+          break;
+        case '/calendar':
+          document.querySelector('#open-calendar-modal-btn').click();
+          break;
+        default:
+          break;
+      }
     }
   };
 
@@ -50,7 +55,7 @@ const MainContent = () => {
       {user && <Navbar onAddButtonClick={handleAddButtonClick} />}
       <div className="main-content">
         <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard ref={dashboardRef} />} />
           <Route path="/students" element={<Students />} />
           <Route path="/professors" element={<Professors />} />
           <Route path="/calendar" element={<CalendarPage />} />

@@ -1,22 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import Modal from '../components/Modal'; // Make sure the path is correct
 import '../styles/Dashboard.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const Dashboard = () => {
+const Dashboard = forwardRef((props, ref) => {
   const [lessons, setLessons] = useState([]);
   const [students, setStudents] = useState([]);
   const [studentGoal, setStudentGoal] = useState(100);
   const [revenueGoal, setRevenueGoal] = useState(10000);
   const [hoursGoal, setHoursGoal] = useState(1000);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetchLessons();
     fetchStudents();
+    fetchGoals();
   }, []);
+
+  useImperativeHandle(ref, () => ({
+    openGoalsModal: () => setModalIsOpen(true),
+  }));
 
   const fetchLessons = async () => {
     try {
@@ -36,11 +44,35 @@ const Dashboard = () => {
     }
   };
 
+  const fetchGoals = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/goals');
+      const { studentGoal, revenueGoal, hoursGoal } = response.data;
+      setStudentGoal(studentGoal);
+      setRevenueGoal(revenueGoal);
+      setHoursGoal(hoursGoal);
+    } catch (error) {
+      console.error('Error fetching goals: ', error);
+    }
+  };
+
+  const saveGoals = async () => {
+    try {
+      await axios.put('http://localhost:5000/api/goals', {
+        studentGoal,
+        revenueGoal,
+        hoursGoal
+      });
+    } catch (error) {
+      console.error('Error saving goals: ', error);
+    }
+  };
+
   const calculateTotalHours = () => {
     return lessons.reduce((acc, lesson) => {
       const start = new Date(lesson.start);
       const end = new Date(lesson.end);
-      const duration = (end - start) / (1000 * 60 * 60); // Convert milliseconds to hours
+      const duration = (end - start) / (1000 * 60 * 60);
       return acc + duration;
     }, 0);
   };
@@ -51,12 +83,6 @@ const Dashboard = () => {
 
   const calculateTotalRevenue = () => {
     return students.reduce((acc, student) => acc + student.paid, 0);
-  };
-
-  const handleGoalChange = (goalType, value) => {
-    if (goalType === 'students') setStudentGoal(value);
-    if (goalType === 'revenue') setRevenueGoal(value);
-    if (goalType === 'hours') setHoursGoal(value);
   };
 
   const pieDataStudents = {
@@ -92,6 +118,28 @@ const Dashboard = () => {
     ]
   };
 
+  const handleModalSubmit = () => {
+    const currentStudents = students.length;
+    const currentRevenue = calculateTotalRevenue();
+    const currentHours = calculateTotalHours();
+
+    if (studentGoal < currentStudents) {
+      setError(`Students goal cannot be less than the current number of students (${currentStudents}).`);
+      return;
+    }
+    if (revenueGoal < currentRevenue) {
+      setError(`Revenue goal cannot be less than the current total revenue (${currentRevenue.toFixed(2)}).`);
+      return;
+    }
+    if (hoursGoal < currentHours) {
+      setError(`Hours goal cannot be less than the current total hours (${currentHours.toFixed(2)}).`);
+      return;
+    }
+
+    saveGoals();
+    setModalIsOpen(false);
+  };
+
   return (
     <div className="dashboard">
       <h2>Dashboard</h2>
@@ -120,22 +168,40 @@ const Dashboard = () => {
       </div>
       <div className="charts">
         <div className="pie-charts-container">
-          <div className="pie-chart" onClick={() => handleGoalChange('students', prompt('Enter new students goal', studentGoal))}>
+          <div className="pie-chart">
             <h3>Students Goal</h3>
             <Doughnut data={pieDataStudents} />
           </div>
-          <div className="pie-chart" onClick={() => handleGoalChange('revenue', prompt('Enter new revenue goal', revenueGoal))}>
+          <div className="pie-chart">
             <h3>Revenue Goal</h3>
             <Doughnut data={pieDataRevenue} />
           </div>
-          <div className="pie-chart" onClick={() => handleGoalChange('hours', prompt('Enter new hours goal', hoursGoal))}>
+          <div className="pie-chart">
             <h3>Hours Goal</h3>
             <Doughnut data={pieDataHours} />
           </div>
         </div>
       </div>
+      <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)}>
+        <h2>Set Goals</h2>
+        {error && <p className="error">{error}</p>}
+        <div className="form-group">
+          <label>Students Goal</label>
+          <input type="number" className="form-control" value={studentGoal} onChange={(e) => setStudentGoal(Number(e.target.value))} />
+        </div>
+        <div className="form-group">
+          <label>Revenue Goal</label>
+          <input type="number" className="form-control" value={revenueGoal} onChange={(e) => setRevenueGoal(Number(e.target.value))} />
+        </div>
+        <div className="form-group">
+          <label>Hours Goal</label>
+          <input type="number" className="form-control" value={hoursGoal} onChange={(e) => setHoursGoal(Number(e.target.value))} />
+        </div>
+        <button className="btn btn-primary" onClick={handleModalSubmit}>Submit</button>
+        <button className="btn btn-secondary" onClick={() => setModalIsOpen(false)}>Cancel</button>
+      </Modal>
     </div>
   );
-};
+});
 
 export default Dashboard;
