@@ -55,4 +55,18 @@
     text-align: center;
     cursor: pointer;
   }
+
+  .set-goals-btn {
+    margin-top: 20px;
+  }
+  
+  .hidden-button {
+    display: none !important;
+  }
+  
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+  
   

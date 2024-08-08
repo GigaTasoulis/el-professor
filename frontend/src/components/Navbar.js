@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { logout } from '../services/authService';
-import '../styles/Navbar.css'; // Import custom CSS for the sidebar
+import '../styles/Navbar.css';
 
 const Navbar = ({ onAddButtonClick }) => {
   const { user, setUser } = useContext(AuthContext);
@@ -23,11 +23,13 @@ const Navbar = ({ onAddButtonClick }) => {
   const getButtonText = () => {
     switch (selectedCategory) {
       case '/students':
-        return '+Add Student';
+        return '+ Add Student';
       case '/professors':
-        return '+Add Professor';
+        return '+ Add Professor';
       case '/calendar':
-        return '+Add Event';
+        return '+ Add Event';
+      case '/dashboard':
+        return '+ Set Goals';
       default:
         return '';
     }
@@ -41,9 +43,15 @@ const Navbar = ({ onAddButtonClick }) => {
         return 'Please, organize your professors through button below!';
       case '/calendar':
         return 'Please, organize your events through button below!';
+      case '/dashboard':
+        return 'Please, set your goals through the button below!';
       default:
         return '';
     }
+  };
+
+  const handleButtonClick = () => {
+    onAddButtonClick(selectedCategory);
   };
 
   return (
@@ -72,9 +80,9 @@ const Navbar = ({ onAddButtonClick }) => {
         </li>
         <div className="add-button-container">
           <p>{getButtonTextDescription()}</p>
-          <button className="add-button" onClick={() => onAddButtonClick(selectedCategory)}>{getButtonText()}</button>
+          <button className="add-button" onClick={handleButtonClick}>{getButtonText()}</button>
         </div>
-        <li className="nav-item mt-auto"> {/* Ensure this is at the bottom */}
+        <li className="nav-item mt-auto">
           {user ? (
             <a href="#" className="nav-link logout-link" onClick={handleLogout}>
               <img src="https://cdn-icons-png.flaticon.com/512/1828/1828466.png" alt="Logout Icon" className="logout-icon" />
