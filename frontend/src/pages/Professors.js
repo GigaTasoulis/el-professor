@@ -54,14 +54,14 @@ const Professors = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div className="professor-container container-fluid">
       <div className="row">
         <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
           <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 className="h2">Professors</h1>
+            <h1 className="h2">Καθηγητές</h1>
             <div className="btn-toolbar mb-2 mb-md-0">
               <button type="button" className="btn btn-sm btn-outline-secondary">
-                <i className="fa fa-filter"></i> Filters
+                <i className="fa fa-filter"></i> Φίλτρα
               </button>
             </div>
           </div>
@@ -70,12 +70,12 @@ const Professors = () => {
             <table className="table table-striped table-sm">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Surname</th>
-                  <th>Tel</th>
+                  <th>Όνομα</th>
+                  <th>Επίθετο</th>
+                  <th>Τηλέφωνο</th>
                   <th>Email</th>
-                  <th>AFM</th>
-                  <th>Actions</th>
+                  <th>ΑΦΜ</th>
+                  <th>Αλλαγές</th>
                 </tr>
               </thead>
               <tbody>
@@ -152,14 +152,14 @@ const Professors = () => {
                           className="btn btn-sm btn-success"
                           onClick={() => handleSaveChanges(professor._id, index)}
                         >
-                          Save
+                          Αποθήκευση
                         </button>
                       ) : (
                         <button
                           className="btn btn-sm btn-link"
                           onClick={() => setEditingIndex(index)}
                         >
-                          <img src={editIcon} alt="Edit" className="icon" />
+                          <img src={editIcon} alt="Αλλαγή" className="icon" />
                         </button>
                       )}
                     </td>
@@ -171,23 +171,29 @@ const Professors = () => {
           
           <div className="add-professor">
             <button type="button" id="open-professor-modal-btn" className="btn btn-primary hidden-button" onClick={openModal}>
-              +Add Professor
+              +Προσθήκη Καθηγητή
             </button>
           </div>
 
-          <ReactModal isOpen={modalIsOpen} onRequestClose={closeModal} ariaHideApp={false}>
-            <h2>Add New Professor</h2>
+          <ReactModal 
+            isOpen={modalIsOpen} 
+            onRequestClose={closeModal} 
+            className="custom-modal"
+            overlayClassName="custom-modal-overlay"
+            ariaHideApp={false}
+          >
+            <h2>Προσθήκη Νέου Καθηγητή</h2>
             <form>
               <div className="form-group">
-                <label>Name</label>
+                <label>Όνομα</label>
                 <input type="text" className="form-control" name="name" value={newProfessor.name} onChange={handleChange} />
               </div>
               <div className="form-group">
-                <label>Surname</label>
+                <label>Επίθετο</label>
                 <input type="text" className="form-control" name="surname" value={newProfessor.surname} onChange={handleChange} />
               </div>
               <div className="form-group">
-                <label>Tel</label>
+                <label>Τηλέφωνο</label>
                 <input type="text" className="form-control" name="tel" value={newProfessor.tel} onChange={handleChange} />
               </div>
               <div className="form-group">
@@ -195,13 +201,16 @@ const Professors = () => {
                 <input type="email" className="form-control" name="email" value={newProfessor.email} onChange={handleChange} />
               </div>
               <div className="form-group">
-                <label>AFM</label>
+                <label>ΑΦΜ</label>
                 <input type="text" className="form-control" name="afm" value={newProfessor.afm} onChange={handleChange} />
               </div>
-              <button type="button" className="btn btn-primary" onClick={handleAddProfessor}>Add Professor</button>
-              <button type="button" className="btn btn-secondary" onClick={closeModal}>Cancel</button>
+              <div className="modal-actions">
+                <button type="button" className="btn-add-professor" onClick={handleAddProfessor}>Προσθήκη Καθηγητή</button>
+                <button type="button" className="btn-cancel" onClick={closeModal}>Ακύρωση</button>
+              </div>
             </form>
           </ReactModal>
+
         </main>
       </div>
     </div>
