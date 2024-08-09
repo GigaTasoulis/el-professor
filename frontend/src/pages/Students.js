@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ReactModal from 'react-modal';
+import Modal from '../components/Modal';
 import '../styles/Students.css';
 import { getStudents, createStudent, updateStudent } from '../services/studentService';
 import editIcon from '../images/edit.png';
@@ -83,11 +83,21 @@ const Students = () => {
   };
 
   const handleEditStudent = async () => {
-    await updateStudent(currentStudent._id, currentStudent);
+    const updatedStudent = {
+      ...currentStudent,
+      debt: parseFloat(currentStudent.debt)
+    };
+  
+    console.log('Updated student before sending:', updatedStudent);  // Debugging log
+  
+    const response = await updateStudent(currentStudent._id, updatedStudent);
+    console.log('Backend response:', response);  // Debugging log
+  
     loadStudents();
     closeEditModal();
   };
-
+  
+  
   const handleAddPayment = async () => {
     const updatedStudent = { ...currentStudent };
     const payment = parseFloat(paymentAmount);
@@ -170,7 +180,7 @@ const Students = () => {
             </table>
           </div>
 
-          <ReactModal isOpen={modalIsOpen} onRequestClose={closeModal} ariaHideApp={false}>
+          <Modal isOpen={modalIsOpen} onClose={closeModal}>
             <h2>Add New Student</h2>
             <form>
               <div className="form-group">
@@ -200,9 +210,10 @@ const Students = () => {
               <button type="button" className="btn btn-primary" onClick={handleAddStudent}>Add Student</button>
               <button type="button" className="btn btn-secondary" onClick={closeModal}>Cancel</button>
             </form>
-          </ReactModal>
+          </Modal>
 
-          <ReactModal isOpen={editModalIsOpen} onRequestClose={closeEditModal} ariaHideApp={false}>
+
+          <Modal isOpen={editModalIsOpen} onClose={closeEditModal}>
             <div className="modal-header">
               <h2>Edit Student</h2>
               <button className="btn btn-link" onClick={toggleEdit}>
@@ -235,19 +246,16 @@ const Students = () => {
                   <label>Debt</label>
                   <input type="number" className="form-control" name="debt" value={currentStudent.debt} onChange={handleEditChange} readOnly={!isEditable} />
                 </div>
-                <div className="form-group">
-                  <label>Paid</label>
-                  <input type="number" className="form-control" name="paid" value={currentStudent.paid} onChange={handleEditChange} readOnly={!isEditable} />
-                </div>
                 {isEditable && (
                   <button type="button" className="btn btn-primary" onClick={handleEditStudent}>Save Changes</button>
                 )}
                 <button type="button" className="btn btn-secondary" onClick={closeEditModal}>Cancel</button>
               </form>
             )}
-          </ReactModal>
+          </Modal>
 
-          <ReactModal isOpen={paymentModalIsOpen} onRequestClose={closePaymentModal} ariaHideApp={false}>
+
+          <Modal isOpen={paymentModalIsOpen} onClose={closePaymentModal}>
             <h2>Add Payment</h2>
             <div className="form-group">
               <label>Payment Amount</label>
@@ -255,9 +263,10 @@ const Students = () => {
             </div>
             <button type="button" className="btn btn-primary" onClick={handleAddPayment}>Submit Payment</button>
             <button type="button" className="btn btn-secondary" onClick={closePaymentModal}>Cancel</button>
-          </ReactModal>
+          </Modal>
 
-          <ReactModal isOpen={paymentHistoryModalIsOpen} onRequestClose={closePaymentHistoryModal} ariaHideApp={false}>
+
+          <Modal isOpen={paymentHistoryModalIsOpen} onClose={closePaymentHistoryModal}>
             <h2>Payment History</h2>
             {currentStudent && (
               <ul>
@@ -269,7 +278,8 @@ const Students = () => {
               </ul>
             )}
             <button type="button" className="btn btn-secondary" onClick={closePaymentHistoryModal}>Close</button>
-          </ReactModal>
+          </Modal>
+
         </main>
       </div>
     </div>
