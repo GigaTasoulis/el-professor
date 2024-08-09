@@ -1,0 +1,320 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Modal from '../components/Modal';  // Assuming this is your modal component
+import '../styles/ClassroomsPage.css';
+
+const ClassroomsPage = () => {
+  const [classrooms, setClassrooms] = useState([]);
+  const [lessons, setLessons] = useState([]);
+  const [currentLessonPage, setCurrentLessonPage] = useState(1);
+  const [currentClassroomPage, setCurrentClassroomPage] = useState(1);
+  const [itemsPerPage] = useState(7);
+  const [newLesson, setNewLesson] = useState({ name: '', description: '' });
+  const [newClassroom, setNewClassroom] = useState({ name: '', availability: true });
+  const [error, setError] = useState('');
+  const [isAddLessonModalOpen, setIsAddLessonModalOpen] = useState(false);
+  const [isRemoveLessonModalOpen, setIsRemoveLessonModalOpen] = useState(false);
+  const [isAddClassroomModalOpen, setIsAddClassroomModalOpen] = useState(false);
+  const [isRemoveClassroomModalOpen, setIsRemoveClassroomModalOpen] = useState(false);
+  const [lessonToRemove, setLessonToRemove] = useState(null);
+  const [classroomToRemove, setClassroomToRemove] = useState(null);
+
+  useEffect(() => {
+    fetchClassrooms();
+    fetchLessons();
+  }, []);
+
+  const fetchClassrooms = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/classrooms');
+      setClassrooms(response.data);
+    } catch (error) {
+      console.error('Error fetching classrooms:', error);
+      setError('Failed to fetch classrooms');
+    }
+  };
+
+  const fetchLessons = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/lessons');
+      setLessons(response.data);
+    } catch (error) {
+      console.error('Error fetching lessons:', error);
+      setError('Failed to fetch lessons');
+    }
+  };
+
+  const handleAddLesson = async () => {
+    if (newLesson.name.trim() === '' || newLesson.description.trim() === '') {
+      setError('Lesson name and description cannot be empty.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/lessons', newLesson);
+      setLessons([...lessons, response.data]);
+      setNewLesson({ name: '', description: '' }); // Reset input fields
+      closeModal();
+    } catch (error) {
+      console.error('Error adding lesson:', error);
+      setError('Failed to add lesson');
+    }
+  };
+
+  const handleRemoveLesson = async () => {
+    if (!lessonToRemove) return;
+
+    try {
+      await axios.delete(`http://localhost:5000/api/lessons/${lessonToRemove._id}`);
+      setLessons(lessons.filter(lesson => lesson._id !== lessonToRemove._id));
+      closeModal();
+    } catch (error) {
+      console.error('Error removing lesson:', error);
+      setError('Failed to remove lesson');
+    }
+  };
+
+  const handleAddClassroom = async () => {
+    if (newClassroom.name.trim() === '') {
+      setError('Classroom name cannot be empty.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/classrooms', newClassroom);
+      setClassrooms([...classrooms, response.data]);
+      setNewClassroom({ name: '', availability: true }); // Reset input fields
+      closeModal();
+    } catch (error) {
+      console.error('Error adding classroom:', error);
+      setError('Failed to add classroom');
+    }
+  };
+
+  const handleRemoveClassroom = async () => {
+    if (!classroomToRemove) return;
+
+    try {
+      await axios.delete(`http://localhost:5000/api/classrooms/${classroomToRemove._id}`);
+      setClassrooms(classrooms.filter(classroom => classroom._id !== classroomToRemove._id));
+      closeModal();
+    } catch (error) {
+      console.error('Error removing classroom:', error);
+      setError('Failed to remove classroom');
+    }
+  };
+
+  const openAddLessonModal = () => {
+    setError(''); // Clear any existing errors
+    if (newLesson.name.trim() === '' || newLesson.description.trim() === '') {
+      setError('Lesson name and description cannot be empty.');
+      return;
+    }
+    setIsAddLessonModalOpen(true);
+  };
+
+  const openRemoveLessonModal = (lesson) => {
+    setError(''); // Clear any existing errors
+    setLessonToRemove(lesson);
+    setIsRemoveLessonModalOpen(true);
+  };
+
+  const openAddClassroomModal = () => {
+    setError(''); // Clear any existing errors
+    if (newClassroom.name.trim() === '') {
+      setError('Classroom name cannot be empty.');
+      return;
+    }
+    setIsAddClassroomModalOpen(true);
+  };
+
+  const openRemoveClassroomModal = (classroom) => {
+    setError(''); // Clear any existing errors
+    setClassroomToRemove(classroom);
+    setIsRemoveClassroomModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsAddLessonModalOpen(false);
+    setIsRemoveLessonModalOpen(false);
+    setIsAddClassroomModalOpen(false);
+    setIsRemoveClassroomModalOpen(false);
+    setLessonToRemove(null);
+    setClassroomToRemove(null);
+  };
+
+  // Pagination logic for lessons
+  const indexOfLastLesson = currentLessonPage * itemsPerPage;
+  const indexOfFirstLesson = indexOfLastLesson - itemsPerPage;
+  const currentLessons = lessons.slice(indexOfFirstLesson, indexOfLastLesson);
+
+  // Pagination logic for classrooms
+  const indexOfLastClassroom = currentClassroomPage * itemsPerPage;
+  const indexOfFirstClassroom = indexOfLastClassroom - itemsPerPage;
+  const currentClassrooms = classrooms.slice(indexOfFirstClassroom, indexOfLastClassroom);
+
+  // Change page for lessons
+  const paginateLessons = (pageNumber) => setCurrentLessonPage(pageNumber);
+
+  // Change page for classrooms
+  const paginateClassrooms = (pageNumber) => setCurrentClassroomPage(pageNumber);
+
+  return (
+    <div className="classrooms-page">
+      <h1>Classrooms & Lessons</h1>
+
+      {error && <div className="error-message">{error}</div>}
+
+      <div className="tables-container">
+        <div className="table-container">
+          <h2>Classrooms</h2>
+
+          <div className="add-classroom-container">
+            <input
+              type="text"
+              placeholder="Classroom Name"
+              value={newClassroom.name}
+              onChange={(e) => setNewClassroom({ ...newClassroom, name: e.target.value })}
+            />
+            <button onClick={openAddClassroomModal}>Add Classroom</button>
+          </div>
+
+          <table className="classroom-table">
+            <thead>
+              <tr>
+                <th>Classroom Name</th>
+                <th>Availability</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentClassrooms.map((classroom) => (
+                <tr key={classroom._id}>
+                  <td>{classroom.name}</td>
+                  <td>{classroom.availability ? 'Available' : 'Unavailable'}</td>
+                  <td>
+                    <button onClick={() => openRemoveClassroomModal(classroom)}>Remove</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* Pagination for Classrooms */}
+          <nav>
+            <ul className="pagination">
+              {Array.from({ length: Math.ceil(classrooms.length / itemsPerPage) }).map((_, i) => (
+                <li key={i + 1} className={`page-item ${currentClassroomPage === i + 1 ? 'active' : ''}`}>
+                  <button onClick={() => paginateClassrooms(i + 1)} className="page-link">
+                    {i + 1}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+
+        <div className="table-container">
+          <h2>Lessons</h2>
+
+          <div className="add-lesson-container">
+            <input
+              type="text"
+              placeholder="Lesson Name"
+              value={newLesson.name}
+              onChange={(e) => setNewLesson({ ...newLesson, name: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="Description"
+              value={newLesson.description}
+              onChange={(e) => setNewLesson({ ...newLesson, description: e.target.value })}
+            />
+            <button onClick={openAddLessonModal}>Add Lesson</button>
+          </div>
+
+          <table className="lesson-table">
+            <thead>
+              <tr>
+                <th>Lesson Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentLessons.map((lesson) => (
+                <tr key={lesson._id}>
+                  <td>{lesson.name}</td>
+                  <td>{lesson.description}</td>
+                  <td>
+                    <button onClick={() => openRemoveLessonModal(lesson)}>Remove</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* Pagination for Lessons */}
+          <nav>
+            <ul className="pagination">
+              {Array.from({ length: Math.ceil(lessons.length / itemsPerPage) }).map((_, i) => (
+                <li key={i + 1} className={`page-item ${currentLessonPage === i + 1 ? 'active' : ''}`}>
+                  <button onClick={() => paginateLessons(i + 1)} className="page-link">
+                    {i + 1}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      {/* Modals */}
+      {isAddLessonModalOpen && (
+        <Modal isOpen={isAddLessonModalOpen} onClose={closeModal}>
+          <h2>Confirm Addition</h2>
+          <p>Are you sure you want to add the lesson "{newLesson.name}"?</p>
+          <div className="button-group">
+            <button className="btn btn-primary" onClick={handleAddLesson}>Yes, Add</button>
+            <button className="btn btn-secondary" onClick={closeModal}>Cancel</button>
+          </div>
+        </Modal>
+      )}
+
+      {isRemoveLessonModalOpen && (
+        <Modal isOpen={isRemoveLessonModalOpen} onClose={closeModal}>
+          <h2>Confirm Removal</h2>
+          <p>Are you sure you want to remove the lesson "{lessonToRemove?.name}"?</p>
+          <div className="button-group">
+            <button className="btn btn-danger" onClick={handleRemoveLesson}>Yes, Remove</button>
+            <button className="btn btn-secondary" onClick={closeModal}>Cancel</button>
+          </div>
+        </Modal>
+      )}
+
+      {isAddClassroomModalOpen && (
+        <Modal isOpen={isAddClassroomModalOpen} onClose={closeModal}>
+          <h2>Confirm Addition</h2>
+          <p>Are you sure you want to add the classroom "{newClassroom.name}"?</p>
+          <div className="button-group">
+            <button className="btn btn-primary" onClick={handleAddClassroom}>Yes, Add</button>
+            <button className="btn btn-secondary" onClick={closeModal}>Cancel</button>
+          </div>
+        </Modal>
+      )}
+
+      {isRemoveClassroomModalOpen && (
+        <Modal isOpen={isRemoveClassroomModalOpen} onClose={closeModal}>
+          <h2>Confirm Removal</h2>
+          <p>Are you sure you want to remove the classroom "{classroomToRemove?.name}"?</p>
+          <div className="button-group">
+            <button className="btn btn-danger" onClick={handleRemoveClassroom}>Yes, Remove</button>
+            <button className="btn btn-secondary" onClick={closeModal}>Cancel</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+export default ClassroomsPage;
