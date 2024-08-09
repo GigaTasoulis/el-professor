@@ -3,12 +3,14 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { logout } from '../services/authService';
 import '../styles/Navbar.css';
+import '../styles/Navbar.css';
 
 const Navbar = ({ onAddButtonClick }) => {
   const { user, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedCategory, setSelectedCategory] = useState(location.pathname);
+  
 
   const handleLogout = () => {
     logout();
@@ -23,13 +25,15 @@ const Navbar = ({ onAddButtonClick }) => {
   const getButtonText = () => {
     switch (selectedCategory) {
       case '/students':
-        return '+ Add Student';
+        return '+  Add Student';
       case '/professors':
         return '+ Add Professor';
       case '/calendar':
-        return '+ Add Event';
+        return '+  Add Event';
       case '/dashboard':
         return '+ Set Goals';
+      case '/classrooms':
+        return ''; 
       default:
         return '';
     }
@@ -45,6 +49,8 @@ const Navbar = ({ onAddButtonClick }) => {
         return 'Please, organize your events through button below!';
       case '/dashboard':
         return 'Please, set your goals through the button below!';
+      case '/classrooms':
+        return ''; // Add a description if necessary
       default:
         return '';
     }
@@ -78,13 +84,18 @@ const Navbar = ({ onAddButtonClick }) => {
             Calendar
           </NavLink>
         </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/classrooms" onClick={() => handleNavClick('/classrooms')}>
+            Classrooms
+          </NavLink>
+        </li>
         <div className="add-button-container">
           <p>{getButtonTextDescription()}</p>
           <button className="add-button" onClick={handleButtonClick}>{getButtonText()}</button>
         </div>
         <li className="nav-item mt-auto">
           {user ? (
-            <a href="#" className="nav-link logout-link" onClick={handleLogout}>
+            <a href="/login" className="nav-link logout-link" onClick={handleLogout}>
               <img src="https://cdn-icons-png.flaticon.com/512/1828/1828466.png" alt="Logout Icon" className="logout-icon" />
               Logout
             </a>

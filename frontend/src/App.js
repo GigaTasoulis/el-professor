@@ -8,6 +8,7 @@ import Professors from './pages/Professors';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import './styles/App.css';
+import ClassroomsPage from './pages/ClassroomsPage';
 
 function App() {
   return (
@@ -60,6 +61,7 @@ const MainContent = () => {
           <Route path="/professors" element={<Professors />} />
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/classrooms" element={<ClassroomsPage />} />
         </Routes>
       </div>
     </>
