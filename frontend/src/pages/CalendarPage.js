@@ -25,7 +25,8 @@ const CalendarPage = () => {
     className: '',
     lesson: '',
     teacher: user ? user.name : '',
-    students: [{ name: '' }]
+    students: [{ name: '' }],
+    costPerClass: ''
   });
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -145,18 +146,35 @@ const CalendarPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    const totalCost = 50; // Fixed total cost for the lesson
+    const numberOfStudents = newEvent.students.length;
+  
+    if (numberOfStudents === 0) {
+      console.error("You must add at least one student.");
+      return;
+    }
+  
+    const debtPerStudent = totalCost / numberOfStudents;
+  
+    // Update each student's debt
+    const updatedStudents = newEvent.students.map((student) => ({
+      ...student,
+      debt: debtPerStudent
+    }));
+  
     const eventData = {
       start: newEvent.start,
       end: newEvent.end,
       class: newEvent.className,
       lesson: newEvent.lesson,
       teacher: newEvent.teacher,
-      students: newEvent.students
+      students: updatedStudents,
+      costPerClass: totalCost // Include this field
     };
-
+  
     console.log('Event data:', eventData);
-
+  
     try {
       if (selectedEvent) {
         console.log('Updating event:', selectedEvent._id);
@@ -169,6 +187,12 @@ const CalendarPage = () => {
       }
       setModalOpen(false);
       fetchEvents();
+  
+      // After creating the event, update each student's debt in the database
+      await Promise.all(updatedStudents.map(student => {
+        return axios.put(`http://localhost:5000/api/students/${student._id}/debt`, { debt: student.debt });
+      }));
+  
     } catch (error) {
       console.error("Error creating/updating event: ", error);
       if (error.response) {

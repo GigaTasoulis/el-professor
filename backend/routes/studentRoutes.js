@@ -62,5 +62,28 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// Update a student's debt
+router.put('/:id/debt', async (req, res) => {
+  const { id } = req.params;
+  const { debt } = req.body;
+
+  if (debt === undefined) {
+    return res.status(400).json({ message: 'Debt value is required' });
+  }
+
+  try {
+    const student = await Student.findById(id);
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    student.debt += debt; // Add the new debt amount to the student's existing debt
+    await student.save();
+
+    res.status(200).json(student);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating student debt', error });
+  }
+});
 
 module.exports = router;
