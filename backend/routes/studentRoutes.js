@@ -44,45 +44,20 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Student not found' });
     }
 
-    const newPaidAmount = paid - student.paid; // Calculate the new payment amount
-    student.debt -= newPaidAmount; // Subtract the new payment from the debt
-    student.paid = paid; // Update the paid amount
-    student.paymentHistory = paymentHistory; // Update the payment history
-
+    // Update student fields
     student.name = name;
     student.surname = surname;
     student.tel = tel;
     student.department = department;
     student.email = email;
+    student.debt = debt;
+    student.paid = paid;
+    student.paymentHistory = paymentHistory;
 
     await student.save();
     res.status(200).json(student);
   } catch (error) {
     res.status(500).json({ message: 'Error updating student', error });
-  }
-});
-
-// Update a student's debt
-router.put('/:id/debt', async (req, res) => {
-  const { id } = req.params;
-  const { debt } = req.body;
-
-  if (debt === undefined) {
-    return res.status(400).json({ message: 'Debt value is required' });
-  }
-
-  try {
-    const student = await Student.findById(id);
-    if (!student) {
-      return res.status(404).json({ message: 'Student not found' });
-    }
-
-    student.debt += debt; // Add the new debt amount to the student's existing debt
-    await student.save();
-
-    res.status(200).json(student);
-  } catch (error) {
-    res.status(500).json({ message: 'Error updating student debt', error });
   }
 });
 
