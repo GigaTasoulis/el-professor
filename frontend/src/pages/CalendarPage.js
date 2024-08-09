@@ -144,10 +144,27 @@ const CalendarPage = () => {
     }));
   };
 
+  const calculateDebtPerStudent = (numberOfStudents, durationInHours) => {
+    let costPerStudent;
+  
+    if (numberOfStudents === 1) {
+      costPerStudent = 25;
+    } else if (numberOfStudents === 2) {
+      costPerStudent = 15;
+    } else if (numberOfStudents === 3) {
+      costPerStudent = 12.5;
+    } else if (numberOfStudents >= 4 && numberOfStudents <= 5) {
+      costPerStudent = 10;
+    } else {
+      costPerStudent = 0; // Default in case there are more than 5 students (adjust if necessary)
+    }
+  
+    return costPerStudent * durationInHours;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    const totalCost = 50; // Fixed total cost for the lesson
     const numberOfStudents = newEvent.students.length;
   
     if (numberOfStudents === 0) {
@@ -155,12 +172,24 @@ const CalendarPage = () => {
       return;
     }
   
-    const debtPerStudent = totalCost / numberOfStudents;
+    // Calculate the duration of the class in hours
+    const durationInHours = (newEvent.end - newEvent.start) / (1000 * 60 * 60);
   
-    // Update each student's debt
-    const updatedStudents = newEvent.students.map((student) => ({
-      ...student,
-      debt: debtPerStudent
+    // Calculate debt per student based on the number of students and duration
+    const debtPerStudent = calculateDebtPerStudent(numberOfStudents, durationInHours);
+  
+    // Fetch existing debt for each student and update their debt
+    const updatedStudents = await Promise.all(newEvent.students.map(async (student) => {
+      const existingStudent = students.find(s => s.name === student.name);
+      const updatedDebt = existingStudent.debt + debtPerStudent;
+  
+      // Update the student's debt in the database via the new debt-specific endpoint
+      await axios.put(`http://localhost:5000/api/students/${existingStudent._id}/debt`, { debt: updatedDebt });
+  
+      return {
+        ...student,
+        debt: updatedDebt
+      };
     }));
   
     const eventData = {
@@ -170,7 +199,7 @@ const CalendarPage = () => {
       lesson: newEvent.lesson,
       teacher: newEvent.teacher,
       students: updatedStudents,
-      costPerClass: totalCost // Include this field
+      costPerClass: debtPerStudent * numberOfStudents // Total cost is debt per student multiplied by the number of students
     };
   
     console.log('Event data:', eventData);
@@ -187,12 +216,6 @@ const CalendarPage = () => {
       }
       setModalOpen(false);
       fetchEvents();
-  
-      // After creating the event, update each student's debt in the database
-      await Promise.all(updatedStudents.map(student => {
-        return axios.put(`http://localhost:5000/api/students/${student._id}/debt`, { debt: student.debt });
-      }));
-  
     } catch (error) {
       console.error("Error creating/updating event: ", error);
       if (error.response) {
