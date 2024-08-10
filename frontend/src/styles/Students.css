@@ -1,21 +1,39 @@
-.table-responsive {
+/* General Styles */
+.students-container {
   margin-bottom: 20px;
 }
 
-.table thead th {
-  border-bottom: 2px solid #dee2e6;
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.table tbody td {
+.students-table thead th,
+.students-table tbody td {
+  border: 1px solid #dee2e6;
+  padding: 10px;
+  text-align: center;
+}
+
+.students-table thead th {
+  background-color: #f8f9fa;
+}
+
+.students-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.students-table tbody td {
+  background-color: white;
   vertical-align: middle;
 }
 
-.add-student {
+.add-student-button {
   text-align: center;
   margin-top: 20px;
 }
 
-.add-student button {
+.add-student-button button {
   background-color: #007bff;
   color: white;
   border: none;
@@ -25,30 +43,22 @@
   font-size: 16px;
 }
 
-.add-student p {
+.add-student-info {
   margin-top: 10px;
   color: #666;
 }
 
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.btn-link svg {
+.edit-icon,
+.payment-icon,
+.history-icon {
+  width: 20px;
+  height: 20px;
   cursor: pointer;
 }
 
-.icon {
-  width: 20px;
-  height: 20px;
-}
-
-.table-responsive {
+.students-table-container {
   margin-top: 20px;
 }
-
 
 .modal-header .btn-link {
   background: none;
@@ -56,7 +66,152 @@
   cursor: pointer;
 }
 
-/* Students.css */
 .hidden-button {
   display: none !important;
+}
+
+/* Form Field Styles */
+form .form-group {
+  margin-bottom: 15px;
+}
+
+form .form-group label {
+  font-weight: bold;
+}
+
+form .form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+form .form-group input[readonly] {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
+
+/* Στυλ για τα κουμπιά */
+.add-student-button,
+.payment-student-button,
+.edit-student-button {
+  background-color: #00b894;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 150px; /* Σταθερό πλάτος για τα κύρια κουμπιά */
+  margin-right: 10px; /* Απόσταση από το κουμπί ακύρωσης */
+}
+
+/* Hover effect για τα κύρια κουμπιά */
+.add-student-button:hover,
+.payment-student-button:hover,
+.edit-student-button:hover {
+  background-color: #009974; /* Πιο σκούρο πράσινο */
+}
+
+/* Στυλ για τα κουμπιά ακύρωσης */
+.cancel-button {
+  background-color: #ccc;
+  color: black;
+  border: none;
+  padding: 8px 15px; /* Μικρότερο padding για τα κουμπιά ακύρωσης */
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px; /* Μικρότερο μέγεθος γραμματοσειράς */
+  width: 120px; /* Μικρότερο πλάτος για τα κουμπιά ακύρωσης */
+}
+
+/* Hover effect για τα κουμπιά ακύρωσης */
+.cancel-button:hover {
+  background-color: #b3b3b3; /* Πιο σκούρο γκρι */
+}
+
+/* Ευθυγράμμιση των κουμπιών στην modal-actions */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  gap: 10px; /* Απόσταση μεταξύ των κουμπιών */
+}
+
+/* Κεντροποίηση και ορισμός μέγιστου πλάτους για το modal */
+.modal-content {
+  max-width: 500px; /* Ορίζουμε ένα μέγιστο πλάτος για το modal */
+  margin: 0 auto; /* Κεντροποίηση του modal */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Κεντροποίηση του περιεχομένου στο modal */
+}
+
+/* Στυλ για τη λίστα του ιστορικού πληρωμών */
+.payment-history-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 100%; /* Προσαρμογή του πλάτους στο container */
+  text-align: center; /* Κεντροποίηση του κειμένου */
+}
+
+.payment-history-list li {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+}
+
+/* Στυλ για τα κουμπιά μέσα στο Payment History Modal */
+.payment-history-modal .modal-actions {
+  display: flex;
+  justify-content: center; /* Κεντροποίηση των κουμπιών */
+  margin-top: 20px;
+}
+
+/* Στυλ για τα κουμπιά προηγούμενης και επόμενης σελίδας */
+.previous-button,
+.next-button {
+  width: 50px;           /* Πλάτος για τα κουμπιά */
+  height: 40px;          /* Ύψος για τα κουμπιά */
+  display: flex;         /* Για να κεντράρουμε το εικονίδιο */
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;    /* Στρογγυλοποίηση γωνιών */
+  background-color: white; /* Λευκό χρώμα για το κουμπί */
+  color: gray;           /* Γκρι χρώμα για το εικονίδιο */
+  border: none;          /* Χωρίς περίγραμμα */
+  cursor: pointer;       /* Δείκτης δείκτη όταν ο χρήστης περάσει πάνω από το κουμπί */
+  font-size: 16px;       /* Μέγεθος γραμματοσειράς για το εικονίδιο */
+}
+
+/* Αφαίρεση hover effect για τα κουμπιά προηγούμενης και επόμενης σελίδας */
+.previous-button:hover,
+.next-button:hover {
+  background-color: white; /* Παραμένει λευκό στο hover */
+  color: gray; /* Το χρώμα του εικονιδίου παραμένει γκρι στο hover */
+}
+
+
+/* Custom Styles for Close Buttons */
+.close-button {
+  background-color: transparent;
+  border: none;
+  color: gray; /* Γκρι χρώμα για το "X" */
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+/* Αφαιρούμε το hover effect από το κουμπί κλεισίματος */
+.close-button:hover {
+  color: gray; /* Το χρώμα παραμένει γκρι ακόμα και όταν κάνεις hover */
+  background-color: transparent;
 }
