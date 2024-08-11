@@ -161,30 +161,31 @@ const ClassroomsPage = () => {
 
   return (
     <div className="classrooms-page">
-      <h1>Classrooms & Lessons</h1>
+      <h1>Αίθουσες & Μαθήματα</h1>
 
       {error && <div className="error-message">{error}</div>}
 
       <div className="tables-container">
         <div className="table-container">
-          <h2>Classrooms</h2>
+          <h2>Αίθουσες
+          </h2>
 
           <div className="add-classroom-container">
             <input
               type="text"
-              placeholder="Classroom Name"
+              placeholder="Όνομα αίθουσας"
               value={newClassroom.name}
               onChange={(e) => setNewClassroom({ ...newClassroom, name: e.target.value })}
             />
-            <button onClick={openAddClassroomModal}>Add Classroom</button>
+            <button className="btn-add-classroom" onClick={openAddClassroomModal}>Προσθήκη</button>
           </div>
 
           <table className="classroom-table">
             <thead>
               <tr>
-                <th>Classroom Name</th>
-                <th>Availability</th>
-                <th>Actions</th>
+                <th>Όνομα Αίθουσας</th>
+                <th>Διαθεσιμότητα</th>
+                <th>Αλλαγές</th>
               </tr>
             </thead>
             <tbody>
@@ -193,7 +194,7 @@ const ClassroomsPage = () => {
                   <td>{classroom.name}</td>
                   <td>{classroom.availability ? 'Available' : 'Unavailable'}</td>
                   <td>
-                    <button onClick={() => openRemoveClassroomModal(classroom)}>Remove</button>
+                    <button onClick={() => openRemoveClassroomModal(classroom)}>Διαγραφή</button>
                   </td>
                 </tr>
               ))}
@@ -215,30 +216,30 @@ const ClassroomsPage = () => {
         </div>
 
         <div className="table-container">
-          <h2>Lessons</h2>
+          <h2>Μαθήματα</h2>
 
           <div className="add-lesson-container">
             <input
               type="text"
-              placeholder="Lesson Name"
+              placeholder="Όνομα Μαθήματος"
               value={newLesson.name}
               onChange={(e) => setNewLesson({ ...newLesson, name: e.target.value })}
             />
             <input
               type="text"
-              placeholder="Description"
+              placeholder="Περιγραφή"
               value={newLesson.description}
               onChange={(e) => setNewLesson({ ...newLesson, description: e.target.value })}
             />
-            <button onClick={openAddLessonModal}>Add Lesson</button>
+            <button className="btn-add-lesson" onClick={openAddLessonModal}>Προσθήκη</button>
           </div>
 
           <table className="lesson-table">
             <thead>
               <tr>
-                <th>Lesson Name</th>
-                <th>Description</th>
-                <th>Actions</th>
+                <th>Όνομα μαθήματος</th>
+                <th>Περιγραφή</th>
+                <th>Αλλαγές</th>
               </tr>
             </thead>
             <tbody>
@@ -247,7 +248,7 @@ const ClassroomsPage = () => {
                   <td>{lesson.name}</td>
                   <td>{lesson.description}</td>
                   <td>
-                    <button onClick={() => openRemoveLessonModal(lesson)}>Remove</button>
+                    <button onClick={() => openRemoveLessonModal(lesson)}>Διαγραφή</button>
                   </td>
                 </tr>
               ))}
@@ -272,44 +273,44 @@ const ClassroomsPage = () => {
       {/* Modals */}
       {isAddLessonModalOpen && (
         <Modal isOpen={isAddLessonModalOpen} onClose={closeModal}>
-          <h2>Confirm Addition</h2>
-          <p>Are you sure you want to add the lesson "{newLesson.name}"?</p>
+          <h2>Επιβεβαίωση προσθήκης</h2>
+          <p>Είσαι σίγουρος ότι θες να προσθέσεις το μάθημα "{newLesson.name}"?</p>
           <div className="button-group">
-            <button className="btn btn-primary" onClick={handleAddLesson}>Yes, Add</button>
-            <button className="btn btn-secondary" onClick={closeModal}>Cancel</button>
+            <button className="btn btn-primary confirm-add-button" onClick={handleAddLesson}>Προσθήκη</button>
+            <button className="btn btn-secondary" onClick={closeModal}>Ακύρωση</button>
           </div>
         </Modal>
       )}
 
       {isRemoveLessonModalOpen && (
         <Modal isOpen={isRemoveLessonModalOpen} onClose={closeModal}>
-          <h2>Confirm Removal</h2>
-          <p>Are you sure you want to remove the lesson "{lessonToRemove?.name}"?</p>
+          <h2>Επιβεβαίωση διαγραφής</h2>
+          <p>Είσαι σίγουρος ότι θες να αφαιρέσεις το μάθημα "{lessonToRemove?.name}"?</p>
           <div className="button-group">
-            <button className="btn btn-danger" onClick={handleRemoveLesson}>Yes, Remove</button>
-            <button className="btn btn-secondary" onClick={closeModal}>Cancel</button>
+            <button className="btn btn-danger" onClick={handleRemoveLesson}>Αφαίρεση</button>
+            <button className="btn btn-secondary" onClick={closeModal}>Ακύρωση</button>
           </div>
         </Modal>
       )}
 
-      {isAddClassroomModalOpen && (
-        <Modal isOpen={isAddClassroomModalOpen} onClose={closeModal}>
-          <h2>Confirm Addition</h2>
-          <p>Are you sure you want to add the classroom "{newClassroom.name}"?</p>
-          <div className="button-group">
-            <button className="btn btn-primary" onClick={handleAddClassroom}>Yes, Add</button>
-            <button className="btn btn-secondary" onClick={closeModal}>Cancel</button>
-          </div>
-        </Modal>
-      )}
+        {isAddClassroomModalOpen && (
+          <Modal isOpen={isAddClassroomModalOpen} onClose={closeModal}>
+            <h2>Επιβεβαίωση προσθήκης</h2>
+            <p>Είσαι σίγουρος ότι θες να προσθέσεις την αίθουσα "{newClassroom.name}"?</p>
+            <div className="button-group">
+              <button className="btn btn-primary confirm-add-button" onClick={handleAddClassroom}>Προσθήκη</button>
+              <button className="btn btn-secondary" onClick={closeModal}>Ακύρωση</button>
+            </div>
+          </Modal>
+        )}
 
       {isRemoveClassroomModalOpen && (
         <Modal isOpen={isRemoveClassroomModalOpen} onClose={closeModal}>
-          <h2>Confirm Removal</h2>
-          <p>Are you sure you want to remove the classroom "{classroomToRemove?.name}"?</p>
+          <h2>Επιβεβαίωση διαγραφής</h2>
+          <p>Είσαι σίγουρος ότι θες να αφαιρέσεις την αίθουσα "{classroomToRemove?.name}"?</p>
           <div className="button-group">
-            <button className="btn btn-danger" onClick={handleRemoveClassroom}>Yes, Remove</button>
-            <button className="btn btn-secondary" onClick={closeModal}>Cancel</button>
+            <button className="btn btn-danger" onClick={handleRemoveClassroom}>Αφαίρεση</button>
+            <button className="btn btn-secondary" onClick={closeModal}>Ακύρωση</button>
           </div>
         </Modal>
       )}
