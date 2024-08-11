@@ -92,7 +92,6 @@ form .form-group input[readonly] {
   cursor: not-allowed;
 }
 
-/* Στυλ για τα κουμπιά */
 .add-student-button,
 .payment-student-button,
 .edit-student-button {
@@ -103,59 +102,55 @@ form .form-group input[readonly] {
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  width: 150px; /* Σταθερό πλάτος για τα κύρια κουμπιά */
-  margin-right: 10px; /* Απόσταση από το κουμπί ακύρωσης */
+  width: 150px; 
+  margin-right: 10px; 
 }
 
-/* Hover effect για τα κύρια κουμπιά */
+
 .add-student-button:hover,
 .payment-student-button:hover,
 .edit-student-button:hover {
-  background-color: #009974; /* Πιο σκούρο πράσινο */
+  background-color: #009974; 
 }
 
-/* Στυλ για τα κουμπιά ακύρωσης */
 .cancel-button {
   background-color: #ccc;
   color: black;
   border: none;
-  padding: 8px 15px; /* Μικρότερο padding για τα κουμπιά ακύρωσης */
+  padding: 8px 15px; 
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px; /* Μικρότερο μέγεθος γραμματοσειράς */
-  width: 120px; /* Μικρότερο πλάτος για τα κουμπιά ακύρωσης */
+  font-size: 14px; 
+  width: 120px; 
 }
 
-/* Hover effect για τα κουμπιά ακύρωσης */
 .cancel-button:hover {
-  background-color: #b3b3b3; /* Πιο σκούρο γκρι */
+  background-color: #b3b3b3; 
 }
 
-/* Ευθυγράμμιση των κουμπιών στην modal-actions */
+
 .modal-actions {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
-  gap: 10px; /* Απόσταση μεταξύ των κουμπιών */
+  gap: 10px; 
 }
 
-/* Κεντροποίηση και ορισμός μέγιστου πλάτους για το modal */
 .modal-content {
-  max-width: 500px; /* Ορίζουμε ένα μέγιστο πλάτος για το modal */
-  margin: 0 auto; /* Κεντροποίηση του modal */
+  max-width: 500px; 
+  margin: 0 auto; 
   padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Κεντροποίηση του περιεχομένου στο modal */
+  align-items: center; 
 }
 
-/* Στυλ για τη λίστα του ιστορικού πληρωμών */
 .payment-history-list {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  width: 100%; /* Προσαρμογή του πλάτους στο container */
-  text-align: center; /* Κεντροποίηση του κειμένου */
+  width: 100%; 
+  text-align: center; 
 }
 
 .payment-history-list li {
@@ -165,42 +160,39 @@ form .form-group input[readonly] {
   width: 100%;
 }
 
-/* Στυλ για τα κουμπιά μέσα στο Payment History Modal */
 .payment-history-modal .modal-actions {
   display: flex;
-  justify-content: center; /* Κεντροποίηση των κουμπιών */
+  justify-content: center; 
   margin-top: 20px;
 }
 
-/* Στυλ για τα κουμπιά προηγούμενης και επόμενης σελίδας */
 .previous-button,
 .next-button {
-  width: 50px;           /* Πλάτος για τα κουμπιά */
-  height: 40px;          /* Ύψος για τα κουμπιά */
-  display: flex;         /* Για να κεντράρουμε το εικονίδιο */
+  width: 50px;           
+  height: 40px;         
+  display: flex;        
   justify-content: center;
   align-items: center;
-  border-radius: 5px;    /* Στρογγυλοποίηση γωνιών */
-  background-color: white; /* Λευκό χρώμα για το κουμπί */
-  color: gray;           /* Γκρι χρώμα για το εικονίδιο */
-  border: none;          /* Χωρίς περίγραμμα */
-  cursor: pointer;       /* Δείκτης δείκτη όταν ο χρήστης περάσει πάνω από το κουμπί */
-  font-size: 16px;       /* Μέγεθος γραμματοσειράς για το εικονίδιο */
+  border-radius: 5px;    
+  background-color: white; 
+  color: gray;          
+  border: none;          
+  cursor: pointer;       
+  font-size: 16px;       
 }
 
-/* Αφαίρεση hover effect για τα κουμπιά προηγούμενης και επόμενης σελίδας */
 .previous-button:hover,
 .next-button:hover {
-  background-color: white; /* Παραμένει λευκό στο hover */
-  color: gray; /* Το χρώμα του εικονιδίου παραμένει γκρι στο hover */
+  background-color: white; 
+  color: gray; 
 }
 
 
-/* Custom Styles for Close Buttons */
+
 .close-button {
   background-color: transparent;
   border: none;
-  color: gray; /* Γκρι χρώμα για το "X" */
+  color: gray; 
   font-size: 1.5rem;
   cursor: pointer;
   padding: 0;
@@ -210,8 +202,8 @@ form .form-group input[readonly] {
   right: 10px;
 }
 
-/* Αφαιρούμε το hover effect από το κουμπί κλεισίματος */
+
 .close-button:hover {
-  color: gray; /* Το χρώμα παραμένει γκρι ακόμα και όταν κάνεις hover */
+  color: gray; 
   background-color: transparent;
 }

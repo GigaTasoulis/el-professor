@@ -91,10 +91,9 @@ const Students = () => {
       debt: parseFloat(currentStudent.debt),
     };
 
-    console.log('Updated student before sending:', updatedStudent);
 
     const response = await updateStudent(currentStudent._id, updatedStudent);
-    console.log('Backend response:', response);
+    
 
     loadStudents();
     closeEditModal();
@@ -105,7 +104,7 @@ const Students = () => {
     const payment = parseFloat(paymentAmount);
 
     if (isNaN(payment) || payment <= 0) {
-      alert('Please enter a valid payment amount');
+      alert('Παρακαλώ εισάγεται ένα έγκυρο ποσό πληρωμής');
       return;
     }
 
@@ -125,42 +124,33 @@ const Students = () => {
     setIsEditable(!isEditable);
   };
 
-  // Υπολογισμός των μαθητών που θα εμφανίζονται στη τρέχουσα σελίδα
   const indexOfLastStudent = currentPage * studentsPerPage;
   const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
   const currentStudents = students.slice(indexOfFirstStudent, indexOfLastStudent);
 
-  // Αλλαγή σελίδας
   const paginate = (pageNumber) => {
     if (pageNumber > 0 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
     }
   };
 
-  // Καθορισμός εύρους σελίδων για εμφάνιση
   const pageRange = () => {
     const pages = [];
 
-    // Προσθέτουμε την πρώτη σελίδα πάντα
     pages.push(1);
 
-    // Προσθέτουμε τις ενδιάμεσες σελίδες με βάση την τρέχουσα σελίδα
     if (currentPage > 3) {
-      // Προσθέτουμε τις τρεις τελείες αν είμαστε πέρα από την 3η σελίδα
       pages.push('...');
     }
 
-    // Αν η τρέχουσα σελίδα είναι η πρώτη, προσθέτουμε τις επόμενες δύο
     if (currentPage === 1) {
       pages.push(2);
       pages.push('...');
     } else if (currentPage === totalPages) {
-      // Αν είμαστε στην τελευταία σελίδα, προσθέτουμε την προτελευταία
       if (totalPages > 2) {
         pages.push(totalPages - 1);
       }
     } else {
-      // Σε άλλες περιπτώσεις, προσθέτουμε την τρέχουσα σελίδα και τις γύρω από αυτήν
       for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
         pages.push(i);
       }
@@ -170,12 +160,10 @@ const Students = () => {
       }
     }
 
-    // Προσθέτουμε την τελευταία σελίδα πάντα, αν είναι πάνω από μία σελίδα
     if (totalPages > 1) {
       pages.push(totalPages);
     }
 
-    // Επιστρέφουμε τις σελίδες που θα εμφανιστούν
     return pages;
   };
 
@@ -236,7 +224,7 @@ const Students = () => {
             </table>
           </div>
 
-          {/* Κουμπιά σελιδοποίησης */}
+          
           <nav>
             <ul className="pagination">
               <li className="page-item">
@@ -245,7 +233,7 @@ const Students = () => {
                   className="previous-button"
                   disabled={currentPage === 1}
                 >
-                  &#9664; {/* Βέλος αριστερά */}
+                  &#9664; 
                 </button>
               </li>
               {pageRange().map((page, index) => (
@@ -268,14 +256,14 @@ const Students = () => {
                   className="next-button"
                   disabled={currentPage === totalPages}
                 >
-                  &#9654; {/* Βέλος δεξιά */}
+                  &#9654; 
                 </button>
               </li>
             </ul>
           </nav>
 
           <Modal isOpen={modalIsOpen} onClose={closeModal}>
-            <h2>Add New Student</h2>
+            <h2>Προσθήκη Φοιτητή</h2>
             <form>
               <div className="form-group">
                 <label>Όνομα</label>
@@ -354,26 +342,26 @@ const Students = () => {
 
 
           <Modal isOpen={paymentModalIsOpen} onClose={closePaymentModal}>
-            <h2>Add Payment</h2>
+            <h2>Προσθήκη Πλήρωμής</h2>
             <div className="form-group">
-              <label>Payment Amount</label>
+              <label>Ποσό Πληρωμής</label>
               <input type="number" className="form-control" value={paymentAmount} onChange={(e) => setPaymentAmount(e.target.value)} />
             </div>
             <div className="modal-actions">
-              <button type="button" className="payment-student-button" onClick={handleAddPayment}>Submit Payment</button>
-              <button type="button" className="cancel-button" onClick={closePaymentModal}>Cancel</button>
+              <button type="button" className="payment-student-button" onClick={handleAddPayment}>Υποβολή</button>
+              <button type="button" className="cancel-button" onClick={closePaymentModal}>Ακύρωση</button>
             </div>
           </Modal>
 
         
           <Modal isOpen={paymentHistoryModalIsOpen} onClose={closePaymentHistoryModal}>
           <div>
-            <h2>Payment History</h2>
+            <h2>Ιστορικό πληρωμών</h2>
             {currentStudent && (
               <ul className="payment-history-list">
                 {currentStudent.paymentHistory.map((payment, index) => (
                   <li key={index}>
-                    Amount: {payment.amount}, Date: {new Date(payment.date).toLocaleString()}
+                    Ποσό: {payment.amount}, Ημερομηνία: {new Date(payment.date).toLocaleString()}
                   </li>
                 ))}
               </ul>
