@@ -18,12 +18,12 @@ h1 {
 .table-container {
   flex: 1;
   min-width: 300px;
-  text-align: center; /* Προσθήκη για κεντρική στοίχιση του τίτλου */
+  text-align: center; 
 }
 
 .table-container h2 {
-  text-align: center; /* Προσθήκη για στοίχιση του τίτλου στο κέντρο */
-  margin-bottom: 20px; /* Ενδεχόμενη προσθήκη περιθωρίου για διαχωρισμό από τον πίνακα */
+  text-align: center; 
+  margin-bottom: 20px; 
 }
 
 .add-classroom-container,
@@ -31,7 +31,7 @@ h1 {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
-  align-items: stretch; /* Stretch all items to the same height */
+  align-items: stretch; 
 }
 
 .add-classroom-container input[type="text"],
@@ -40,23 +40,23 @@ h1 {
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  height: 100%; /* Ensure inputs fill the height */
+  height: 100%; 
 }
 
 .add-classroom-container button,
 .add-lesson-container button {
   padding: 8px 12px;
-  background-color: #00b894; /* Νέο χρώμα */
+  background-color: #00b894; 
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  height: 100%; /* Ensure buttons fill the height */
+  height: 100%; 
 }
 
 .add-classroom-container button:hover,
 .add-lesson-container button:hover {
-  background-color: #009f7e; /* Ελαφρώς πιο σκούρο για το hover */
+  background-color: #009f7e; 
 }
 
 table {
@@ -69,8 +69,8 @@ table th,
 table td {
   border: 1px solid #ddd;
   padding: 10px;
-  text-align: center; /* Κεντρική στοίχιση κειμένου */
-  vertical-align: middle; /* Κεντρική στοίχιση κάθετα */
+  text-align: center;
+  vertical-align: middle; 
 }
 
 table th {
@@ -134,7 +134,7 @@ button:hover {
 }
 
 .modal .button-group .btn-confirm-add {
-  background-color: #00b894; /* Νέο χρώμα για το κουμπί Yes, Add */
+  background-color: #00b894; 
   color: white;
   border: none;
   border-radius: 4px;
@@ -142,11 +142,11 @@ button:hover {
 }
 
 .modal .button-group .btn-confirm-add:hover {
-  background-color: #009f7e; /* Ελαφρώς πιο σκούρο για το hover */
+  background-color: #009f7e; 
 }
 
 .modal .button-group .btn-cancel {
-  background-color: #6c757d; /* Χρώμα για το κουμπί Cancel */
+  background-color: #6c757d; 
   color: white;
   border: none;
   border-radius: 4px;
@@ -154,7 +154,7 @@ button:hover {
 }
 
 .modal .button-group .btn-cancel:hover {
-  background-color: #1b1919a2; /* Ελαφρώς πιο σκούρο για το hover */
+  background-color: #1b1919a2; 
 }
 
 .confirm-add-button {

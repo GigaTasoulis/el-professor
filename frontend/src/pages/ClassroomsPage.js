@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Modal from '../components/Modal';  // Assuming this is your modal component
+import Modal from '../components/Modal'; 
 import '../styles/ClassroomsPage.css';
 
 const ClassroomsPage = () => {
@@ -53,7 +53,7 @@ const ClassroomsPage = () => {
     try {
       const response = await axios.post('http://localhost:5000/api/lessons', newLesson);
       setLessons([...lessons, response.data]);
-      setNewLesson({ name: '', description: '' }); // Reset input fields
+      setNewLesson({ name: '', description: '' }); 
       closeModal();
     } catch (error) {
       console.error('Error adding lesson:', error);
@@ -83,7 +83,7 @@ const ClassroomsPage = () => {
     try {
       const response = await axios.post('http://localhost:5000/api/classrooms', newClassroom);
       setClassrooms([...classrooms, response.data]);
-      setNewClassroom({ name: '', availability: true }); // Reset input fields
+      setNewClassroom({ name: '', availability: true }); 
       closeModal();
     } catch (error) {
       console.error('Error adding classroom:', error);
@@ -105,7 +105,7 @@ const ClassroomsPage = () => {
   };
 
   const openAddLessonModal = () => {
-    setError(''); // Clear any existing errors
+    setError('');
     if (newLesson.name.trim() === '' || newLesson.description.trim() === '') {
       setError('Το μάθημα και η περιγραφή του δεν μπορούν να είναι κενά.');
       return;
@@ -114,13 +114,13 @@ const ClassroomsPage = () => {
   };
 
   const openRemoveLessonModal = (lesson) => {
-    setError(''); // Clear any existing errors
+    setError('');
     setLessonToRemove(lesson);
     setIsRemoveLessonModalOpen(true);
   };
 
   const openAddClassroomModal = () => {
-    setError(''); // Clear any existing errors
+    setError(''); 
     if (newClassroom.name.trim() === '') {
       setError('Το όνομα της αίθουσας δεν μπορεί να είναι κενό.');
       return;
@@ -129,7 +129,7 @@ const ClassroomsPage = () => {
   };
 
   const openRemoveClassroomModal = (classroom) => {
-    setError(''); // Clear any existing errors
+    setError(''); 
     setClassroomToRemove(classroom);
     setIsRemoveClassroomModalOpen(true);
   };
@@ -143,20 +143,16 @@ const ClassroomsPage = () => {
     setClassroomToRemove(null);
   };
 
-  // Pagination logic for lessons
   const indexOfLastLesson = currentLessonPage * itemsPerPage;
   const indexOfFirstLesson = indexOfLastLesson - itemsPerPage;
   const currentLessons = lessons.slice(indexOfFirstLesson, indexOfLastLesson);
 
-  // Pagination logic for classrooms
   const indexOfLastClassroom = currentClassroomPage * itemsPerPage;
   const indexOfFirstClassroom = indexOfLastClassroom - itemsPerPage;
   const currentClassrooms = classrooms.slice(indexOfFirstClassroom, indexOfLastClassroom);
 
-  // Change page for lessons
   const paginateLessons = (pageNumber) => setCurrentLessonPage(pageNumber);
 
-  // Change page for classrooms
   const paginateClassrooms = (pageNumber) => setCurrentClassroomPage(pageNumber);
 
   return (
