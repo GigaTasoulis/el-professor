@@ -46,7 +46,7 @@ const ClassroomsPage = () => {
 
   const handleAddLesson = async () => {
     if (newLesson.name.trim() === '' || newLesson.description.trim() === '') {
-      setError('Lesson name and description cannot be empty.');
+      setError('Το μάθημα και η περιγραφή του δεν μπορούν να είναι κενά.');
       return;
     }
 
@@ -76,7 +76,7 @@ const ClassroomsPage = () => {
 
   const handleAddClassroom = async () => {
     if (newClassroom.name.trim() === '') {
-      setError('Classroom name cannot be empty.');
+      setError('Το όνομα της αίθουσας δεν μπορεί να είναι κενό.');
       return;
     }
 
@@ -107,7 +107,7 @@ const ClassroomsPage = () => {
   const openAddLessonModal = () => {
     setError(''); // Clear any existing errors
     if (newLesson.name.trim() === '' || newLesson.description.trim() === '') {
-      setError('Lesson name and description cannot be empty.');
+      setError('Το μάθημα και η περιγραφή του δεν μπορούν να είναι κενά.');
       return;
     }
     setIsAddLessonModalOpen(true);
@@ -122,7 +122,7 @@ const ClassroomsPage = () => {
   const openAddClassroomModal = () => {
     setError(''); // Clear any existing errors
     if (newClassroom.name.trim() === '') {
-      setError('Classroom name cannot be empty.');
+      setError('Το όνομα της αίθουσας δεν μπορεί να είναι κενό.');
       return;
     }
     setIsAddClassroomModalOpen(true);
@@ -287,8 +287,8 @@ const ClassroomsPage = () => {
           <h2>Επιβεβαίωση διαγραφής</h2>
           <p>Είσαι σίγουρος ότι θες να αφαιρέσεις το μάθημα "{lessonToRemove?.name}"?</p>
           <div className="button-group">
-            <button className="btn btn-danger" onClick={handleRemoveLesson}>Αφαίρεση</button>
-            <button className="btn btn-secondary" onClick={closeModal}>Ακύρωση</button>
+            <button className="btn btn-primary confirm-delete-button" onClick={handleRemoveLesson}>Αφαίρεση</button>
+            <button className="btn btn-secondary btn-cancel" onClick={closeModal}>Ακύρωση</button>
           </div>
         </Modal>
       )}
@@ -309,8 +309,8 @@ const ClassroomsPage = () => {
           <h2>Επιβεβαίωση διαγραφής</h2>
           <p>Είσαι σίγουρος ότι θες να αφαιρέσεις την αίθουσα "{classroomToRemove?.name}"?</p>
           <div className="button-group">
-            <button className="btn btn-danger" onClick={handleRemoveClassroom}>Αφαίρεση</button>
-            <button className="btn btn-secondary" onClick={closeModal}>Ακύρωση</button>
+            <button className="btn btn-primary confirm-delete-button" onClick={handleRemoveClassroom}>Αφαίρεση</button>
+            <button className="btn btn-secondary btn-cancel" onClick={closeModal}>Ακύρωση</button>
           </div>
         </Modal>
       )}
