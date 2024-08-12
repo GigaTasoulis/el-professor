@@ -17,6 +17,9 @@ const Students = () => {
   const [currentStudent, setCurrentStudent] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const studentsPerPage = 10;
+  const totalPages = Math.ceil(students.length / studentsPerPage);
 
   useEffect(() => {
     loadStudents();
@@ -57,7 +60,7 @@ const Students = () => {
 
   const openEditModal = (student) => {
     setCurrentStudent(student);
-    setIsEditable(false); // Initially set to read-only
+    setIsEditable(false);
     setEditModalIsOpen(true);
   };
 
@@ -85,25 +88,23 @@ const Students = () => {
   const handleEditStudent = async () => {
     const updatedStudent = {
       ...currentStudent,
-      debt: parseFloat(currentStudent.debt)
+      debt: parseFloat(currentStudent.debt),
     };
-  
-    console.log('Updated student before sending:', updatedStudent);  // Debugging log
-  
+
+
     const response = await updateStudent(currentStudent._id, updatedStudent);
-    console.log('Backend response:', response);  // Debugging log
-  
+    
+
     loadStudents();
     closeEditModal();
   };
-  
-  
+
   const handleAddPayment = async () => {
     const updatedStudent = { ...currentStudent };
     const payment = parseFloat(paymentAmount);
 
     if (isNaN(payment) || payment <= 0) {
-      alert("Please enter a valid payment amount");
+      alert('Παρακαλώ εισάγεται ένα έγκυρο ποσό πληρωμής');
       return;
     }
 
@@ -111,7 +112,7 @@ const Students = () => {
     updatedStudent.paid += payment;
     updatedStudent.paymentHistory = [
       ...currentStudent.paymentHistory,
-      { amount: payment, date: new Date().toISOString() }
+      { amount: payment, date: new Date().toISOString() },
     ];
 
     await updateStudent(currentStudent._id, updatedStudent);
@@ -123,12 +124,55 @@ const Students = () => {
     setIsEditable(!isEditable);
   };
 
+  const indexOfLastStudent = currentPage * studentsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+  const currentStudents = students.slice(indexOfFirstStudent, indexOfLastStudent);
+
+  const paginate = (pageNumber) => {
+    if (pageNumber > 0 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  const pageRange = () => {
+    const pages = [];
+
+    pages.push(1);
+
+    if (currentPage > 3) {
+      pages.push('...');
+    }
+
+    if (currentPage === 1) {
+      pages.push(2);
+      pages.push('...');
+    } else if (currentPage === totalPages) {
+      if (totalPages > 2) {
+        pages.push(totalPages - 1);
+      }
+    } else {
+      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+        pages.push(i);
+      }
+
+      if (currentPage < totalPages - 2) {
+        pages.push('...');
+      }
+    }
+
+    if (totalPages > 1) {
+      pages.push(totalPages);
+    }
+
+    return pages;
+  };
+
   return (
-    <div className="container-fluid">
+    <div className="students-container container-fluid">
       <div className="row">
         <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
           <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 className="h2">Students</h1>
+            <h1 className="h2">Φοιτητές</h1>
             <div className="btn-toolbar mb-2 mb-md-0">
               <button
                 type="button"
@@ -136,26 +180,26 @@ const Students = () => {
                 className="btn btn-sm btn-outline-secondary hidden-button"
                 onClick={openModal}
               >
-                +Add Student
+                +Προσθήκη Φοιτητή
               </button>
             </div>
           </div>
 
-          <div className="table-responsive">
-            <table className="table table-striped table-sm">
+          <div className="students-table-container table-responsive">
+            <table className="students-table table table-striped table-sm">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Surname</th>
-                  <th>Tel</th>
-                  <th>Department</th>
+                  <th>Όνομα</th>
+                  <th>Επίθετο</th>
+                  <th>Τηλέφωνο</th>
+                  <th>Τμήμα</th>
                   <th>Email</th>
-                  <th>Debt</th>
-                  <th>Actions</th>
+                  <th>Οφειλές</th>
+                  <th>Ενέργειες</th>
                 </tr>
               </thead>
               <tbody>
-                {students.map((student, index) => (
+                {currentStudents.map((student, index) => (
                   <tr key={index}>
                     <td>{student.name}</td>
                     <td>{student.surname}</td>
@@ -165,13 +209,13 @@ const Students = () => {
                     <td>{student.debt}</td>
                     <td>
                       <button className="btn btn-link" onClick={() => openEditModal(student)}>
-                        <img src={editIcon} alt="Edit" className="icon" />
+                        <img src={editIcon} alt="Αλλαγή" className="edit-icon" />
                       </button>
                       <button className="btn btn-link" onClick={() => openPaymentModal(student)}>
-                        <img src={paymentIcon} alt="Payment" className="icon" />
+                        <img src={paymentIcon} alt="Πληρωμή" className="payment-icon" />
                       </button>
                       <button className="btn btn-link" onClick={() => openPaymentHistoryModal(student)}>
-                        <img src={historyIcon} alt="History" className="icon" />
+                        <img src={historyIcon} alt="Ιστορικό" className="history-icon" />
                       </button>
                     </td>
                   </tr>
@@ -180,23 +224,61 @@ const Students = () => {
             </table>
           </div>
 
+          
+          <nav>
+            <ul className="pagination">
+              <li className="page-item">
+                <button
+                  onClick={() => paginate(currentPage - 1)}
+                  className="previous-button"
+                  disabled={currentPage === 1}
+                >
+                  &#9664; 
+                </button>
+              </li>
+              {pageRange().map((page, index) => (
+                <li
+                  key={index}
+                  className={`page-item ${currentPage === page ? 'active' : ''}`}
+                >
+                  {page === "..." ? (
+                    <span className="page-link">...</span>
+                  ) : (
+                    <button onClick={() => paginate(page)} className="page-link">
+                      {page}
+                    </button>
+                  )}
+                </li>
+              ))}
+              <li className="page-item">
+                <button
+                  onClick={() => paginate(currentPage + 1)}
+                  className="next-button"
+                  disabled={currentPage === totalPages}
+                >
+                  &#9654; 
+                </button>
+              </li>
+            </ul>
+          </nav>
+
           <Modal isOpen={modalIsOpen} onClose={closeModal}>
-            <h2>Add New Student</h2>
+            <h2>Προσθήκη Φοιτητή</h2>
             <form>
               <div className="form-group">
-                <label>Name</label>
+                <label>Όνομα</label>
                 <input type="text" className="form-control" name="name" value={newStudent.name} onChange={handleChange} />
               </div>
               <div className="form-group">
-                <label>Surname</label>
+                <label>Επίθετο</label>
                 <input type="text" className="form-control" name="surname" value={newStudent.surname} onChange={handleChange} />
               </div>
               <div className="form-group">
-                <label>Tel</label>
+                <label>Τηλέφωνο</label>
                 <input type="text" className="form-control" name="tel" value={newStudent.tel} onChange={handleChange} />
               </div>
               <div className="form-group">
-                <label>Department</label>
+                <label>Τμήμα</label>
                 <input type="text" className="form-control" name="department" value={newStudent.department} onChange={handleChange} />
               </div>
               <div className="form-group">
@@ -204,38 +286,40 @@ const Students = () => {
                 <input type="email" className="form-control" name="email" value={newStudent.email} onChange={handleChange} />
               </div>
               <div className="form-group">
-                <label>Debt</label>
+                <label>Οφειλές</label>
                 <input type="number" className="form-control" name="debt" value={newStudent.debt} onChange={handleChange} />
               </div>
-              <button type="button" className="btn btn-primary" onClick={handleAddStudent}>Add Student</button>
-              <button type="button" className="btn btn-secondary" onClick={closeModal}>Cancel</button>
+              <div className="modal-actions">
+                <button type="button" className="add-student-button" onClick={handleAddStudent}>Προσθήκη Φοιτητή</button>
+                <button type="button" className="cancel-button" onClick={closeModal}>Ακύρωση</button>
+              </div>
             </form>
           </Modal>
 
-
           <Modal isOpen={editModalIsOpen} onClose={closeEditModal}>
             <div className="modal-header">
-              <h2>Edit Student</h2>
-              <button className="btn btn-link" onClick={toggleEdit}>
-                <img src={editIcon} alt="Edit" className="icon" />
+              <h2>Επεξεργασία Φοιτητή</h2>
+              <button className="btn btn-link small-edit-button" onClick={toggleEdit}>
+                <img src={editIcon} alt="Αλλαγή" className="edit-icon" />
               </button>
+
             </div>
             {currentStudent && (
               <form>
                 <div className="form-group">
-                  <label>Name</label>
+                  <label>Όνομα</label>
                   <input type="text" className="form-control" name="name" value={currentStudent.name} onChange={handleEditChange} readOnly={!isEditable} />
                 </div>
                 <div className="form-group">
-                  <label>Surname</label>
+                  <label>Επίθετο</label>
                   <input type="text" className="form-control" name="surname" value={currentStudent.surname} onChange={handleEditChange} readOnly={!isEditable} />
                 </div>
                 <div className="form-group">
-                  <label>Tel</label>
+                  <label>Τηλέφωνο</label>
                   <input type="text" className="form-control" name="tel" value={currentStudent.tel} onChange={handleEditChange} readOnly={!isEditable} />
                 </div>
                 <div className="form-group">
-                  <label>Department</label>
+                  <label>Τμήμα</label>
                   <input type="text" className="form-control" name="department" value={currentStudent.department} onChange={handleEditChange} readOnly={!isEditable} />
                 </div>
                 <div className="form-group">
@@ -243,42 +327,51 @@ const Students = () => {
                   <input type="email" className="form-control" name="email" value={currentStudent.email} onChange={handleEditChange} readOnly={!isEditable} />
                 </div>
                 <div className="form-group">
-                  <label>Debt</label>
+                  <label>Οφειλές</label>
                   <input type="number" className="form-control" name="debt" value={currentStudent.debt} onChange={handleEditChange} readOnly={!isEditable} />
                 </div>
                 {isEditable && (
-                  <button type="button" className="btn btn-primary" onClick={handleEditStudent}>Save Changes</button>
+                  <div className="modal-actions">
+                    <button type="button" className="edit-student-button" onClick={handleEditStudent}>Αποθήκευση Αλλαγών</button>
+                    <button type="button" className="cancel-button" onClick={closeEditModal}>Ακύρωση</button>
+                  </div>
                 )}
-                <button type="button" className="btn btn-secondary" onClick={closeEditModal}>Cancel</button>
               </form>
             )}
           </Modal>
 
 
           <Modal isOpen={paymentModalIsOpen} onClose={closePaymentModal}>
-            <h2>Add Payment</h2>
+            <h2>Προσθήκη Πλήρωμής</h2>
             <div className="form-group">
-              <label>Payment Amount</label>
+              <label>Ποσό Πληρωμής</label>
               <input type="number" className="form-control" value={paymentAmount} onChange={(e) => setPaymentAmount(e.target.value)} />
             </div>
-            <button type="button" className="btn btn-primary" onClick={handleAddPayment}>Submit Payment</button>
-            <button type="button" className="btn btn-secondary" onClick={closePaymentModal}>Cancel</button>
+            <div className="modal-actions">
+              <button type="button" className="payment-student-button" onClick={handleAddPayment}>Υποβολή</button>
+              <button type="button" className="cancel-button" onClick={closePaymentModal}>Ακύρωση</button>
+            </div>
           </Modal>
 
-
+        
           <Modal isOpen={paymentHistoryModalIsOpen} onClose={closePaymentHistoryModal}>
-            <h2>Payment History</h2>
+          <div>
+            <h2>Ιστορικό πληρωμών</h2>
             {currentStudent && (
-              <ul>
+              <ul className="payment-history-list">
                 {currentStudent.paymentHistory.map((payment, index) => (
                   <li key={index}>
-                    Amount: {payment.amount}, Date: {new Date(payment.date).toLocaleString()}
+                    Ποσό: {payment.amount}, Ημερομηνία: {new Date(payment.date).toLocaleString()}
                   </li>
                 ))}
               </ul>
             )}
-            <button type="button" className="btn btn-secondary" onClick={closePaymentHistoryModal}>Close</button>
+            <div className="modal-actions">
+                <button type="button" className="cancel-button" onClick={closePaymentHistoryModal}>Close</button>
+              </div>
+            </div>
           </Modal>
+
 
         </main>
       </div>
