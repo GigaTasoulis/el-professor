@@ -1,136 +1,190 @@
 .classrooms-page {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  h1 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.tables-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.table-container {
+  flex: 1;
+  min-width: 300px;
+  text-align: center; 
+}
+
+.table-container h2 {
+  text-align: center; 
+  margin-bottom: 20px; 
+}
+
+.add-classroom-container,
+.add-lesson-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: stretch; 
+}
+
+.add-classroom-container input[type="text"],
+.add-lesson-container input[type="text"] {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  height: 100%; 
+}
+
+.add-classroom-container button,
+.add-lesson-container button {
+  padding: 8px 12px;
+  background-color: #00b894; 
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  height: 100%; 
+}
+
+.add-classroom-container button:hover,
+.add-lesson-container button:hover {
+  background-color: #009f7e; 
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+table th,
+table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+  vertical-align: middle; 
+}
+
+table th {
+  background-color: #f8f9fa;
+}
+
+button {
+  padding: 6px 12px;
+  border: none;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #c82333;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 20px;
+}
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.page-item {
+  margin: 0 5px;
+}
+
+.page-link {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  color: #007bff;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.page-link:hover {
+  background-color: #f1f1f1;
+}
+
+.page-item.active .page-link {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.modal .button-group .btn-confirm-add {
+  background-color: #00b894; 
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal .button-group .btn-confirm-add:hover {
+  background-color: #009f7e; 
+}
+
+.modal .button-group .btn-cancel {
+  background-color: #6c757d; 
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal .button-group .btn-cancel:hover {
+  background-color: #1b1919a2; 
+}
+
+.confirm-add-button {
+  background-color: #00b894;
+  border-color: #00b894;
+}
+
+.confirm-add-button:hover {
+  background-color: #019f7a;
+  border-color: #019f7a;
+}
+
+
+.confirm-delete-button {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.confirm-delete-button:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+
+@media (max-width: 768px) {
   .tables-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .table-container {
-    flex: 1;
-    min-width: 300px;
-  }
-  
-  .add-classroom-container,
-  .add-lesson-container {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .add-classroom-container input[type="text"],
-  .add-lesson-container input[type="text"] {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-  
-  .add-classroom-container button,
-  .add-lesson-container button {
-    padding: 8px 12px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .add-classroom-container button:hover,
-  .add-lesson-container button:hover {
-    background-color: #218838;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-  }
-  
-  table th,
-  table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-  }
-  
-  table th {
-    background-color: #f8f9fa;
-  }
-  
-  button {
-    padding: 6px 12px;
-    border: none;
-    background-color: #dc3545;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #c82333;
-  }
-  
-  .button-group {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  .error-message {
-    color: red;
-    margin-bottom: 20px;
+    flex-direction: column;
   }
 
-  .pagination {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    justify-content: center;
-    margin-top: 20px;
+  .table-container {
+    min-width: 100%;
   }
-  
-  .page-item {
-    margin: 0 5px;
-  }
-  
-  .page-link {
-    padding: 8px 16px;
-    border: 1px solid #ddd;
-    color: #007bff;
-    cursor: pointer;
-    background-color: white;
-    border-radius: 4px;
-  }
-  
-  .page-link:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .page-item.active .page-link {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-  }
-  
-  
-  @media (max-width: 768px) {
-    .tables-container {
-      flex-direction: column;
-    }
-  
-    .table-container {
-      min-width: 100%;
-    }
-  }
-  
+}
