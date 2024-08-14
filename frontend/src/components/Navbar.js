@@ -25,13 +25,13 @@ const Navbar = ({ onAddButtonClick }) => {
   const getButtonText = () => {
     switch (selectedCategory) {
       case '/students':
-        return '+  Add Student';
+        return '+ Προσθήκη Μαθητή';
       case '/professors':
-        return '+ Add Professor';
+        return '+ Προσθήκη Καθηγητή';
       case '/calendar':
-        return '+  Add Event';
+        return '+ Προσθήκη Μαθήματος';
       case '/dashboard':
-        return '+ Set Goals';
+        return '+ Όρισε Στόχους';
       case '/classrooms':
         return '';
       default:
@@ -42,13 +42,13 @@ const Navbar = ({ onAddButtonClick }) => {
   const getButtonTextDescription = () => {
     switch (selectedCategory) {
       case '/students':
-        return 'Please, organize your students through button below!';
+        return 'Παρακαλώ, οργανώστε τους μαθητές σας μέσω του παρακάτω κουμπιού!';
       case '/professors':
-        return 'Please, organize your professors through button below!';
+        return 'Παρακαλώ, οργανώστε τους καθηγτές σας μέσω του παρακάτω κουμπιού!';
       case '/calendar':
-        return 'Please, organize your events through button below!';
+        return 'Παρακαλώ, οργανώστε την ατζέντα σας μέσω του παρακάτω κουμπιού!';
       case '/dashboard':
-        return 'Please, set your goals through the button below!';
+        return 'Παρακαλώ, οργανώστε την αρχική σας μέσω του παρακάτω κουμπιού!';
       case '/classrooms':
         return '';
       default:
@@ -84,27 +84,27 @@ const Navbar = ({ onAddButtonClick }) => {
         <ul className="nav flex-column">
           <li className="nav-item">
             <NavLink className="nav-link" to="/dashboard" onClick={() => handleNavClick('/dashboard')}>
-              Dashboard
+              Αρχική
             </NavLink>
           </li>
           <li className="nav-item">
             <NavLink className="nav-link" to="/students" onClick={() => handleNavClick('/students')}>
-              Students
+              Μαθητές
             </NavLink>
           </li>
           <li className="nav-item">
             <NavLink className="nav-link" to="/professors" onClick={() => handleNavClick('/professors')}>
-              Professors
+              Καθηγητές
             </NavLink>
           </li>
           <li className="nav-item">
             <NavLink className="nav-link" to="/calendar" onClick={() => handleNavClick('/calendar')}>
-              Calendar
+              Ατζέντα
             </NavLink>
           </li>
           <li className="nav-item">
             <NavLink className="nav-link" to="/classrooms" onClick={() => handleNavClick('/classrooms')}>
-              Classrooms
+              Αίθουσες/Μαθήματα
             </NavLink>
           </li>
           <div className="add-button-container">
@@ -115,11 +115,11 @@ const Navbar = ({ onAddButtonClick }) => {
             {user ? (
               <a href="/login" className="nav-link logout-link" onClick={handleLogout}>
                 <img src="https://cdn-icons-png.flaticon.com/512/1828/1828466.png" alt="Logout Icon" className="logout-icon" />
-                Logout
+                Αποσύνδεση
               </a>
             ) : (
               <NavLink className="nav-link" to="/login">
-                Login
+                Σύνδεση
               </NavLink>
             )}
           </li>
