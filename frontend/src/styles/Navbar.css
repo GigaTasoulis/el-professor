@@ -1,13 +1,25 @@
 .sidebar {
-  right: 0;
+  position: fixed;
   top: 0;
-  bottom: 0;
+  left: 0;
   width: 300px;
+  height: 100%;
+  background-color: #f8f9fa;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
-  background-color: #f8f9fa;
   padding: 20px;
-  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  transform: translateX(0); /* Initially on screen */
+  z-index: 1000;
+}
+
+.sidebar.open {
+  transform: translateX(0); /* Ensures sidebar is visible when open */
+}
+
+.sidebar.closed {
+  transform: translateX(-100%); /* Hide sidebar when closed */
 }
 
 .sidebar-heading {
@@ -18,6 +30,8 @@
 
 .nav {
   flex-grow:1;
+  display: flex;
+  flex-direction: column;
 }
 
 .nav-item {
@@ -90,4 +104,28 @@
   width: 20px;
   height: 20px;
   margin-right: 8px;
+}
+.menu-icon {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  z-index: 1100; /* Above the sidebar */
+}
+
+@media (max-width: 1024px) {
+  /* Hide the sidebar by default on smaller screens */
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .menu-icon {
+    display: block; /* Show burger menu icon */
+  }
 }
