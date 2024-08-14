@@ -1,18 +1,25 @@
-.App {
-  text-align: center;
-}
+/* General app container */
 .app-container {
   display: flex;
   min-height: 100vh;
-  
 }
 
+/* Main content styling */
 .main-content {
+  flex-grow: 1;
   padding: 20px;
-  width: calc(100% - 200px);
+  transition: margin-left 0.3s ease;
+  margin-left: 300px; /* Adjust to the width of the sidebar */
 }
 
+@media (max-width: 1024px) {
+  .main-content {
+    margin-left: 0; /* Remove margin when sidebar is hidden */
+    width: 100%; /* Take full width when sidebar is hidden */
+  }
+}
 
+/* Optional: styles for specific components */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
