@@ -76,6 +76,11 @@ const Navbar = ({ onAddButtonClick }) => {
       )}
       <nav className={`sidebar ${isMenuOpen ? 'open' : ''}`}>
         <h2 className="sidebar-heading">Elprof.</h2>
+        {isMenuOpen && (
+          <button className="close-menu" onClick={toggleMenu}>
+            &times;
+          </button>
+        )}
         <ul className="nav flex-column">
           <li className="nav-item">
             <NavLink className="nav-link" to="/dashboard" onClick={() => handleNavClick('/dashboard')}>

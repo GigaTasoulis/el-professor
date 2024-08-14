@@ -98,13 +98,12 @@
   color: #00b894;
 }
 
-
-
 .logout-icon {
   width: 20px;
   height: 20px;
   margin-right: 8px;
 }
+
 .menu-icon {
   display: none; /* Hidden by default */
   position: fixed;
@@ -116,16 +115,34 @@
   z-index: 1100; /* Above the sidebar */
 }
 
+.close-menu {
+  display: none;
+  background-color: rgb(180, 91, 91);
+  color: white;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  padding: 5px 10px;
+}
+
 @media (max-width: 1024px) {
   /* Hide the sidebar by default on smaller screens */
   .sidebar {
     transform: translateX(-100%);
   }
+
   .sidebar.open {
     transform: translateX(0);
   }
 
   .menu-icon {
     display: block; /* Show burger menu icon */
+  }
+
+  .sidebar.open .close-menu {
+    display: block; /* Show close button only when sidebar is open on small screens */
   }
 }
