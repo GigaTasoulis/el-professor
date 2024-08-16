@@ -8,6 +8,12 @@
   border-collapse: collapse;
 }
 
+.students-title {
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
 .students-table thead th,
 .students-table tbody td {
   border: 1px solid #dee2e6;
@@ -92,6 +98,7 @@ form .form-group input[readonly] {
   cursor: not-allowed;
 }
 
+/* Unified Button Styles for Modals */
 .add-student-button,
 .payment-student-button,
 .edit-student-button {
@@ -102,10 +109,9 @@ form .form-group input[readonly] {
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  width: 150px; 
-  margin-right: 10px; 
+  width: 150px; /* Set a unified width */
+  margin-right: 10px; /* Space between buttons */
 }
-
 
 .add-student-button:hover,
 .payment-student-button:hover,
@@ -113,27 +119,28 @@ form .form-group input[readonly] {
   background-color: #009974; 
 }
 
-.cancel-button {
+.cancel-button-students {
   background-color: #ccc;
   color: black;
   border: none;
-  padding: 8px 15px; 
+  padding: 10px 20px; /* Adjust padding for consistent height */
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px; 
-  width: 120px; 
+  font-size: 16px; /* Consistent font size */
+  width: 150px; /* Same width as the other buttons */
+  margin-right: 10px !important; /* Space between the last button */
 }
 
-.cancel-button:hover {
+.cancel-button-students:hover {
   background-color: #b3b3b3; 
 }
-
 
 .modal-actions {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
   gap: 10px; 
+  flex-wrap: nowrap; /* Αλλάξε αυτό από "wrap" σε "nowrap" για να αποφύγεις την περιτύλιξη */
 }
 
 .modal-content {
@@ -142,7 +149,7 @@ form .form-group input[readonly] {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
 }
 
 .payment-history-list {
@@ -187,8 +194,6 @@ form .form-group input[readonly] {
   color: gray; 
 }
 
-
-
 .close-button {
   background-color: transparent;
   border: none;
@@ -202,8 +207,36 @@ form .form-group input[readonly] {
   right: 10px;
 }
 
-
 .close-button:hover {
   color: gray; 
   background-color: transparent;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .students-table thead th:nth-child(3), /* Κρύψε τις στήλες εκτός από τις πρώτες δύο και την τελευταία */
+  .students-table thead th:nth-child(4), 
+  .students-table thead th:nth-child(5), 
+  .students-table thead th:nth-child(6),
+  .students-table tbody td:nth-child(3),
+  .students-table tbody td:nth-child(4),
+  .students-table tbody td:nth-child(5),
+  .students-table tbody td:nth-child(6) {
+    display: none;
+  }
+
+  .students-table thead th:nth-child(1),
+  .students-table thead th:nth-child(2),
+  .students-table thead th:nth-child(7),
+  .students-table tbody td:nth-child(1),
+  .students-table tbody td:nth-child(2),
+  .students-table tbody td:nth-child(7) {
+    width: auto;
+  }
+
+  .students-title {
+    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+  }
 }

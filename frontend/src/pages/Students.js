@@ -20,6 +20,49 @@ const Students = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const studentsPerPage = 10;
   const totalPages = Math.ceil(students.length / studentsPerPage);
+  const [currentPagePaymentHistory, setCurrentPagePaymentHistory] = useState(1);
+  const paymentsPerPage = 5;
+
+  const paginatePaymentHistory = (pageNumber) => {
+    if (pageNumber > 0 && pageNumber <= totalPaymentsPages) {
+      setCurrentPagePaymentHistory(pageNumber);
+    }
+  };
+
+  const indexOfLastPayment = currentPagePaymentHistory * paymentsPerPage;
+  const indexOfFirstPayment = indexOfLastPayment - paymentsPerPage;
+
+  const currentPayments = currentStudent
+    ? currentStudent.paymentHistory.slice(indexOfFirstPayment, indexOfLastPayment)
+    : [];
+
+  const totalPaymentsPages = currentStudent
+    ? Math.ceil(currentStudent.paymentHistory.length / paymentsPerPage)
+    : 0;
+
+    const pageRangePaymentHistory = () => {
+      const pages = [];
+    
+      // Πρώτη σελίδα
+      if (currentPagePaymentHistory === 1) {
+        pages.push(1, 2);
+      }
+      // Δεύτερη σελίδα
+      else if (currentPagePaymentHistory === 2) {
+        pages.push(1, 2, 3);
+      }
+      // Τρίτη σελίδα
+      else if (currentPagePaymentHistory > 2 && currentPagePaymentHistory < totalPaymentsPages) {
+        pages.push(currentPagePaymentHistory - 1, currentPagePaymentHistory, currentPagePaymentHistory + 1);
+      }
+      // Τελευταία σελίδα
+      else if (currentPagePaymentHistory === totalPaymentsPages) {
+        pages.push(totalPaymentsPages - 1, totalPaymentsPages);
+      }
+    
+      return pages;
+    };
+    
 
   useEffect(() => {
     loadStudents();
@@ -172,7 +215,7 @@ const Students = () => {
       <div className="row">
         <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
           <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 className="h2">Φοιτητές</h1>
+            <h1 className="students-title">Φοιτητές</h1>
             <div className="btn-toolbar mb-2 mb-md-0">
               <button
                 type="button"
@@ -290,8 +333,8 @@ const Students = () => {
                 <input type="number" className="form-control" name="debt" value={newStudent.debt} onChange={handleChange} />
               </div>
               <div className="modal-actions">
-                <button type="button" className="add-student-button" onClick={handleAddStudent}>Προσθήκη Φοιτητή</button>
-                <button type="button" className="cancel-button" onClick={closeModal}>Ακύρωση</button>
+                <button type="button" className="add-student-button" onClick={handleAddStudent}>Προσθήκη</button>
+                <button type="button" className="cancel-button-students" onClick={closeModal}>Ακύρωση</button>
               </div>
             </form>
           </Modal>
@@ -332,8 +375,8 @@ const Students = () => {
                 </div>
                 {isEditable && (
                   <div className="modal-actions">
-                    <button type="button" className="edit-student-button" onClick={handleEditStudent}>Αποθήκευση Αλλαγών</button>
-                    <button type="button" className="cancel-button" onClick={closeEditModal}>Ακύρωση</button>
+                    <button type="button" className="edit-student-button" onClick={handleEditStudent}>Αποθήκευση</button>
+                    <button type="button" className="cancel-button-students" onClick={closeEditModal}>Ακύρωση</button>
                   </div>
                 )}
               </form>
@@ -349,28 +392,66 @@ const Students = () => {
             </div>
             <div className="modal-actions">
               <button type="button" className="payment-student-button" onClick={handleAddPayment}>Υποβολή</button>
-              <button type="button" className="cancel-button" onClick={closePaymentModal}>Ακύρωση</button>
+              <button type="button" className="cancel-button-students" onClick={closePaymentModal}>Ακύρωση</button>
             </div>
           </Modal>
 
         
           <Modal isOpen={paymentHistoryModalIsOpen} onClose={closePaymentHistoryModal}>
-          <div>
-            <h2>Ιστορικό πληρωμών</h2>
-            {currentStudent && (
+        <div>
+          <h2>Ιστορικό πληρωμών</h2>
+          {currentStudent && (
+            <>
               <ul className="payment-history-list">
-                {currentStudent.paymentHistory.map((payment, index) => (
+                {currentPayments.map((payment, index) => (
                   <li key={index}>
                     Ποσό: {payment.amount}, Ημερομηνία: {new Date(payment.date).toLocaleString()}
                   </li>
                 ))}
               </ul>
-            )}
-            <div className="modal-actions">
-                <button type="button" className="cancel-button" onClick={closePaymentHistoryModal}>Close</button>
-              </div>
-            </div>
-          </Modal>
+              <nav>
+                <ul className="pagination">
+                  <li className="page-item">
+                    <button
+                      onClick={() => paginatePaymentHistory(currentPagePaymentHistory - 1)}
+                      className="previous-button"
+                      disabled={currentPagePaymentHistory === 1}
+                    >
+                      &#9664; 
+                    </button>
+                  </li>
+                  {pageRangePaymentHistory().map((page, index) => (
+                    <li
+                      key={index}
+                      className={`page-item ${currentPagePaymentHistory === page ? 'active' : ''}`}
+                    >
+                      {page === "..." ? (
+                        <span className="page-link">...</span>
+                      ) : (
+                        <button onClick={() => paginatePaymentHistory(page)} className="page-link">
+                          {page}
+                        </button>
+                      )}
+                    </li>
+                  ))}
+                  <li className="page-item">
+                    <button
+                      onClick={() => paginatePaymentHistory(currentPagePaymentHistory + 1)}
+                      className="next-button"
+                      disabled={currentPagePaymentHistory === totalPaymentsPages}
+                    >
+                      &#9654; 
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </>
+          )}
+          <div className="modal-actions">
+            <button type="button" className="cancel-button-students" onClick={closePaymentHistoryModal}>Close</button>
+          </div>
+        </div>
+      </Modal>
 
 
         </main>
