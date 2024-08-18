@@ -213,7 +213,7 @@ form .form-group input[readonly] {
 }
 
 /* Responsive Styles */
-@media (max-width: 768px) {
+@media (max-width: 1400px) {
   .students-table thead th:nth-child(3), /* Κρύψε τις στήλες εκτός από τις πρώτες δύο και την τελευταία */
   .students-table thead th:nth-child(4), 
   .students-table thead th:nth-child(5), 
