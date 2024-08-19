@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import Modal from '../components/Modal';
 import '../styles/Students.css';
 import { getStudents, createStudent, updateStudent } from '../services/studentService';
@@ -43,19 +43,19 @@ const Students = () => {
     const pageRangePaymentHistory = () => {
       const pages = [];
     
-      // Πρώτη σελίδα
+      
       if (currentPagePaymentHistory === 1) {
         pages.push(1, 2);
       }
-      // Δεύτερη σελίδα
+      
       else if (currentPagePaymentHistory === 2) {
         pages.push(1, 2, 3);
       }
-      // Τρίτη σελίδα
+      
       else if (currentPagePaymentHistory > 2 && currentPagePaymentHistory < totalPaymentsPages) {
         pages.push(currentPagePaymentHistory - 1, currentPagePaymentHistory, currentPagePaymentHistory + 1);
       }
-      // Τελευταία σελίδα
+      
       else if (currentPagePaymentHistory === totalPaymentsPages) {
         pages.push(totalPaymentsPages - 1, totalPaymentsPages);
       }
@@ -135,7 +135,7 @@ const Students = () => {
     };
 
 
-    const response = await updateStudent(currentStudent._id, updatedStudent);
+    await updateStudent(currentStudent._id, updatedStudent);
     
 
     loadStudents();
