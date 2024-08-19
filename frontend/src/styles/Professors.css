@@ -6,6 +6,7 @@
 /* Table styling */
 .professor-container .table-responsive {
   margin-top: 20px;
+  overflow-x: auto; /* Ensure table is scrollable on small screens */
 }
 
 .professor-container .table {
@@ -69,6 +70,8 @@
 /* Main content styling */
 .professor-container .main {
   padding: 20px;
+  margin: 0 auto; /* Center the content */
+  max-width: 1000px; /* Set a maximum width */
 }
 
 .professor-container .professors-list {
@@ -85,6 +88,7 @@
   border-radius: 5px;
   display: flex;
   align-items: center;
+  min-width: 280px;
 }
 
 .professor-container .professor-item i {
@@ -148,6 +152,7 @@
   padding: 20px;
   max-width: 500px;
   width: 90%;
+  box-sizing: border-box; /* Ensure padding is included in width */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
@@ -174,7 +179,6 @@
   margin-top: 20px;
 }
 
-
 .btn-secondary {
   background-color: #6c757d;
   border-color: #6c757d;
@@ -187,47 +191,113 @@
 
 /* New button styling */
 .btn-add-professor {
-  background-color: #28a745; /* Βασικό πράσινο χρώμα */
+  background-color: #28a745;
   border-color: #28a745;
   color: white;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Σκίαση */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  margin-bottom: 10px; /* Περιθώριο από το κουμπί ακύρωσης */
+  margin-bottom: 10px;
 }
 
 .btn-add-professor:hover {
-  background-color: #218838; /* Σκούρο πράσινο όταν περνά το ποντίκι από πάνω */
+  background-color: #218838;
   border-color: #1e7e34;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Αυξημένη σκίαση κατά το hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .btn-add-professor:focus {
   outline: none;
-  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5); /* Outline σε focus */
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
 }
 
 /* Cancel button styling */
 .btn-cancel {
-  background-color: #6c757d; /* Αρχικό γκρι χρώμα */
+  background-color: #6c757d;
   border-color: #6c757d;
   color: white;
-  padding: 10px 20px; /* Ίδιο padding με το προσθήκη καθηγητή */
+  padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Σκίαση */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .btn-cancel:hover {
-  background-color: #5a6268; /* Σκούρο γκρι κατά το hover */
+  background-color: #5a6268;
   border-color: #545b62;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Αυξημένη σκίαση κατά το hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .btn-cancel:focus {
   outline: none;
-  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5); /* Outline σε focus */
+  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+}
+
+/* Media Queries for responsive design */
+@media (max-width: 1024px) {
+  .professor-container .main {
+    padding: 20px 10px;
+    max-width: 100%;
+    margin: 0 auto; 
+
+  }
+
+  .professor-container .table th,
+  .professor-container .table td {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .col-lg-10{
+    max-width: 100%;
+  }
+
+  .professor-container .professor-item {
+    flex: 1 1 100%;
+    margin: 10px 0;
+  }
+
+  .professor-container .main {
+    padding: 10px;
+  }
+
+  .custom-modal {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .form-control {
+    padding: 6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .professor-container .table th,
+  .professor-container .table td {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .professor-container .professor-item {
+    flex: 1 1 100%;
+    margin: 10px 0;
+  }
+
+  .professor-container .main {
+    padding: 10px;
+  }
+
+  .custom-modal {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .form-control {
+    padding: 6px;
+  }
 }
