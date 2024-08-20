@@ -88,4 +88,25 @@ router.put('/:id/debt', async (req, res) => {
   }
 });
 
+// Delete a student
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedStudent = await Student.findByIdAndDelete(id);
+
+    if (!deletedStudent) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    res.status(200).json({ message: 'Student deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting student', error });
+  }
+});
+
+
 module.exports = router;
+
+
+
