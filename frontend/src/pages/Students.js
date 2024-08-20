@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import Modal from '../components/Modal';
 import '../styles/Students.css';
+import axios from 'axios';
 import { getStudents, createStudent, updateStudent } from '../services/studentService';
 import editIcon from '../images/edit.png';
 import paymentIcon from '../images/credit-card.png';
 import historyIcon from '../images/scroll.png';
+import deleteIcon from '../images/deletebutton.png';
+import previousIcon from '../images/arrow_double_left_icon.png';
+import nextIcon from '../images/arrow_double_right_icon.png';
+
 
 const Students = () => {
   const [students, setStudents] = useState([]);
@@ -22,6 +27,34 @@ const Students = () => {
   const totalPages = Math.ceil(students.length / studentsPerPage);
   const [currentPagePaymentHistory, setCurrentPagePaymentHistory] = useState(1);
   const paymentsPerPage = 5;
+  const [isRemoveStudentModalOpen, setIsRemoveStudentModalOpen] = useState(false);
+  const [studentToRemove, setStudentToRemove] = useState(null);
+
+
+  const openRemoveStudentModal = (student) => {
+    setStudentToRemove(student);
+    setIsRemoveStudentModalOpen(true);
+  };
+  
+  const closeRemoveStudentModal = () => {
+    setIsRemoveStudentModalOpen(false);
+    setStudentToRemove(null);
+  };
+
+  
+  const handleRemoveStudent = async () => {
+    if (!studentToRemove) return;
+  
+    try {
+      await axios.delete(`http://localhost:5000/api/students/${studentToRemove._id}`);
+      setStudents(students.filter(student => student._id !== studentToRemove._id)); // Ενημέρωση της λίστας φοιτητών
+      closeRemoveStudentModal();
+    } catch (error) {
+      console.error('Error deleting student:', error);
+      // Μπορείς να προσθέσεις επιπλέον χειρισμό σφαλμάτων εδώ, αν χρειάζεται
+    }
+  };
+  
 
   const paginatePaymentHistory = (pageNumber) => {
     if (pageNumber > 0 && pageNumber <= totalPaymentsPages) {
@@ -43,20 +76,25 @@ const Students = () => {
     const pageRangePaymentHistory = () => {
       const pages = [];
     
-      
+      // Έλεγχος για μία σελίδα
+      if (totalPaymentsPages === 1) {
+        pages.push(1);
+        return pages;
+      }
+    
+      // Έλεγχος για δύο σελίδες
+      if (totalPaymentsPages === 2) {
+        pages.push(1, 2);
+        return pages;
+      }
+    
       if (currentPagePaymentHistory === 1) {
         pages.push(1, 2);
-      }
-      
-      else if (currentPagePaymentHistory === 2) {
+      } else if (currentPagePaymentHistory === 2) {
         pages.push(1, 2, 3);
-      }
-      
-      else if (currentPagePaymentHistory > 2 && currentPagePaymentHistory < totalPaymentsPages) {
+      } else if (currentPagePaymentHistory > 2 && currentPagePaymentHistory < totalPaymentsPages) {
         pages.push(currentPagePaymentHistory - 1, currentPagePaymentHistory, currentPagePaymentHistory + 1);
-      }
-      
-      else if (currentPagePaymentHistory === totalPaymentsPages) {
+      } else if (currentPagePaymentHistory === totalPaymentsPages) {
         pages.push(totalPaymentsPages - 1, totalPaymentsPages);
       }
     
@@ -179,13 +217,25 @@ const Students = () => {
 
   const pageRange = () => {
     const pages = [];
-
+  
+    // Έλεγχος για μία σελίδα
+    if (totalPages === 1) {
+      pages.push(1);
+      return pages;
+    }
+  
+    // Έλεγχος για δύο σελίδες
+    if (totalPages === 2) {
+      pages.push(1, 2);
+      return pages;
+    }
+  
     pages.push(1);
-
+  
     if (currentPage > 3) {
       pages.push('...');
     }
-
+  
     if (currentPage === 1) {
       pages.push(2);
       pages.push('...');
@@ -197,18 +247,19 @@ const Students = () => {
       for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
         pages.push(i);
       }
-
+  
       if (currentPage < totalPages - 2) {
         pages.push('...');
       }
     }
-
+  
     if (totalPages > 1) {
       pages.push(totalPages);
     }
-
+  
     return pages;
   };
+  
 
   return (
     <div className="students-container container-fluid">
@@ -260,6 +311,10 @@ const Students = () => {
                       <button className="btn btn-link" onClick={() => openPaymentHistoryModal(student)}>
                         <img src={historyIcon} alt="Ιστορικό" className="history-icon" />
                       </button>
+                      <button className="btn btn-link" onClick={() => openRemoveStudentModal(student)}>
+                        <img src={deleteIcon} alt="Διαγραφή" className="delete-icon" />
+                      </button>
+
                     </td>
                   </tr>
                 ))}
@@ -276,7 +331,7 @@ const Students = () => {
                   className="previous-button"
                   disabled={currentPage === 1}
                 >
-                  &#9664; 
+                  <img src={previousIcon} alt="Previous" />
                 </button>
               </li>
               {pageRange().map((page, index) => (
@@ -299,7 +354,7 @@ const Students = () => {
                   className="next-button"
                   disabled={currentPage === totalPages}
                 >
-                  &#9654; 
+                  <img src={nextIcon} alt="Next" />
                 </button>
               </li>
             </ul>
@@ -387,7 +442,7 @@ const Students = () => {
           <Modal isOpen={paymentModalIsOpen} onClose={closePaymentModal}>
             <h2>Προσθήκη Πλήρωμής</h2>
             <div className="form-group">
-              <label>Ποσό Πληρωμής</label>
+              <label className="payment-modal-label">Ποσό Πληρωμής</label>
               <input type="number" className="form-control" value={paymentAmount} onChange={(e) => setPaymentAmount(e.target.value)} />
             </div>
             <div className="modal-actions">
@@ -398,60 +453,76 @@ const Students = () => {
 
         
           <Modal isOpen={paymentHistoryModalIsOpen} onClose={closePaymentHistoryModal}>
-        <div>
-          <h2>Ιστορικό πληρωμών</h2>
-          {currentStudent && (
-            <>
-              <ul className="payment-history-list">
-                {currentPayments.map((payment, index) => (
-                  <li key={index}>
-                    Ποσό: {payment.amount}, Ημερομηνία: {new Date(payment.date).toLocaleString()}
-                  </li>
-                ))}
-              </ul>
-              <nav>
-                <ul className="pagination">
-                  <li className="page-item">
-                    <button
-                      onClick={() => paginatePaymentHistory(currentPagePaymentHistory - 1)}
-                      className="previous-button"
-                      disabled={currentPagePaymentHistory === 1}
-                    >
-                      &#9664; 
-                    </button>
-                  </li>
-                  {pageRangePaymentHistory().map((page, index) => (
-                    <li
-                      key={index}
-                      className={`page-item ${currentPagePaymentHistory === page ? 'active' : ''}`}
-                    >
-                      {page === "..." ? (
-                        <span className="page-link">...</span>
-                      ) : (
-                        <button onClick={() => paginatePaymentHistory(page)} className="page-link">
-                          {page}
-                        </button>
-                      )}
-                    </li>
-                  ))}
-                  <li className="page-item">
-                    <button
-                      onClick={() => paginatePaymentHistory(currentPagePaymentHistory + 1)}
-                      className="next-button"
-                      disabled={currentPagePaymentHistory === totalPaymentsPages}
-                    >
-                      &#9654; 
-                    </button>
-                  </li>
-                </ul>
-              </nav>
-            </>
-          )}
-          <div className="modal-actions">
-            <button type="button" className="cancel-button-students" onClick={closePaymentHistoryModal}>Close</button>
+            <div>
+              <h2>Ιστορικό πληρωμών</h2>
+              {currentStudent && currentStudent.paymentHistory.length === 0 ? (
+                <p className="no-payment-history">Δεν υπάρχει ιστορικό πληρωμών.</p>
+              ) : (
+                <>
+                  <ul className="payment-history-list">
+                    {currentPayments.map((payment, index) => (
+                      <li key={index}>
+                        Ποσό: {payment.amount}, Ημερομηνία: {new Date(payment.date).toLocaleString()}
+                      </li>
+                    ))}
+                  </ul>
+                  {totalPaymentsPages > 1 && (
+                    <nav>
+                      <ul className="pagination">
+                        <li className="page-item">
+                          <button
+                            onClick={() => paginatePaymentHistory(currentPagePaymentHistory - 1)}
+                            className="previous-button"
+                            disabled={currentPagePaymentHistory === 1}
+                          >
+                            <img src={previousIcon} alt="Previous" />
+                          </button>
+                        </li>
+                        {pageRangePaymentHistory().map((page, index) => (
+                          <li
+                            key={index}
+                            className={`page-item ${currentPagePaymentHistory === page ? 'active' : ''}`}
+                          >
+                            {page === "..." ? (
+                              <span className="page-link">...</span>
+                            ) : (
+                              <button onClick={() => paginatePaymentHistory(page)} className="page-link">
+                                {page}
+                              </button>
+                            )}
+                          </li>
+                        ))}
+                        <li className="page-item">
+                          <button
+                            onClick={() => paginatePaymentHistory(currentPagePaymentHistory + 1)}
+                            className="next-button"
+                            disabled={currentPagePaymentHistory === totalPaymentsPages}
+                          >
+                            <img src={nextIcon} alt="Next" />
+                          </button>
+                        </li>
+                      </ul>
+                    </nav>
+                  )}
+                </>
+              )}
+              <div className="modal-actions">
+                <button type="button" className="cancel-button-students" onClick={closePaymentHistoryModal}>Close</button>
+              </div>
+            </div>
+          </Modal>
+
+      {isRemoveStudentModalOpen && (
+        <Modal isOpen={isRemoveStudentModalOpen} onClose={closeRemoveStudentModal}>
+          <h2>Επιβεβαίωση διαγραφής</h2>
+          <p>Είσαι σίγουρος ότι θες να διαγράψεις τον φοιτητή "{studentToRemove?.name}"?</p>
+          <div className="button-group">
+            <button className="btn btn-primary confirm-delete-button" onClick={handleRemoveStudent}>Διαγραφή</button>
+            <button className="btn btn-secondary btn-cancel" onClick={closeRemoveStudentModal}>Ακύρωση</button>
           </div>
-        </div>
-      </Modal>
+        </Modal>
+      )}
+
 
 
         </main>

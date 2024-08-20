@@ -56,7 +56,8 @@
 
 .edit-icon,
 .payment-icon,
-.history-icon {
+.history-icon,
+.delete-icon {
   width: 20px;
   height: 20px;
   cursor: pointer;
@@ -173,26 +174,7 @@ form .form-group input[readonly] {
   margin-top: 20px;
 }
 
-.previous-button,
-.next-button {
-  width: 50px;           
-  height: 40px;         
-  display: flex;        
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;    
-  background-color: white; 
-  color: gray;          
-  border: none;          
-  cursor: pointer;       
-  font-size: 16px;       
-}
 
-.previous-button:hover,
-.next-button:hover {
-  background-color: white; 
-  color: gray; 
-}
 
 .close-button {
   background-color: transparent;
@@ -210,6 +192,77 @@ form .form-group input[readonly] {
 .close-button:hover {
   color: gray; 
   background-color: transparent;
+}
+
+
+.no-payment-history {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px; /* Προσαρμόζουμε το ύψος ώστε να είναι πιο ισορροπημένο */
+  font-size: 18px;
+  color: #555;
+}
+
+.previous-button img,
+.next-button img {
+  width: 20px; /* Προσαρμόστε το μέγεθος των εικονιδίων ανάλογα με τις προτιμήσεις σας */
+  height: 20px;
+}
+
+
+.pagination .page-item {
+  display: inline-block;
+  margin: 0 2px;
+}
+
+.pagination .page-item button {
+  background-color: white; /* Λευκό φόντο */
+  border: 1px solid #dee2e6; /* Συνοριακή γραμμή για συνέπεια με τα άλλα κουμπιά */
+  padding: 5px 10px; /* Ίδιο padding με τα άλλα κουμπιά */
+  width: 40px; /* Σταθερό πλάτος για συνέπεια */
+  height: 40px; /* Σταθερό ύψος για συνέπεια */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination .page-item button img {
+  max-width: 16px; /* Προσαρμόζουμε το μέγεθος του εικονιδίου */
+  max-height: 16px;
+}
+
+.pagination .page-item button:hover {
+  background-color: #f8f9fa; /* Χρώμα φόντου κατά την αιώρηση, ίδιο με τα άλλα κουμπιά */
+}
+
+.pagination .page-item .page-link {
+  color: #00b894; /* Εφαρμογή του νέου χρώματος στα νούμερα και τις τελείες */
+  border: 1px solid #dee2e6;
+  padding: 5px 10px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #00b894; /* Εφαρμογή του νέου χρώματος για το ενεργό κουμπί */
+  border-color: #00b894;
+  color: white; /* Κάνουμε το κείμενο λευκό για αντίθεση */
+}
+
+.pagination .page-item:hover .page-link {
+  background-color: #00b894; /* Αλλαγή του χρώματος κατά την αιώρηση */
+  color: white; /* Χρώμα κειμένου κατά την αιώρηση */
+}
+
+.payment-modal-label {
+  display: block;
+  text-align: center; /* Κεντράρισμα του κειμένου οριζόντια */
+  margin-bottom: 20px; /* Προσθήκη κάτω περιθωρίου για καλύτερη εμφάνιση */
+  font-weight: bold; /* Προαιρετικά: Αύξηση βάρους της γραμματοσειράς για έμφαση */
 }
 
 /* Responsive Styles */
