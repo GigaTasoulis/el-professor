@@ -15,7 +15,9 @@ const lessonRoutes = require('./routes/lessonsRoutes');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://el-professor.vercel.app/'
+}));
 
 const PORT = process.env.PORT || 5000;
 
