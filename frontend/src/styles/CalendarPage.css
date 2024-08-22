@@ -1,3 +1,4 @@
+/* --- Βασικές Διατάξεις Σελίδας --- */
 .calendar-page {
   display: flex;
   flex-direction: column;
@@ -5,16 +6,17 @@
   margin-top: 20px;
 }
 
-
-
 .calendar-container {
-  width: 80%;
+  width: 100%;
+  height: calc(100vh - 100px); /* Adjust the height dynamically based on viewport height */
+  overflow: hidden;
 }
 
+/* --- Modal Διατάξεις --- */
 .modal {
   position: fixed !important;
   top: 0 !important;
-  left: 0 !important; 
+  left: 0 !important;
   width: 100% !important;
   height: 100% !important;
   background: rgba(0, 0, 0, 0.5) !important;
@@ -28,10 +30,37 @@
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 400px !important;
+  max-width: 800px; /* Αυξήσαμε το πλάτος του modal */
+  width: 100% !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.modal-content h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* --- Modal Sections and Rows --- */
+.modal-section {
+  margin-bottom: 20px;
+}
+
+.modal-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.modal-row .form-group {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.modal-row .form-group:last-child {
+  margin-right: 0;
+}
+
+/* --- Form Groups --- */
 .form-group {
   margin-bottom: 15px;
 }
@@ -48,39 +77,122 @@
   box-sizing: border-box;
 }
 
-button {
+/* --- Student Form Groups and Rows --- */
+.student-container {
+  max-height: 210px; /* Ύψος για 3 σειρές μαθητών (περίπου 70px ανά σειρά) */
+  overflow-y: auto; /* Ενεργοποιεί το scrollbar αν υπάρχουν περισσότεροι από 6 μαθητές */
+  padding-right: 10px; /* Προσθέτει λίγο κενό για το scrollbar */
+  display: flex;
+  flex-direction: column;
+}
+
+.student-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.student-form-group {
+  flex: 1;
+  margin: 0 5px;
+  max-width: 45%;
+}
+
+.student-form-group:nth-child(2n) {
+  margin-right: 0; /* Κάθε δεύτερη φόρμα δεν θα έχει margin-right για να ισορροπεί */
+}
+
+/* --- Student Input Container --- */
+.student-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.student-input {
+  flex-grow: 1;
   margin-right: 10px;
+  min-width: 100px; /* Minimum width */
+  max-width: calc(100% - 30px); /* Adjust to leave space for the button */
 }
 
-button[type="button"] {
-  display: inline-block;
-  margin-right: 10px;
+.delete-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
-button[type="button"]:last-of-type {
-  margin-right: 0;
+.delete-icon {
+  width: 20px;
+  height: 20px;
 }
 
-.modal-content h2 {
-  text-align: center;
-  margin-bottom: 20px;
+.delete-button:hover {
+  background-color: transparent; /* Αφαίρεση του κόκκινου hover εφέ */
 }
 
-button.btn-primary, button.btn-secondary {
+/* --- Buttons Group --- */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.button-group .row {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   margin-top: 10px;
 }
 
-button[onClick*="addStudent"] {
-  margin-top: 10px;
-  background-color: black;
+.button-group .row button {
+  width: 48%;
+}
+
+/* --- Add Student Button --- */
+.add-new-student {
+  background-color: #3498db; /* Χρώμα για το κουμπί "Add student" */
   color: white;
   border: none;
   padding: 10px;
   cursor: pointer;
-  width: 100%;
+  width: auto; /* Καθορίζει το πλάτος αυτόματα */
+  display: block;
+  margin-left: auto;
+  margin-right: auto; /* Κεντράρει το κουμπί */
 }
 
-button[onClick*="addStudent"]:hover {
-  background-color: darkgray;
+.add-new-student:hover:hover {
+  background-color: #2980b9; /* Σκούρο χρώμα για το hover του κουμπιού "Add student" */
+}
+
+/* --- Submit and Cancel Buttons --- */
+button.btn-primary {
+  background-color: #00b894; /* Χρώμα για το κουμπί "Submit" */
+  color: white;
+  border: none;
+}
+
+button.btn-primary:hover {
+  background-color: #00b894; /* Το hover διατηρεί το ίδιο χρώμα */
+}
+
+button.btn-secondary {
+  background-color: gray;
+  color: white;
+  border: none;
+}
+
+/* --- Centered Form Groups --- */
+.centered-form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.centered-form-group.full-width {
+  width: 100%;
+  align-items: flex-start;
 }
