@@ -1,8 +1,11 @@
 import axios from 'axios';
 
+// Use the base URL from the environment variable
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 export const getStudents = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/api/students');
+    const response = await axios.get(`${API_BASE_URL}students`);
     return response.data;
   } catch (error) {
     console.error("Error fetching students: ", error);
@@ -12,7 +15,7 @@ export const getStudents = async () => {
 
 export const createStudent = async (student) => {
   try {
-    const response = await axios.post('http://localhost:5000/api/students', student);
+    const response = await axios.post(`${API_BASE_URL}students`, student);
     return response.data;
   } catch (error) {
     console.error("Error creating student: ", error);
@@ -22,7 +25,7 @@ export const createStudent = async (student) => {
 
 export const updateStudent = async (id, student) => {
   try {
-    const response = await axios.put(`http://localhost:5000/api/students/${id}`, student);
+    const response = await axios.put(`${API_BASE_URL}students/${id}`, student);
     return response.data;
   } catch (error) {
     console.error("Error updating student: ", error);
@@ -32,7 +35,7 @@ export const updateStudent = async (id, student) => {
 
 export const addStudentPayment = async (id, amount) => {
   try {
-    const response = await axios.put(`http://localhost:5000/api/students/${id}/payment`, { amount });
+    const response = await axios.put(`${API_BASE_URL}students/${id}/payment`, { amount });
     return response.data;
   } catch (error) {
     console.error("Error adding payment: ", error);
