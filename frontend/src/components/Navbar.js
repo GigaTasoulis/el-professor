@@ -33,7 +33,7 @@ const Navbar = ({ onAddButtonClick }) => {
       case '/dashboard':
         return '+ Όρισε Στόχους';
       case '/classrooms':
-        return '';
+        return '+ Προσθήκη Τάξης';
       default:
         return '';
     }

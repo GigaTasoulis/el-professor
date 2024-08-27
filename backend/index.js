@@ -34,8 +34,8 @@ app.use('/api/classes', classRoutes);
 app.use('/api/students', studentRoutes); 
 app.use('/api/professors', professorRoutes); 
 app.use('/api/goals', goalRoutes);
-app.use('/api/classrooms', classroomRoutes);
-app.use('/api/lessons', lessonRoutes);
+app.use('/api', classroomRoutes);
+app.use('/api', lessonRoutes);
 
 
 
