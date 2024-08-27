@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/el-professor/static/css/main.354ca631.css",
+    "main.js": "/el-professor/static/js/main.9c4daad9.js",
+    "static/js/453.d855a71b.chunk.js": "/el-professor/static/js/453.d855a71b.chunk.js",
+    "static/media/loginbackround.png": "/el-professor/static/media/loginbackround.259686ab28aa747c34d0.png",
+    "static/media/credit-card.png": "/el-professor/static/media/credit-card.600583d2c2fcc5014119.png",
+    "static/media/scroll.png": "/el-professor/static/media/scroll.29864f8d8d8e39f5c5a2.png",
+    "static/media/edit.png": "/el-professor/static/media/edit.0f46e2728eb984e21ce8.png",
+    "index.html": "/el-professor/index.html",
+    "main.354ca631.css.map": "/el-professor/static/css/main.354ca631.css.map",
+    "main.9c4daad9.js.map": "/el-professor/static/js/main.9c4daad9.js.map",
+    "453.d855a71b.chunk.js.map": "/el-professor/static/js/453.d855a71b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.354ca631.css",
+    "static/js/main.9c4daad9.js"
+  ]
+}
