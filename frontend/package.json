@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-  "homepage": "https://gigatasoulis.github.io/el-professor/",
+  "homepage": "http://gigatasoulis.github.io/el-professor",
   "private": false,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
