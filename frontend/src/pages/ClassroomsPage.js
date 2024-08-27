@@ -3,6 +3,9 @@ import axios from 'axios';
 import Modal from '../components/Modal'; 
 import '../styles/ClassroomsPage.css';
 
+// Use the base URL from the environment variable
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const ClassroomsPage = () => {
   const [classrooms, setClassrooms] = useState([]);
   const [lessons, setLessons] = useState([]);
@@ -26,7 +29,7 @@ const ClassroomsPage = () => {
 
   const fetchClassrooms = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/classrooms');
+      const response = await axios.get(`${API_BASE_URL}classrooms`);
       setClassrooms(response.data);
     } catch (error) {
       console.error('Error fetching classrooms:', error);
@@ -36,7 +39,7 @@ const ClassroomsPage = () => {
 
   const fetchLessons = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/lessons');
+      const response = await axios.get(`${API_BASE_URL}lessons`);
       setLessons(response.data);
     } catch (error) {
       console.error('Error fetching lessons:', error);
@@ -51,7 +54,7 @@ const ClassroomsPage = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/lessons', newLesson);
+      const response = await axios.post(`${API_BASE_URL}lessons`, newLesson);
       setLessons([...lessons, response.data]);
       setNewLesson({ name: '', description: '' }); 
       closeModal();
@@ -65,7 +68,7 @@ const ClassroomsPage = () => {
     if (!lessonToRemove) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/lessons/${lessonToRemove._id}`);
+      await axios.delete(`${API_BASE_URL}lessons/${lessonToRemove._id}`);
       setLessons(lessons.filter(lesson => lesson._id !== lessonToRemove._id));
       closeModal();
     } catch (error) {
@@ -81,7 +84,7 @@ const ClassroomsPage = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/classrooms', newClassroom);
+      const response = await axios.post(`${API_BASE_URL}classrooms`, newClassroom);
       setClassrooms([...classrooms, response.data]);
       setNewClassroom({ name: '', availability: true }); 
       closeModal();
@@ -95,7 +98,7 @@ const ClassroomsPage = () => {
     if (!classroomToRemove) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/classrooms/${classroomToRemove._id}`);
+      await axios.delete(`${API_BASE_URL}classrooms/${classroomToRemove._id}`);
       setClassrooms(classrooms.filter(classroom => classroom._id !== classroomToRemove._id));
       closeModal();
     } catch (error) {

@@ -2,10 +2,13 @@ import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'rea
 import axios from 'axios';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import Modal from '../components/Modal'; // Make sure the path is correct
+import Modal from '../components/Modal';
 import '../styles/Dashboard.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+// Use the base URL from the environment variable
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Dashboard = forwardRef((props, ref) => {
   const [lessons, setLessons] = useState([]);
@@ -28,7 +31,7 @@ const Dashboard = forwardRef((props, ref) => {
 
   const fetchLessons = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/classes');
+      const response = await axios.get(`${API_BASE_URL}classes`);
       setLessons(response.data);
     } catch (error) {
       console.error('Error fetching lessons: ', error);
@@ -37,7 +40,7 @@ const Dashboard = forwardRef((props, ref) => {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/students');
+      const response = await axios.get(`${API_BASE_URL}students`);
       setStudents(response.data);
     } catch (error) {
       console.error('Error fetching students: ', error);
@@ -46,7 +49,7 @@ const Dashboard = forwardRef((props, ref) => {
 
   const fetchGoals = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/goals');
+      const response = await axios.get(`${API_BASE_URL}goals`);
       const { studentGoal, revenueGoal, hoursGoal } = response.data;
       setStudentGoal(studentGoal);
       setRevenueGoal(revenueGoal);
@@ -58,7 +61,7 @@ const Dashboard = forwardRef((props, ref) => {
 
   const saveGoals = async () => {
     try {
-      await axios.put('http://localhost:5000/api/goals', {
+      await axios.put(`${API_BASE_URL}goals`, {
         studentGoal,
         revenueGoal,
         hoursGoal

@@ -12,6 +12,9 @@ import '../styles/CalendarPage.css';
 
 const localizer = momentLocalizer(moment);
 
+// Use the base URL from the environment variable
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const CalendarPage = () => {
   const { user } = useContext(AuthContext);
   const [events, setEvents] = useState([]);
@@ -40,7 +43,7 @@ const CalendarPage = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/classes');
+      const response = await axios.get(`${API_BASE_URL}classes`);
       setEvents(response.data.map(event => ({
         ...event,
         start: new Date(event.start),
@@ -53,7 +56,7 @@ const CalendarPage = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/students');
+      const response = await axios.get(`${API_BASE_URL}students`);
       setStudents(response.data);
     } catch (error) {
       console.error("Error fetching students: ", error);
@@ -62,7 +65,7 @@ const CalendarPage = () => {
 
   const fetchClasses = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/classes');
+      const response = await axios.get(`${API_BASE_URL}classes`);
       setClasses(response.data);
     } catch (error) {
       console.error("Error fetching classes: ", error);
@@ -71,7 +74,7 @@ const CalendarPage = () => {
 
   const fetchTeachers = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/professors');
+      const response = await axios.get(`${API_BASE_URL}professors`);
       setTeachers(response.data);
     } catch (error) {
       console.error("Error fetching teachers: ", error);
@@ -184,7 +187,7 @@ const CalendarPage = () => {
       const updatedDebt = existingStudent.debt + debtPerStudent;
   
       // Update the student's debt in the database via the new debt-specific endpoint
-      await axios.put(`http://localhost:5000/api/students/${existingStudent._id}/debt`, { debt: updatedDebt });
+      await axios.put(`${API_BASE_URL}students/${existingStudent._id}/debt`, { debt: updatedDebt });
   
       return {
         ...student,
@@ -207,11 +210,11 @@ const CalendarPage = () => {
     try {
       if (selectedEvent) {
         console.log('Updating event:', selectedEvent._id);
-        const response = await axios.put(`http://localhost:5000/api/classes/${selectedEvent._id}`, eventData);
+        const response = await axios.put(`${API_BASE_URL}classes/${selectedEvent._id}`, eventData);
         console.log('Event updated:', response.data);
       } else {
         console.log('Creating event with data:', eventData);
-        const response = await axios.post('http://localhost:5000/api/classes', eventData);
+        const response = await axios.post(`${API_BASE_URL}classes`, eventData);
         console.log('Event created:', response.data);
       }
       setModalOpen(false);

@@ -11,6 +11,7 @@ import deleteIcon from '../images/deletebutton.png';
 import previousIcon from '../images/arrow_double_left_icon.png';
 import nextIcon from '../images/arrow_double_right_icon.png';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Students = () => {
   const [students, setStudents] = useState([]);
@@ -29,7 +30,7 @@ const Students = () => {
   const paymentsPerPage = 5;
   const [isRemoveStudentModalOpen, setIsRemoveStudentModalOpen] = useState(false);
   const [studentToRemove, setStudentToRemove] = useState(null);
-
+  
 
   const openRemoveStudentModal = (student) => {
     setStudentToRemove(student);
@@ -46,7 +47,7 @@ const Students = () => {
     if (!studentToRemove) return;
   
     try {
-      await axios.delete(`http://localhost:5000/api/students/${studentToRemove._id}`);
+      await axios.delete(`${API_BASE_URL}students/${studentToRemove._id}`);
       setStudents(students.filter(student => student._id !== studentToRemove._id)); // Ενημέρωση της λίστας φοιτητών
       closeRemoveStudentModal();
     } catch (error) {
