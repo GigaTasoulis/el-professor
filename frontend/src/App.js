@@ -13,7 +13,7 @@ import ClassroomsPage from './pages/ClassroomsPage';
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <Router basename={process.env.PUBLIC_URL}>
         <div className="app-container">
           <MainContent />
         </div>
