@@ -396,7 +396,7 @@ const CalendarPage = () => {
             <div className="button-group">
                 <button type="button" className="add-new-student" onClick={addStudent}>Add student</button>              
                 <div className="row">
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="calendar-submit">Submit</button>
                 <button type="button" className="btn btn-secondary" onClick={() => setModalOpen(false)}>Cancel</button>
                 </div>
             </div>

@@ -1,4 +1,3 @@
-/* --- Βασικές Διατάξεις Σελίδας --- */
 .calendar-page {
   display: flex;
   flex-direction: column;
@@ -8,11 +7,10 @@
 
 .calendar-container {
   width: 100%;
-  height: calc(100vh - 100px); /* Adjust the height dynamically based on viewport height */
+  height: calc(100vh - 100px);
   overflow: hidden;
 }
 
-/* --- Modal Διατάξεις --- */
 .modal {
   position: fixed !important;
   top: 0 !important;
@@ -23,14 +21,14 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  z-index: 1000 !important;  /* Ensure the modal is above other content */
+  z-index: 1000 !important;  
 }
 
 .modal-content {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  max-width: 800px; /* Αυξήσαμε το πλάτος του modal */
+  max-width: 800px; 
   width: 100% !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -79,9 +77,9 @@
 
 /* --- Student Form Groups and Rows --- */
 .student-container {
-  max-height: 210px; /* Ύψος για 3 σειρές μαθητών (περίπου 70px ανά σειρά) */
-  overflow-y: auto; /* Ενεργοποιεί το scrollbar αν υπάρχουν περισσότεροι από 6 μαθητές */
-  padding-right: 10px; /* Προσθέτει λίγο κενό για το scrollbar */
+  max-height: 210px; 
+  overflow-y: auto; 
+  padding-right: 10px; 
   display: flex;
   flex-direction: column;
 }
@@ -99,7 +97,7 @@
 }
 
 .student-form-group:nth-child(2n) {
-  margin-right: 0; /* Κάθε δεύτερη φόρμα δεν θα έχει margin-right για να ισορροπεί */
+  margin-right: 0; 
 }
 
 /* --- Student Input Container --- */
@@ -111,8 +109,8 @@
 .student-input {
   flex-grow: 1;
   margin-right: 10px;
-  min-width: 100px; /* Minimum width */
-  max-width: calc(100% - 30px); /* Adjust to leave space for the button */
+  min-width: 100px; 
+  max-width: calc(100% - 30px); 
 }
 
 .delete-button {
@@ -128,7 +126,7 @@
 }
 
 .delete-button:hover {
-  background-color: transparent; /* Αφαίρεση του κόκκινου hover εφέ */
+  background-color: transparent; 
 }
 
 /* --- Buttons Group --- */
@@ -150,32 +148,30 @@
   width: 48%;
 }
 
-/* --- Add Student Button --- */
 .add-new-student {
-  background-color: #3498db; /* Χρώμα για το κουμπί "Add student" */
+  background-color: #3498db; 
   color: white;
   border: none;
   padding: 10px;
   cursor: pointer;
-  width: auto; /* Καθορίζει το πλάτος αυτόματα */
+  width: auto; 
   display: block;
   margin-left: auto;
-  margin-right: auto; /* Κεντράρει το κουμπί */
+  margin-right: auto; 
 }
 
 .add-new-student:hover:hover {
-  background-color: #2980b9; /* Σκούρο χρώμα για το hover του κουμπιού "Add student" */
+  background-color: #2980b9; 
 }
 
-/* --- Submit and Cancel Buttons --- */
-button.btn-primary {
-  background-color: #00b894; /* Χρώμα για το κουμπί "Submit" */
+.calendar-submit {
+  background-color: #00b894; 
   color: white;
   border: none;
 }
 
-button.btn-primary:hover {
-  background-color: #00b894; /* Το hover διατηρεί το ίδιο χρώμα */
+.calendar-submit:hover {
+  background-color: #00b894; 
 }
 
 button.btn-secondary {
@@ -184,7 +180,7 @@ button.btn-secondary {
   border: none;
 }
 
-/* --- Centered Form Groups --- */
+
 .centered-form-group {
   display: flex;
   flex-direction: column;
