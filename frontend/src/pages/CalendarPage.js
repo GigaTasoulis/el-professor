@@ -9,6 +9,7 @@ import { AuthContext } from '../context/AuthContext';
 import Modal from '../components/Modal';
 import FormGroup from '../components/FormGroup';
 import '../styles/CalendarPage.css';
+import deleteIcon from '../images/deletebutton.png';
 
 const localizer = momentLocalizer(moment);
 
@@ -255,111 +256,151 @@ const CalendarPage = () => {
       </button>
 
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <h2>{selectedEvent ? 'View/Edit Lesson' : 'Add Lesson'}</h2>
+        <h2>{selectedEvent ? 'Επεξεργασία' : 'Προσθήκη Μαθήματος'}</h2>
         <form onSubmit={handleSubmit}>
-          <FormGroup label="Date">
-            <DatePicker
-              selected={newEvent.start}
-              onChange={(date) => handleDateChange(date, 'start')}
-              dateFormat="dd-MMM-yyyy"
-              className="form-control"
-              disabled={!isEditing}
-            />
-          </FormGroup>
-          <FormGroup label="Start Time">
-            <DatePicker
-              selected={newEvent.start}
-              onChange={(date) => handleDateChange(date, 'start')}
-              showTimeSelect
-              showTimeSelectOnly
-              timeIntervals={15}
-              timeCaption="Time"
-              dateFormat="h:mm aa"
-              className="form-control"
-              disabled={!isEditing}
-            />
-          </FormGroup>
-          <FormGroup label="End Time">
-            <DatePicker
-              selected={newEvent.end}
-              onChange={(date) => handleDateChange(date, 'end')}
-              showTimeSelect
-              showTimeSelectOnly
-              timeIntervals={15}
-              timeCaption="Time"
-              dateFormat="h:mm aa"
-              className="form-control"
-              disabled={!isEditing}
-            />
-          </FormGroup>
-          <FormGroup label="Class">
-            <input
-              type="text"
-              name="className"
-              value={newEvent.className}
-              onChange={handleEventChange}
-              className="form-control"
-              disabled={!isEditing}
-              list="classes-list"
-            />
-            <datalist id="classes-list">
-              {classes.map((classItem, index) => (
-                <option key={index} value={classItem.name} />
-              ))}
-            </datalist>
-          </FormGroup>
-          <FormGroup label="Lesson">
-            <input
-              type="text"
-              name="lesson"
-              value={newEvent.lesson}
-              onChange={handleEventChange}
-              className="form-control"
-              disabled={!isEditing}
-            />
-          </FormGroup>
-          <FormGroup label="Teacher">
-            <input
-              type="text"
-              name="teacher"
-              value={newEvent.teacher}
-              onChange={handleEventChange}
-              className="form-control"
-              disabled={!isEditing}
-              list="teachers-list"
-            />
-            <datalist id="teachers-list">
-              {teachers.map((teacher, index) => (
-                <option key={index} value={teacher.name} />
-              ))}
-            </datalist>
-          </FormGroup>
-          {newEvent.students.map((student, index) => (
-            <FormGroup label={`Student ${index + 1}`} key={index}>
-              <input
-                type="text"
-                value={student.name}
-                onChange={(e) => handleStudentChange(index, e)}
-                className="form-control"
-                list={`students-list-${index}`}
-                disabled={!isEditing}
-              />
-              <datalist id={`students-list-${index}`}>
-                {filterStudents(student.name).map((filteredStudent, i) => (
-                  <option key={i} value={filteredStudent.name} />
-                ))}
-              </datalist>
-              {isEditing && <button type="button" onClick={() => removeStudent(index)}>Remove</button>}
-            </FormGroup>
-          ))}
-          {isEditing && <button type="button" onClick={addStudent}>Add student</button>}
+          <div className="modal-section">
+            <div className="modal-row">
+              <FormGroup label="Ημ/νία">
+                <DatePicker
+                  selected={newEvent.start}
+                  onChange={(date) => handleDateChange(date, 'start')}
+                  dateFormat="dd-MMM-yyyy"
+                  className="form-control"
+                  disabled={!isEditing}
+                />
+              </FormGroup>
+              <FormGroup label="Καθηγητής">
+                <input
+                  type="text"
+                  name="teacher"
+                  value={newEvent.teacher}
+                  onChange={handleEventChange}
+                  className="form-control"
+                  disabled={!isEditing}
+                  list="teachers-list"
+                />
+                <datalist id="teachers-list">
+                  {teachers.map((teacher, index) => (
+                    <option key={index} value={teacher.name} />
+                  ))}
+                </datalist>
+              </FormGroup>
+            </div>
+
+            <div className="modal-row">
+              <FormGroup label="Ώρα Έναρξης">
+                <DatePicker
+                  selected={newEvent.start}
+                  onChange={(date) => handleDateChange(date, 'start')}
+                  showTimeSelect
+                  showTimeSelectOnly
+                  timeIntervals={15}
+                  timeCaption="Time"
+                  dateFormat="h:mm aa"
+                  className="form-control"
+                  disabled={!isEditing}
+                />
+              </FormGroup>
+              <FormGroup label="Ώρα Λήξης">
+                <DatePicker
+                  selected={newEvent.end}
+                  onChange={(date) => handleDateChange(date, 'end')}
+                  showTimeSelect
+                  showTimeSelectOnly
+                  timeIntervals={15}
+                  timeCaption="Time"
+                  dateFormat="h:mm aa"
+                  className="form-control"
+                  disabled={!isEditing}
+                />
+              </FormGroup>
+            </div>
+
+            <div className="modal-row">
+              <FormGroup label="Αίθουσα">
+                <input
+                  type="text"
+                  name="className"
+                  value={newEvent.className}
+                  onChange={handleEventChange}
+                  className="form-control"
+                  disabled={!isEditing}
+                  list="classes-list"
+                />
+                <datalist id="classes-list">
+                  {classes.map((classItem, index) => (
+                    <option key={index} value={classItem.name} />
+                  ))}
+                </datalist>
+              </FormGroup>
+              <FormGroup label="Μάθημα">
+                <input
+                  type="text"
+                  name="lesson"
+                  value={newEvent.lesson}
+                  onChange={handleEventChange}
+                  className="form-control"
+                  disabled={!isEditing}
+                />
+              </FormGroup>
+            </div>
+          </div>
+
+          <div className="modal-section">
+              {newEvent.students.map((student, index) => {
+                if (index % 2 === 0) {
+                  const studentPair = newEvent.students.slice(index, index + 2);
+                  return (
+                    <div className="student-row" key={index}>
+                      {studentPair.map((student, subIndex) => (
+                        <FormGroup
+                          label={`Μαθητής ${index + subIndex + 1}`}
+                          key={index + subIndex}
+                          className="student-form-group"
+                        >
+                          <div className="student-input-container">
+                            <input
+                              type="text"
+                              value={student.name}
+                              onChange={(e) => handleStudentChange(index + subIndex, e)}
+                              className="form-control student-input"
+                              list={`students-list-${index + subIndex}`}
+                              disabled={!isEditing}
+                            />
+                            {isEditing && (
+                              <button
+                                type="button"
+                                onClick={() => removeStudent(index + subIndex)}
+                                className="delete-button"
+                              >
+                                <img src={deleteIcon} alt="Delete" className="delete-icon" />
+                              </button>
+                            )}
+                          </div>
+                          <datalist id={`students-list-${index + subIndex}`}>
+                            {filterStudents(student.name).map((filteredStudent, i) => (
+                              <option key={i} value={filteredStudent.name} />
+                            ))}
+                          </datalist>
+                        </FormGroup>
+                      ))}
+                    </div>
+                  );
+                }
+                return null;
+              })}
+            </div>
+
           {isEditing ? (
             <div className="button-group">
-              <button type="submit" className="btn btn-primary">Submit</button>
-              <button type="button" className="btn btn-secondary" onClick={() => setModalOpen(false)}>Cancel</button>
+                <button type="button" className="add-new-student" onClick={addStudent}>Προσθήκη Μαθητή</button>              
+                <div className="row">
+                <button type="submit" className="calendar-submit">Υποβολή</button>
+                <button type="button" className="btn btn-secondary" onClick={() => setModalOpen(false)}>Ακύρωση</button>
+                </div>
             </div>
           ) : (
-            <button type="button" className="btn btn-secondary" onClick={() => setIsEditing(true)}>Edit</button>
+            <button type="button" className="btn btn-secondary" onClick={() => setIsEditing(true)}>Επεξεργασία</button>
           )}
         </form>
       </Modal>
