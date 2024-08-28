@@ -256,11 +256,11 @@ const CalendarPage = () => {
       </button>
 
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <h2>{selectedEvent ? 'View/Edit Lesson' : 'Add Lesson'}</h2>
+        <h2>{selectedEvent ? 'Επεξεργασία' : 'Προσθήκη Μαθήματος'}</h2>
         <form onSubmit={handleSubmit}>
           <div className="modal-section">
             <div className="modal-row">
-              <FormGroup label="Date">
+              <FormGroup label="Ημ/νία">
                 <DatePicker
                   selected={newEvent.start}
                   onChange={(date) => handleDateChange(date, 'start')}
@@ -269,7 +269,7 @@ const CalendarPage = () => {
                   disabled={!isEditing}
                 />
               </FormGroup>
-              <FormGroup label="Teacher">
+              <FormGroup label="Καθηγητής">
                 <input
                   type="text"
                   name="teacher"
@@ -288,7 +288,7 @@ const CalendarPage = () => {
             </div>
 
             <div className="modal-row">
-              <FormGroup label="Start Time">
+              <FormGroup label="Ώρα Έναρξης">
                 <DatePicker
                   selected={newEvent.start}
                   onChange={(date) => handleDateChange(date, 'start')}
@@ -301,7 +301,7 @@ const CalendarPage = () => {
                   disabled={!isEditing}
                 />
               </FormGroup>
-              <FormGroup label="End Time">
+              <FormGroup label="Ώρα Λήξης">
                 <DatePicker
                   selected={newEvent.end}
                   onChange={(date) => handleDateChange(date, 'end')}
@@ -317,7 +317,7 @@ const CalendarPage = () => {
             </div>
 
             <div className="modal-row">
-              <FormGroup label="Class">
+              <FormGroup label="Αίθουσα">
                 <input
                   type="text"
                   name="className"
@@ -333,7 +333,7 @@ const CalendarPage = () => {
                   ))}
                 </datalist>
               </FormGroup>
-              <FormGroup label="Lesson">
+              <FormGroup label="Μάθημα">
                 <input
                   type="text"
                   name="lesson"
@@ -348,14 +348,13 @@ const CalendarPage = () => {
 
           <div className="modal-section">
               {newEvent.students.map((student, index) => {
-                // Κάθε δύο μαθητές δημιουργείται μια νέα σειρά
                 if (index % 2 === 0) {
                   const studentPair = newEvent.students.slice(index, index + 2);
                   return (
                     <div className="student-row" key={index}>
                       {studentPair.map((student, subIndex) => (
                         <FormGroup
-                          label={`Student ${index + subIndex + 1}`}
+                          label={`Μαθητής ${index + subIndex + 1}`}
                           key={index + subIndex}
                           className="student-form-group"
                         >
@@ -394,14 +393,14 @@ const CalendarPage = () => {
 
           {isEditing ? (
             <div className="button-group">
-                <button type="button" className="add-new-student" onClick={addStudent}>Add student</button>              
+                <button type="button" className="add-new-student" onClick={addStudent}>Προσθήκη Μαθητή</button>              
                 <div className="row">
-                <button type="submit" className="calendar-submit">Submit</button>
-                <button type="button" className="btn btn-secondary" onClick={() => setModalOpen(false)}>Cancel</button>
+                <button type="submit" className="calendar-submit">Υποβολή</button>
+                <button type="button" className="btn btn-secondary" onClick={() => setModalOpen(false)}>Ακύρωση</button>
                 </div>
             </div>
           ) : (
-            <button type="button" className="btn btn-secondary" onClick={() => setIsEditing(true)}>Edit</button>
+            <button type="button" className="btn btn-secondary" onClick={() => setIsEditing(true)}>Επεξεργασία</button>
           )}
         </form>
       </Modal>
