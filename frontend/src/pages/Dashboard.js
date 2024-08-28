@@ -86,7 +86,7 @@ const Dashboard = forwardRef((props, ref) => {
   };
 
   const pieDataStudents = {
-    labels: ['Total Students', 'Goal'],
+    labels: ['Σύνολο Μαθητών', 'Στόχος'],
     datasets: [
       {
         data: [students.length, studentGoal - students.length],
@@ -97,7 +97,7 @@ const Dashboard = forwardRef((props, ref) => {
   };
 
   const pieDataRevenue = {
-    labels: ['Total Revenue', 'Goal'],
+    labels: ['Σύνολο Εσόδων', 'Στόχος'],
     datasets: [
       {
         data: [calculateTotalRevenue(), revenueGoal - calculateTotalRevenue()],
@@ -108,7 +108,7 @@ const Dashboard = forwardRef((props, ref) => {
   };
 
   const pieDataHours = {
-    labels: ['Total Hours', 'Goal'],
+    labels: ['Συνολικές Ώρες', 'Στόχος'],
     datasets: [
       {
         data: [calculateTotalHours(), hoursGoal - calculateTotalHours()],
@@ -142,63 +142,63 @@ const Dashboard = forwardRef((props, ref) => {
 
   return (
     <div className="dashboard">
-      <h2>Dashboard</h2>
-      <p>Hi, Admin. Welcome back to ElProfessor!</p>
+      <h2>Αρχική</h2>
+      <p>Γεια σου. Καλώς ήρθες στο ElProfessor!</p>
       <div className="cards">
         <div className="card">
-          <h3>Total Lessons</h3>
+          <h3>Σύνολο Μαθημάτων</h3>
           <p>{lessons.length}</p>
         </div>
         <div className="card">
-          <h3>Total Hours</h3>
+          <h3>Σύνολο Ωρών</h3>
           <p>{calculateTotalHours().toFixed(2)}</p>
         </div>
         <div className="card">
-          <h3>Total Students</h3>
+          <h3>Σύνολο Μαθητών</h3>
           <p>{students.length}</p>
         </div>
         <div className="card">
-          <h3>Unpaid</h3>
-          <p>{calculateTotalDebt().toFixed(2)}</p>
+          <h3>Χρέη</h3>
+          <p>{calculateTotalDebt().toFixed(2)} €</p>
         </div>
         <div className="card">
-          <h3>Revenue</h3>
-          <p>{calculateTotalRevenue().toFixed(2)}</p>
+          <h3>Έσοδα</h3>
+          <p>{calculateTotalRevenue().toFixed(2)} €</p>
         </div>
       </div>
       <div className="charts">
         <div className="pie-charts-container">
           <div className="pie-chart">
-            <h3>Students Goal</h3>
+            <h3>Στόχος Μαθητών</h3>
             <Doughnut data={pieDataStudents} />
           </div>
           <div className="pie-chart">
-            <h3>Revenue Goal</h3>
+            <h3>Στόχος Εσόδων</h3>
             <Doughnut data={pieDataRevenue} />
           </div>
           <div className="pie-chart">
-            <h3>Hours Goal</h3>
+            <h3>Στόχος Ωρών</h3>
             <Doughnut data={pieDataHours} />
           </div>
         </div>
       </div>
       <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)}>
-        <h2>Set Goals</h2>
+        <h2>Όρισε Στόχους</h2>
         {error && <p className="error">{error}</p>}
         <div className="form-group">
-          <label>Students Goal</label>
+          <label>Στόχος Μαθητών</label>
           <input type="number" className="form-control" value={studentGoal} onChange={(e) => setStudentGoal(Number(e.target.value))} />
         </div>
         <div className="form-group">
-          <label>Revenue Goal</label>
+          <label>Στόχος Εσόδων</label>
           <input type="number" className="form-control" value={revenueGoal} onChange={(e) => setRevenueGoal(Number(e.target.value))} />
         </div>
         <div className="form-group">
-          <label>Hours Goal</label>
+          <label>Στόχος Ωρών</label>
           <input type="number" className="form-control" value={hoursGoal} onChange={(e) => setHoursGoal(Number(e.target.value))} />
         </div>
-        <button className="btn btn-primary" onClick={handleModalSubmit}>Submit</button>
-        <button className="btn btn-secondary" onClick={() => setModalIsOpen(false)}>Cancel</button>
+        <button className="btn btn-primary" onClick={handleModalSubmit}>Υποβολή</button>
+        <button className="btn btn-secondary" onClick={() => setModalIsOpen(false)}>Ακύρωση</button>
       </Modal>
     </div>
   );
