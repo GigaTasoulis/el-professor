@@ -1,5 +1,5 @@
-import React, { useContext, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import CalendarPage from './pages/CalendarPage';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -9,6 +9,7 @@ import { AuthProvider, AuthContext } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import './styles/App.css';
 import ClassroomsPage from './pages/ClassroomsPage';
+import ProfessorsDashboard from './pages/ProfessorsDashboard';
 
 function App() {
   return (
@@ -24,44 +25,51 @@ function App() {
 
 const MainContent = () => {
   const { user } = useContext(AuthContext);
-  const location = useLocation();
-  const dashboardRef = useRef(null);
 
-  const handleAddButtonClick = (selectedCategory) => {
-    if (selectedCategory === '/dashboard' && dashboardRef.current) {
-      dashboardRef.current.openGoalsModal();
-    } else {
-      switch (selectedCategory) {
-        case '/students':
-          document.querySelector('#open-student-modal-btn').click();
-          break;
-        case '/professors':
-          document.querySelector('#open-professor-modal-btn').click();
-          break;
-        case '/calendar':
-          document.querySelector('#open-calendar-modal-btn').click();
-          break;
-        default:
-          break;
-      }
-    }
-  };
-
-  if (location.pathname === '/login') {
-    return <Login />;
+  // If user is not logged in, show the Login page
+  if (!user) {
+    return (
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    );
   }
 
   return (
     <>
-      {user && <Navbar onAddButtonClick={handleAddButtonClick} />}
+      {user && <Navbar />}
       <div className="main-content">
         <Routes>
-          <Route path="/dashboard" element={<Dashboard ref={dashboardRef} />} />
-          <Route path="/students" element={<Students />} />
-          <Route path="/professors" element={<Professors />} />
+          {/* Admin Routes */}
+          <Route
+            path="/dashboard"
+            element={user.role === 'admin' ? <Dashboard /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/students"
+            element={user.role === 'admin' ? <Students /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/professors"
+            element={user.role === 'admin' ? <Professors /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/classrooms"
+            element={user.role === 'admin' ? <ClassroomsPage /> : <Navigate to="/login" />}
+          />
+
+          {/* Professor Route */}
+          <Route
+            path="/professors-dashboard"
+            element={user.role === 'professor' ? <ProfessorsDashboard /> : <Navigate to="/login" />}
+          />
+
+          {/* Common Route */}
           <Route path="/calendar" element={<CalendarPage />} />
-          <Route path="/" element={<Navigate to="/login" />} />
-          <Route path="/classrooms" element={<ClassroomsPage />} />
+
+          {/* Default Route */}
+          <Route path="/" element={<Navigate to={user.role === 'admin' ? "/dashboard" : "/professors-dashboard"} />} />
         </Routes>
       </div>
     </>
