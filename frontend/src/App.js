@@ -1,5 +1,5 @@
 import React, { useContext, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import CalendarPage from './pages/CalendarPage';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -24,8 +24,7 @@ function App() {
 }
 
 const MainContent = () => {
-  const { user } = useContext(AuthContext);
-  const location = useLocation();
+  const { user } = useContext(AuthContext);  // Use location to handle navigation logic
   const dashboardRef = useRef(null);
 
   const handleAddButtonClick = (selectedCategory) => {
@@ -49,6 +48,7 @@ const MainContent = () => {
   };
 
   if (!user) {
+    // Redirect to login if the user is not authenticated
     return (
       <Routes>
         <Route path="/login" element={<Login />} />

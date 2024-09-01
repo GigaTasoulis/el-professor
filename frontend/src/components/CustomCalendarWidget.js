@@ -11,18 +11,16 @@ const CustomCalendarWidget = () => {
     return (
       <div className="header row flex-middle">
         <div className="col col-start">
-          <div className="icon" onClick={prevMonth}>
-            <span>&lt;</span>
-          </div>
-        </div>
-        <div className="col col-center">
           <span>
             {format(currentMonth, 'MMMM yyyy', { locale: el })} {/* Month and Year in Greek */}
           </span>
         </div>
-        <div className="col col-end" onClick={nextMonth}>
-          <div className="icon">
-            <span>&gt;</span>
+        <div className="col col-end">
+          <div className="icon" onClick={prevMonth}>
+            <span>&lt;</span> {/* Left arrow icon */}
+          </div>
+          <div className="icon" onClick={nextMonth}>
+            <span>&gt;</span> {/* Right arrow icon */}
           </div>
         </div>
       </div>
