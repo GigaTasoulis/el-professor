@@ -1,0 +1,76 @@
+.calendar {
+    width: 350px;
+    height: 400px;
+    background-color: #1E1F25; /* Dark background */
+    border-radius: 12px;
+    padding: 20px;
+    color: #FFFFFF;
+    font-family: 'sans-serif';
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    color: #FFFFFF;
+    font-size: 1.2em;
+  }
+  
+  .icon {
+    cursor: pointer;
+    color: #A0A0A0; /* Light gray for arrows */
+  }
+  
+  .days {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+  }
+  
+  .col {
+    text-align: center;
+    width: 14.28%; 
+  }
+  
+  .col-center {
+    text-align: center;
+  }
+  
+  .row {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 4px; 
+  }
+  
+  .cell {
+    margin: 1.5%;
+    width: 18px;   
+    height: 36px;  
+    background-color: #090A0C;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .cell:hover {
+    background-color: #589C5F; /* Bright blue for hover */
+    color: #FFFFFF;
+  }
+  
+  .cell.disabled {
+    color: #444; /* Disabled color for dates not in the current month */
+    pointer-events: none;
+  }
+  
+  .cell.selected {
+    background-color: #FB3F4A; /* Red for the selected date */
+    color: #FFFFFF;
+  }
+  
+  .number {
+    font-size: 1.1em;
+  }
+  
