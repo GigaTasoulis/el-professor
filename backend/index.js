@@ -11,7 +11,7 @@ const professorRoutes = require('./routes/professorRoutes');
 const goalRoutes = require('./routes/goalRoutes');
 const classroomRoutes = require('./routes/classroomRoutes');
 const lessonRoutes = require('./routes/lessonsRoutes');
-
+const dashboardRoutes = require('./routes/dashboardRoutes');
 
 const app = express();
 app.use(bodyParser.json());
@@ -36,6 +36,7 @@ app.use('/api/professors', professorRoutes);
 app.use('/api/goals', goalRoutes);
 app.use('/api', classroomRoutes);
 app.use('/api', lessonRoutes);
+app.use('/api', dashboardRoutes);
 
 
 app.get('/', (req, res) => {

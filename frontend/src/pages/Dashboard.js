@@ -2,45 +2,61 @@ import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'rea
 import axios from 'axios';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import Modal from '../components/Modal'; // Make sure the path is correct
+import Modal from '../components/Modal';
 import '../styles/Dashboard.css';
+import { Button } from '@mui/material';
+import DashboardCalendar from '../components/DashboardCalendar';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dashboard = forwardRef((props, ref) => {
-  const [lessons, setLessons] = useState([]);
+  const [classes, setClasses] = useState([]); // Αλλαγή σε classes
   const [students, setStudents] = useState([]);
   const [studentGoal, setStudentGoal] = useState(100);
   const [revenueGoal, setRevenueGoal] = useState(10000);
   const [hoursGoal, setHoursGoal] = useState(1000);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [error, setError] = useState('');
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedWeek, setSelectedWeek] = useState(null);
+  const [viewMode, setViewMode] = useState('year');
+  const [displayStats, setDisplayStats] = useState(false);
 
   useEffect(() => {
-    fetchLessons();
-    fetchStudents();
-    fetchGoals();
-  }, []);
+    if (displayStats) {
+      fetchStats(); 
+    }
+  }, [selectedYear, selectedMonth, selectedWeek, displayStats]);
 
   useImperativeHandle(ref, () => ({
     openGoalsModal: () => setModalIsOpen(true),
   }));
 
-  const fetchLessons = async () => {
+  // Ενιαία λειτουργία για fetch στατιστικών (μαθημάτων και μαθητών)
+  const fetchStats = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/classes');
-      setLessons(response.data);
-    } catch (error) {
-      console.error('Error fetching lessons: ', error);
-    }
-  };
+      let params = {};
+  
+      if (selectedYear && !selectedMonth && !selectedWeek) {
+        params = { year: selectedYear.format('YYYY') };
+      } else if (selectedYear && selectedMonth && !selectedWeek) {
+        params = { year: selectedYear.format('YYYY'), month: selectedMonth.format('MM') };
+      } else if (selectedYear && selectedMonth && selectedWeek) {
+        params = {
+          year: selectedYear.format('YYYY'),
+          month: selectedMonth.format('MM'),
+          week: selectedWeek.map((date) => date.format('YYYY-MM-DD')).join(',')
+        };
+      }
+  
+      const response = await axios.get('http://localhost:5000/api/dashboard/stats', { params });
+      const { classes, students } = response.data; // Ανάκτηση των classes και students
 
-  const fetchStudents = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/api/students');
-      setStudents(response.data);
+      setClasses(classes.data); // Αποθήκευση των classes
+      setStudents(students.data); // Αποθήκευση των μαθητών
     } catch (error) {
-      console.error('Error fetching students: ', error);
+      console.error('Error fetching stats: ', error);
     }
   };
 
@@ -56,22 +72,10 @@ const Dashboard = forwardRef((props, ref) => {
     }
   };
 
-  const saveGoals = async () => {
-    try {
-      await axios.put('http://localhost:5000/api/goals', {
-        studentGoal,
-        revenueGoal,
-        hoursGoal
-      });
-    } catch (error) {
-      console.error('Error saving goals: ', error);
-    }
-  };
-
   const calculateTotalHours = () => {
-    return lessons.reduce((acc, lesson) => {
-      const start = new Date(lesson.start);
-      const end = new Date(lesson.end);
+    return classes.reduce((acc, classData) => {
+      const start = new Date(classData.start);
+      const end = new Date(classData.end);
       const duration = (end - start) / (1000 * 60 * 60);
       return acc + duration;
     }, 0);
@@ -83,6 +87,50 @@ const Dashboard = forwardRef((props, ref) => {
 
   const calculateTotalRevenue = () => {
     return students.reduce((acc, student) => acc + student.paid, 0);
+  };
+
+  const handleDateChange = (date) => {
+    if (viewMode === 'year') {
+      setSelectedYear(date);
+      setSelectedMonth(null);
+      setSelectedWeek(null);
+    } else if (viewMode === 'month') {
+      setSelectedMonth(date);
+      setSelectedWeek(null);
+    } else if (viewMode === 'week') {
+      setSelectedWeek(date);
+    }
+  };
+
+  const handleViewModeChange = (event) => {
+    setViewMode(event.target.value); 
+  };
+
+  const openDateModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeDateModal = () => {
+    setModalIsOpen(false);
+    setDisplayStats(false);
+  };
+
+  const handleShowStats = () => {
+    if (!selectedYear && viewMode === 'year') {
+      setError('Παρακαλώ επιλέξτε έτος.');
+      return;
+    }
+  
+    if (selectedYear && !selectedMonth && !selectedWeek) {
+      console.log('Προβολή στατιστικών για το έτος:', selectedYear.format('YYYY'));
+    } else if (selectedYear && selectedMonth && !selectedWeek) {
+      console.log('Προβολή στατιστικών για το μήνα:', selectedMonth.format('YYYY-MM'));
+    } else if (selectedYear && selectedMonth && selectedWeek) {
+      console.log('Προβολή στατιστικών για την εβδομάδα:', selectedWeek.map((date) => date.format('YYYY-MM-DD')));
+    }
+  
+    setDisplayStats(true); 
+    setModalIsOpen(false); 
   };
 
   const pieDataStudents = {
@@ -118,36 +166,19 @@ const Dashboard = forwardRef((props, ref) => {
     ]
   };
 
-  const handleModalSubmit = () => {
-    const currentStudents = students.length;
-    const currentRevenue = calculateTotalRevenue();
-    const currentHours = calculateTotalHours();
-
-    if (studentGoal < currentStudents) {
-      setError(`Students goal cannot be less than the current number of students (${currentStudents}).`);
-      return;
-    }
-    if (revenueGoal < currentRevenue) {
-      setError(`Revenue goal cannot be less than the current total revenue (${currentRevenue.toFixed(2)}).`);
-      return;
-    }
-    if (hoursGoal < currentHours) {
-      setError(`Hours goal cannot be less than the current total hours (${currentHours.toFixed(2)}).`);
-      return;
-    }
-
-    saveGoals();
-    setModalIsOpen(false);
-  };
-
   return (
     <div className="dashboard">
-      <h2>Αρχική</h2>
+      <div className="dashboard-header">
+        <h2>Αρχική</h2>
+        <div className="dashboard-controls">
+          <Button variant="contained" onClick={openDateModal}>Επιλογή Ημερομηνίας</Button>
+        </div>
+      </div>
       <p>Γεια σου. Καλώς ήρθες στο ElProfessor!</p>
       <div className="cards">
         <div className="card">
           <h3>Σύνολο Μαθημάτων</h3>
-          <p>{lessons.length}</p>
+          <p>{classes.length}</p>
         </div>
         <div className="card">
           <h3>Σύνολο Ωρών</h3>
@@ -182,23 +213,22 @@ const Dashboard = forwardRef((props, ref) => {
           </div>
         </div>
       </div>
-      <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)}>
-        <h2>Όρισε Στόχους</h2>
+
+      {/* Modal για την επιλογή ημερομηνίας */}
+      <Modal isOpen={modalIsOpen} onClose={closeDateModal}>
+        <h2>Επιλογή Ημερομηνίας</h2>
+        <div className="form-group">
+          <label>Επιλέξτε mode προβολής:</label>
+          <select value={viewMode} onChange={handleViewModeChange}>
+            <option value="year">Έτος</option>
+            <option value="month">Μήνας</option>
+            <option value="week">Εβδομάδα</option>
+          </select>
+
+          <DashboardCalendar handleDateChange={handleDateChange} viewMode={viewMode} />
+        </div>
         {error && <p className="error">{error}</p>}
-        <div className="form-group">
-          <label>Στόχος Μαθητών</label>
-          <input type="number" className="form-control" value={studentGoal} onChange={(e) => setStudentGoal(Number(e.target.value))} />
-        </div>
-        <div className="form-group">
-          <label>Στόχος Εσόδων</label>
-          <input type="number" className="form-control" value={revenueGoal} onChange={(e) => setRevenueGoal(Number(e.target.value))} />
-        </div>
-        <div className="form-group">
-          <label>Στόχος Ωρών</label>
-          <input type="number" className="form-control" value={hoursGoal} onChange={(e) => setHoursGoal(Number(e.target.value))} />
-        </div>
-        <button className="btn btn-primary" onClick={handleModalSubmit}>Υποβολή</button>
-        <button className="btn btn-secondary" onClick={() => setModalIsOpen(false)}>Ακύρωση</button>
+        <Button onClick={handleShowStats}>Δες Στατιστικά</Button>
       </Modal>
     </div>
   );
