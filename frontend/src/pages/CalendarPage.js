@@ -18,6 +18,8 @@ const CalendarPage = () => {
   const [events, setEvents] = useState([]);
   const [students, setStudents] = useState([]);
   const [classes, setClasses] = useState([]);
+  const [lessons, setLessons] = useState([]);
+  const [classrooms, setClassrooms] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [newEvent, setNewEvent] = useState({
@@ -37,6 +39,8 @@ const CalendarPage = () => {
     fetchStudents();
     fetchClasses();
     fetchTeachers();
+    fetchLessons();
+    fetchClassrooms();
   }, []);
 
   const fetchEvents = async () => {
@@ -51,6 +55,26 @@ const CalendarPage = () => {
       console.error("Error fetching events: ", error);
     }
   };
+
+  const fetchClassrooms = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/classrooms'); 
+      setClassrooms(response.data);
+    } catch (error) {
+      console.error("Error fetching classrooms: ", error);
+    }
+  };
+  
+
+  const fetchLessons = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/lessons');
+      setLessons(response.data);
+    } catch (error) {
+      console.error("Error fetching lessons: ", error);
+    }
+  };
+  
 
   const fetchStudents = async () => {
     try {
@@ -81,11 +105,19 @@ const CalendarPage = () => {
 
   const handleSelectSlot = ({ start }) => {
     setSelectedEvent(null);
-    setNewEvent({ ...newEvent, start, end: moment(start).add(1, 'hour').toDate() });
+    setNewEvent({
+      start: start,
+      end: moment(start).add(1, 'hour').toDate(),
+      className: '',
+      lesson: '',
+      teacher: '', 
+      students: [{ name: '' }],
+      costPerClass: ''
+    });
     setIsEditing(true);
     setModalOpen(true);
   };
-
+  
   const handleSelectEvent = (event) => {
     setSelectedEvent(event);
     setNewEvent({
@@ -125,11 +157,18 @@ const CalendarPage = () => {
     }));
   };
 
-  const filterStudents = (input) => {
-    if (!input) return students;
-    return students.filter(student => student.name.toLowerCase().includes(input.toLowerCase()));
+  const resetNewEvent = () => {
+    setNewEvent({
+      start: new Date(),
+      end: moment().add(1, 'hour').toDate(),
+      className: '',
+      lesson: '',
+      teacher: '', 
+      students: [{ name: '' }],
+      costPerClass: ''
+    });
   };
-
+  
   const addStudent = () => {
     setNewEvent((prevState) => ({
       ...prevState,
@@ -157,7 +196,7 @@ const CalendarPage = () => {
     } else if (numberOfStudents >= 4 && numberOfStudents <= 5) {
       costPerStudent = 10;
     } else {
-      costPerStudent = 0; // Default in case there are more than 5 students (adjust if necessary)
+      costPerStudent = 0;
     }
   
     return costPerStudent * durationInHours;
@@ -200,7 +239,7 @@ const CalendarPage = () => {
       lesson: newEvent.lesson,
       teacher: newEvent.teacher,
       students: updatedStudents,
-      costPerClass: debtPerStudent * numberOfStudents // Total cost is debt per student multiplied by the number of students
+      costPerClass: debtPerStudent * numberOfStudents 
     };
   
     console.log('Event data:', eventData);
@@ -217,6 +256,7 @@ const CalendarPage = () => {
       }
       setModalOpen(false);
       fetchEvents();
+      resetNewEvent(); // Reset the form state after submission
     } catch (error) {
       console.error("Error creating/updating event: ", error);
       if (error.response) {
@@ -255,7 +295,7 @@ const CalendarPage = () => {
         +Add Event
       </button>
 
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
+      <Modal isOpen={modalOpen} onClose={() => {setModalOpen(false); resetNewEvent();}}>
         <h2>{selectedEvent ? 'Επεξεργασία' : 'Προσθήκη Μαθήματος'}</h2>
         <form onSubmit={handleSubmit}>
           <div className="modal-section">
@@ -270,23 +310,24 @@ const CalendarPage = () => {
                 />
               </FormGroup>
               <FormGroup label="Καθηγητής">
-                <input
-                  type="text"
+                <select
                   name="teacher"
                   value={newEvent.teacher}
                   onChange={handleEventChange}
-                  className="form-control"
+                  className="form-control teacher-select"
                   disabled={!isEditing}
-                  list="teachers-list"
-                />
-                <datalist id="teachers-list">
-                  {teachers.map((teacher, index) => (
-                    <option key={index} value={teacher.name} />
+                >
+                  <option value="" disabled>
+                    Επιλέξτε Καθηγητή
+                  </option>
+                  {teachers.map((teacher, i) => (
+                    <option key={i} value={teacher.name}>
+                      {teacher.name}
+                    </option>
                   ))}
-                </datalist>
+                </select>
               </FormGroup>
             </div>
-
             <div className="modal-row">
               <FormGroup label="Ώρα Έναρξης">
                 <DatePicker
@@ -318,79 +359,90 @@ const CalendarPage = () => {
 
             <div className="modal-row">
               <FormGroup label="Αίθουσα">
-                <input
-                  type="text"
+                <select
                   name="className"
                   value={newEvent.className}
                   onChange={handleEventChange}
-                  className="form-control"
+                  className="form-control classroom-select"
                   disabled={!isEditing}
-                  list="classes-list"
-                />
-                <datalist id="classes-list">
-                  {classes.map((classItem, index) => (
-                    <option key={index} value={classItem.name} />
+                >
+                  <option value="" disabled>
+                    Επιλέξτε Αίθουσα
+                  </option>
+                  {classrooms.map((classroom, i) => (
+                    <option key={i} value={classroom.name}>
+                      {classroom.name}
+                    </option>
                   ))}
-                </datalist>
+                </select>
               </FormGroup>
               <FormGroup label="Μάθημα">
-                <input
-                  type="text"
+                <select
                   name="lesson"
                   value={newEvent.lesson}
                   onChange={handleEventChange}
-                  className="form-control"
+                  className="form-control lesson-select"
                   disabled={!isEditing}
-                />
+                >
+                  <option value="" disabled>
+                    Επιλέξτε Μάθημα
+                  </option>
+                  {lessons.map((lesson, i) => (
+                    <option key={i} value={lesson.name}>
+                      {lesson.name}
+                    </option>
+                  ))}
+                </select>
               </FormGroup>
             </div>
           </div>
 
           <div className="modal-section">
-              {newEvent.students.map((student, index) => {
-                if (index % 2 === 0) {
-                  const studentPair = newEvent.students.slice(index, index + 2);
-                  return (
-                    <div className="student-row" key={index}>
-                      {studentPair.map((student, subIndex) => (
-                        <FormGroup
-                          label={`Μαθητής ${index + subIndex + 1}`}
-                          key={index + subIndex}
-                          className="student-form-group"
-                        >
-                          <div className="student-input-container">
-                            <input
-                              type="text"
-                              value={student.name}
-                              onChange={(e) => handleStudentChange(index + subIndex, e)}
-                              className="form-control student-input"
-                              list={`students-list-${index + subIndex}`}
-                              disabled={!isEditing}
-                            />
-                            {isEditing && (
-                              <button
-                                type="button"
-                                onClick={() => removeStudent(index + subIndex)}
-                                className="delete-button"
-                              >
-                                <img src={deleteIcon} alt="Delete" className="delete-icon" />
-                              </button>
-                            )}
-                          </div>
-                          <datalist id={`students-list-${index + subIndex}`}>
-                            {filterStudents(student.name).map((filteredStudent, i) => (
-                              <option key={i} value={filteredStudent.name} />
+            {newEvent.students.map((student, index) => {
+              if (index % 2 === 0) {
+                const studentPair = newEvent.students.slice(index, index + 2);
+                return (
+                  <div className="student-row" key={index}>
+                    {studentPair.map((student, subIndex) => (
+                      <FormGroup
+                        label={`Μαθητής ${index + subIndex + 1}`}
+                        key={index + subIndex}
+                        className="student-form-group"
+                      >
+                        <div className="student-input-container">
+                          <select
+                            value={student.name}
+                            onChange={(e) => handleStudentChange(index + subIndex, e)}
+                            className="form-control student-select"
+                            disabled={!isEditing}
+                          >
+                            <option value="" disabled>
+                              Επιλέξτε Μαθητή
+                            </option>
+                            {students.map((availableStudent, i) => (
+                              <option key={i} value={availableStudent.name}>
+                                {availableStudent.name}
+                              </option>
                             ))}
-                          </datalist>
-                        </FormGroup>
-                      ))}
-                    </div>
-                  );
-                }
-                return null;
-              })}
+                          </select>
+                          {isEditing && (
+                            <button
+                              type="button"
+                              onClick={() => removeStudent(index + subIndex)}
+                              className="delete-button"
+                            >
+                              <img src={deleteIcon} alt="Delete" className="delete-icon" />
+                            </button>
+                          )}
+                        </div>
+                      </FormGroup>
+                    ))}
+                  </div>
+                );
+              }
+              return null;
+            })}
             </div>
-
           {isEditing ? (
             <div className="button-group">
                 <button type="button" className="add-new-student" onClick={addStudent}>Προσθήκη Μαθητή</button>              
