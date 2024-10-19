@@ -1,82 +1,137 @@
 .professor-dashboard {
-    padding: 72px; /* Padding inside the container */
-    font-family: 'sans-serif', Arial, sans-serif;
-    background-color: #1E1F25; /* Dark primary background */
-    color: #FFFFFF;
-    width: 100%; /* Full width of the container */
-    min-height: 100vh; /* Ensure the dashboard takes up the full height of the viewport */
-    box-sizing: border-box; /* Include padding in the element's total width and height */
-    border-radius: 12px;
-  }
-  
-  .dashboard-header {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  .dashboard-header h1 {
-    font-size: 2.5em;
-    color: #FFFFFF;
-    margin-bottom: 10px;
-  }
-  
-  .dashboard-header p {
-    font-size: 1.2em;
-    color: #A0A0A0; /* Light gray for secondary text */
-  }
-  
-  .quick-links {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 30px;
-  }
-  
-  .quick-link-card {
-    background-color: #090A0C; /* Dark secondary background */
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    text-align: center;
-    width: 30%;
-    transition: transform 0.2s;
-  }
-  
-  .quick-link-card:hover {
-    transform: scale(1.05);
-  }
-  
-  .quick-link-card h2 {
-    color: #28C0E8; /* Bright blue for headings */
-    margin-bottom: 10px;
-  }
-  
-  .quick-link-card p {
-    color: #A0A0A0; /* Light gray for secondary text */
-  }
-  
-  .schedule-overview {
-    background-color: #090A0C; /* Dark secondary background */
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    margin-bottom: 30px;
-  }
-  
-  .schedule-overview h2 {
-    color: #28C0E8; /* Bright blue for headings */
-    margin-bottom: 20px;
-  }
-  
-  .schedule-overview ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .schedule-overview li {
-    background-color: #1E1F25; /* Dark primary background */
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
-    color: #FFFFFF;
-  }
-  
+  padding: 72px;
+  font-family: 'sans-serif', Arial, sans-serif;
+  background-color: #1E1F25;
+  color: #FFFFFF;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  border-radius: 12px;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.dashboard-header h1 {
+  font-size: 2.5em;
+  color: #FFFFFF;
+  margin-bottom: 10px;
+}
+
+.dashboard-header p {
+  font-size: 1.2em;
+  color: #A0A0A0;
+}
+
+.dashboard-layout {
+  display: flex;
+  height: calc(100vh - 120px);
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+#calendar {
+  margin-bottom: 30px;
+}
+
+.upcoming-classes {
+  background-color: #090A0C;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.upcoming-classes h2 {
+  margin-bottom: 15px;
+  color: #28C0E8;
+}
+
+.upcoming-classes ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.upcoming-classes li {
+  background-color: #1E1F25;
+  margin-bottom: 10px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.upcoming-classes button {
+  background-color: #003366;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.upcoming-classes button:hover {
+  background-color: #0056b3;
+}
+
+.quick-links {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30px;
+}
+
+.quick-link-card {
+  background-color: #090A0C;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  text-align: center;
+  width: 30%;
+  transition: transform 0.2s;
+}
+
+.quick-link-card:hover {
+  transform: scale(1.05);
+}
+
+.quick-link-card h2 {
+  color: #28C0E8;
+  margin-bottom: 10px;
+}
+
+.quick-link-card p {
+  color: #A0A0A0;
+}
+
+.schedule-overview {
+  background-color: #090A0C;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.schedule-overview h2 {
+  color: #28C0E8;
+  margin-bottom: 20px;
+}
+
+.schedule-overview ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.schedule-overview li {
+  background-color: #1E1F25;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: #FFFFFF;
+}
