@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ReactModal from 'react-modal';
+import Modal from '../components/Modal';
 import '../styles/Professors.css';
 import { getProfessors, createProfessor, updateProfessor } from '../services/professorService';
 import editIcon from '../images/edit.png';
@@ -170,43 +170,77 @@ const Professors = () => {
               +Προσθήκη Καθηγητή
             </button>
           </div>
-
-          <ReactModal 
-            isOpen={modalIsOpen} 
-            onRequestClose={closeModal} 
-            className="custom-modal"
-            overlayClassName="custom-modal-overlay"
-            ariaHideApp={false}
-          >
+          <Modal isOpen={modalIsOpen} onClose={closeModal}>
             <h2>Προσθήκη Νέου Καθηγητή</h2>
             <form>
               <div className="form-group">
                 <label>Όνομα</label>
-                <input type="text" className="form-control" name="name" value={newProfessor.name} onChange={handleChange} />
+                <input
+                  type="text"
+                  className="form-control"
+                  name="name"
+                  value={newProfessor.name}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-group">
                 <label>Επίθετο</label>
-                <input type="text" className="form-control" name="surname" value={newProfessor.surname} onChange={handleChange} />
+                <input
+                  type="text"
+                  className="form-control"
+                  name="surname"
+                  value={newProfessor.surname}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-group">
                 <label>Τηλέφωνο</label>
-                <input type="text" className="form-control" name="tel" value={newProfessor.tel} onChange={handleChange} />
+                <input
+                  type="text"
+                  className="form-control"
+                  name="tel"
+                  value={newProfessor.tel}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-group">
                 <label>Email</label>
-                <input type="email" className="form-control" name="email" value={newProfessor.email} onChange={handleChange} />
+                <input
+                  type="email"
+                  className="form-control"
+                  name="email"
+                  value={newProfessor.email}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-group">
                 <label>ΑΦΜ</label>
-                <input type="text" className="form-control" name="afm" value={newProfessor.afm} onChange={handleChange} />
+                <input
+                  type="text"
+                  className="form-control"
+                  name="afm"
+                  value={newProfessor.afm}
+                  onChange={handleChange}
+                />
               </div>
               <div className="modal-actions">
-                <button type="button" className="btn-add-professor" onClick={handleAddProfessor}>Προσθήκη Καθηγητή</button>
-                <button type="button" className="btn-cancel" onClick={closeModal}>Ακύρωση</button>
+                <button
+                  type="button"
+                  className="add-student-button"
+                  onClick={handleAddProfessor}
+                >
+                  Προσθήκη
+                </button>
+                <button
+                  type="button"
+                  className="cancel-button-students"
+                  onClick={closeModal}
+                >
+                  Ακύρωση
+                </button>
               </div>
             </form>
-          </ReactModal>
-
+          </Modal>
         </main>
       </div>
     </div>
