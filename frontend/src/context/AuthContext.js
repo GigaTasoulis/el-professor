@@ -9,7 +9,9 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const currentUser = getCurrentUser();
-    setUser(currentUser);
+    if (currentUser) {
+      setUser(currentUser);
+    }
   }, []);
 
   return (

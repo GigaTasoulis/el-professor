@@ -32,8 +32,6 @@ const Navbar = ({ onAddButtonClick }) => {
         return '+ Προσθήκη Μαθήματος';
       case '/dashboard':
         return '+ Όρισε Στόχους';
-      case '/classrooms':
-        return '';
       default:
         return '';
     }
@@ -44,21 +42,24 @@ const Navbar = ({ onAddButtonClick }) => {
       case '/students':
         return 'Παρακαλώ, οργανώστε τους μαθητές σας μέσω του παρακάτω κουμπιού!';
       case '/professors':
-        return 'Παρακαλώ, οργανώστε τους καθηγτές σας μέσω του παρακάτω κουμπιού!';
+        return 'Παρακαλώ, οργανώστε τους καθηγητές σας μέσω του παρακάτω κουμπιού!';
       case '/calendar':
         return 'Παρακαλώ, οργανώστε την ατζέντα σας μέσω του παρακάτω κουμπιού!';
       case '/dashboard':
         return 'Παρακαλώ, οργανώστε την αρχική σας μέσω του παρακάτω κουμπιού!';
-      case '/classrooms':
-        return '';
       default:
         return '';
     }
   };
 
   const handleButtonClick = () => {
-    onAddButtonClick(selectedCategory);
+    if (typeof onAddButtonClick === 'function') {
+      onAddButtonClick(selectedCategory);
+    } else {
+      console.error('onAddButtonClick is not a function');
+    }
   };
+  
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -82,46 +83,58 @@ const Navbar = ({ onAddButtonClick }) => {
           </button>
         )}
         <ul className="nav flex-column">
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/dashboard" onClick={() => handleNavClick('/dashboard')}>
-              Αρχική
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/students" onClick={() => handleNavClick('/students')}>
-              Μαθητές
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/professors" onClick={() => handleNavClick('/professors')}>
-              Καθηγητές
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/calendar" onClick={() => handleNavClick('/calendar')}>
-              Ατζέντα
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/classrooms" onClick={() => handleNavClick('/classrooms')}>
-              Αίθουσες/Μαθήματα
-            </NavLink>
-          </li>
-          <div className="add-button-container">
-            <p>{getButtonTextDescription()}</p>
-            <button className="add-button" onClick={handleButtonClick}>{getButtonText()}</button>
-          </div>
+          {user.role === 'admin' && (
+            <>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/dashboard" onClick={() => handleNavClick('/dashboard')}>
+                  Αρχική
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/students" onClick={() => handleNavClick('/students')}>
+                  Μαθητές
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/professors" onClick={() => handleNavClick('/professors')}>
+                  Καθηγητές
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/calendar" onClick={() => handleNavClick('/calendar')}>
+                  Ατζέντα
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/classrooms" onClick={() => handleNavClick('/classrooms')}>
+                  Αίθουσες/Μαθήματα
+                </NavLink>
+              </li>
+              <div className="add-button-container">
+                <p>{getButtonTextDescription()}</p>
+                <button className="add-button" onClick={handleButtonClick}>{getButtonText()}</button>
+              </div>
+            </>
+          )}
+          {user.role === 'professor' && (
+            <>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/professors-dashboard" onClick={() => handleNavClick('/professors-dashboard')}>
+                  Αρχική
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/calendar" onClick={() => handleNavClick('/calendar')}>
+                  Ατζέντα
+                </NavLink>
+              </li>
+            </>
+          )}
           <li className="nav-item mt-auto">
-            {user ? (
-              <a href="/login" className="nav-link logout-link" onClick={handleLogout}>
-                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828466.png" alt="Logout Icon" className="logout-icon" />
-                Αποσύνδεση
-              </a>
-            ) : (
-              <NavLink className="nav-link" to="/login">
-                Σύνδεση
-              </NavLink>
-            )}
+            <a href="/login" className="nav-link logout-link" onClick={handleLogout}>
+              <img src="https://cdn-icons-png.flaticon.com/512/1828/1828466.png" alt="Logout Icon" className="logout-icon" />
+              Αποσύνδεση
+            </a>
           </li>
         </ul>
       </nav>

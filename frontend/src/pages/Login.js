@@ -16,7 +16,15 @@ const Login = () => {
     try {
       const user = await login(username, password);
       setUser(user);
-      navigate('/dashboard');
+
+      // Redirect based on user role
+      if (user.role === 'admin') {
+        navigate('/dashboard');
+      } else if (user.role === 'professor') {
+        navigate('/professors-dashboard');
+      } else {
+        setError('Unauthorized role');
+      }
     } catch (err) {
       setError('Invalid username or password');
     }
@@ -62,5 +70,3 @@ const Login = () => {
 };
 
 export default Login;
-
-//gg//
