@@ -10,7 +10,7 @@ import historyIcon from '../images/scroll.png';
 import deleteIcon from '../images/deletebutton.png';
 import previousIcon from '../images/arrow_double_left_icon.png';
 import nextIcon from '../images/arrow_double_right_icon.png';
-
+import classesIcon from '../images/history.png'
 
 const Students = () => {
   const [students, setStudents] = useState([]);
@@ -29,7 +29,31 @@ const Students = () => {
   const paymentsPerPage = 5;
   const [isRemoveStudentModalOpen, setIsRemoveStudentModalOpen] = useState(false);
   const [studentToRemove, setStudentToRemove] = useState(null);
+  const [isClassHistoryModalOpen, setIsClassHistoryModalOpen] = useState(false);
+  const [classHistory, setClassHistory] = useState([]);  // To store the fetched class history
 
+
+
+  const openClassHistoryModal = async (studentId) => {
+    const url = `http://localhost:5000/api/students/${studentId}/classes`;
+    console.log('Fetching class history from:', url);  // Log the correct URL
+  
+    try {
+      const response = await axios.get(url);
+      setClassHistory(response.data);  // Set the fetched class history
+      setIsClassHistoryModalOpen(true);  // Open the modal after successful fetch
+    } catch (error) {
+      console.error('Error fetching class history:', error);
+    }
+  };
+  
+  
+  
+  const closeClassHistoryModal = () => {
+    setIsClassHistoryModalOpen(false); 
+    setClassHistory([]); 
+  };
+  
 
   const openRemoveStudentModal = (student) => {
     setStudentToRemove(student);
@@ -311,10 +335,12 @@ const Students = () => {
                       <button className="btn btn-link" onClick={() => openPaymentHistoryModal(student)}>
                         <img src={historyIcon} alt="Ιστορικό" className="history-icon" />
                       </button>
+                      <button className="btn btn-link" onClick={() => openClassHistoryModal(student._id)}>
+                        <img src={classesIcon} alt="Μαθήματα" className="history-icon" /> {/* New button for class history */}
+                      </button>
                       <button className="btn btn-link" onClick={() => openRemoveStudentModal(student)}>
                         <img src={deleteIcon} alt="Διαγραφή" className="delete-icon" />
                       </button>
-
                     </td>
                   </tr>
                 ))}
@@ -393,7 +419,40 @@ const Students = () => {
               </div>
             </form>
           </Modal>
+          <Modal isOpen={isClassHistoryModalOpen} onClose={closeClassHistoryModal}>
+            <div className="class-history-modal-content">
+              <h2>Ιστορικό Μαθημάτων</h2>
+              {classHistory.length === 0 ? (
+                <p>Δεν υπάρχουν μαθήματα που έχει παρακολουθήσει ο φοιτητής.</p>
+              ) : (
+                <div className="class-history-list">
+                  {classHistory.map((classItem, index) => (
+                    <div className="class-history-item" key={index}>
+                      <dl>
+                        <dt><strong>Μάθημα:</strong></dt>
+                        <dd>{classItem.lesson}</dd>
 
+                        <dt><strong>Δάσκαλος:</strong></dt>
+                        <dd>{classItem.teacher}</dd>
+
+                        <dt><strong>Τάξη:</strong></dt>
+                        <dd>{classItem.class}</dd>
+
+                        <dt><strong>Ημερομηνία:</strong></dt>
+                        <dd>Από {new Date(classItem.start).toLocaleString()} έως {new Date(classItem.end).toLocaleString()}</dd>
+
+                        <dt><strong>Κόστος:</strong></dt>
+                        <dd>{classItem.costPerClass}€</dd>
+                      </dl>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="modal-actions">
+                <button type="button" className="cancel-button-students" onClick={closeClassHistoryModal}>Κλείσιμο</button>
+              </div>
+            </div>
+          </Modal>
           <Modal isOpen={editModalIsOpen} onClose={closeEditModal}>
             <div className="modal-header">
               <h2>Επεξεργασία Φοιτητή</h2>

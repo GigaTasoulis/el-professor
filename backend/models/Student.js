@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const Schema = mongoose.Schema;
 const studentSchema = new mongoose.Schema({
   name: { type: String, required: true },
   surname: { type: String, required: true },
@@ -13,7 +13,13 @@ const studentSchema = new mongoose.Schema({
       amount: Number,
       date: { type: Date, default: Date.now }
     }
-  ]
+  ],
+  classes: [
+    {
+      type: Schema.Types.ObjectId, 
+      ref: 'Class',
+    },
+  ],
 });
 
 module.exports = mongoose.model('Student', studentSchema);
