@@ -1,3 +1,4 @@
+/* Modal container styling */
 .modal {
   position: fixed;
   top: 0;
@@ -11,40 +12,70 @@
   z-index: 1000;
 }
 
-.modal-content {
+/* Modal content container */
+.class-history-modal-content {
   background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 70%; /* Increase the width to make it wider */
-  max-width: 800px; /* Limit the maximum width */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Set the width of the modal */
+  max-width: 800px;
+  max-height: 80vh; /* Set maximum height to 80% of viewport height */
   display: flex;
-  flex-wrap: wrap; /* Allow flexible wrapping */
+  flex-direction: column; /* Flex layout for header, body, and footer */
+  border-radius: 8px;
+  overflow: hidden; /* Hide overflowing content */
 }
 
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
+/* Sticky header for the modal */
+.class-history-modal-content h2 {
+  padding: 20px;
+  margin: 0;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Scrollable body for the class history */
+.class-history-list {
+  flex-grow: 1; /* Ensure the body grows to fill available space */
+  padding: 20px;
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Individual class history item styling */
+.class-history-item {
+  margin-bottom: 15px; /* Space between items */
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd; /* Optional border for separation */
+}
+
+.class-history-item dt {
+  font-weight: bold;
+  margin-top: 5px; /* Space between dt elements */
+}
+
+.class-history-item dd {
+  margin: 0 0 10px 0; /* Space below dd elements */
+}
+
+/* Sticky footer for modal */
+.modal-actions {
+  padding: 10px;
+  position: sticky;
+  bottom: 0;
+  text-align: right;
+  z-index: 10;
+}
+
+/* Close button styling */
+.cancel-button-students {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
   border: none;
-  font-size: 16px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-.button-group {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.btn {
-  flex: 1; /* Allow buttons to be flexible in width */
-  margin: 0 10px; /* Add some space between buttons */
-}
-
-.error {
-  color: red;
-  margin-bottom: 10px;
+.cancel-button-students:hover {
+  background-color: #0056b3;
 }

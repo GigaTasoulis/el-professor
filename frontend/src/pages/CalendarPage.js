@@ -221,14 +221,21 @@ const CalendarPage = () => {
     // Fetch existing debt for each student and update their debt
     const updatedStudents = await Promise.all(newEvent.students.map(async (student) => {
       const existingStudent = students.find(s => s.name === student.name);
+  
+      if (!existingStudent) {
+        console.error(`Student ${student.name} not found.`);
+        return student;  // Skip if the student doesn't exist
+      }
+  
       const updatedDebt = existingStudent.debt + debtPerStudent;
   
-      // Update the student's debt in the database via the new debt-specific endpoint
+      // Update student's debt
       await axios.put(`http://localhost:5000/api/students/${existingStudent._id}/debt`, { debt: updatedDebt });
   
       return {
         ...student,
-        debt: updatedDebt
+        debt: updatedDebt,
+        _id: existingStudent._id  // Return student ID to update class later
       };
     }));
   
@@ -245,18 +252,30 @@ const CalendarPage = () => {
     console.log('Event data:', eventData);
   
     try {
+      let classId;
+  
       if (selectedEvent) {
         console.log('Updating event:', selectedEvent._id);
         const response = await axios.put(`http://localhost:5000/api/classes/${selectedEvent._id}`, eventData);
+        classId = selectedEvent._id;
         console.log('Event updated:', response.data);
       } else {
         console.log('Creating event with data:', eventData);
         const response = await axios.post('http://localhost:5000/api/classes', eventData);
+        classId = response.data._id;
         console.log('Event created:', response.data);
       }
+  
+      // Add the class to the students' history
+      await Promise.all(updatedStudents.map(async (student) => {
+        if (student._id) {  // Ensure we have a valid student ID
+          await axios.put(`http://localhost:5000/api/students/${student._id}/add-class`, { classId });
+        }
+      }));
+  
       setModalOpen(false);
       fetchEvents();
-      resetNewEvent(); // Reset the form state after submission
+      resetNewEvent();  // Reset the form state after submission
     } catch (error) {
       console.error("Error creating/updating event: ", error);
       if (error.response) {
@@ -264,6 +283,7 @@ const CalendarPage = () => {
       }
     }
   };
+  
 
   const EventComponent = ({ event }) => (
     <span>

@@ -105,6 +105,47 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// Get a student's class history
+router.get('/:id/classes', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Find the student by ID and populate the classes they attended
+    const student = await Student.findById(id).populate('classes');
+    
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    // Send the populated class history as the response
+    res.json(student.classes);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching class history', error });
+  }
+});
+
+// Add class to a student's history
+router.put('/:id/add-class', async (req, res) => {
+  const { id } = req.params;
+  const { classId } = req.body;
+
+  try {
+    const student = await Student.findById(id);
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    // Add the class ID to the student's classes array
+    student.classes.push(classId);
+    await student.save();
+
+    res.json(student);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating student', error });
+  }
+});
+
+
 
 module.exports = router;
 
